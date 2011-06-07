@@ -36,6 +36,12 @@ Ext.onReady(function() {
             },
             outputTarget: "westpanel"
         }, {
+            ptype: "gxp_featuremanager",
+            id: "nhd-manager",
+            paging: false,
+            autoSetLayer: true,
+            maxFeatures: 1
+        }, {
             ptype: "gxp_addlayers",
             actionTarget: "tree.tbar"
         }, {
@@ -50,6 +56,14 @@ Ext.onReady(function() {
         }, {
             ptype: "gxp_navigationhistory",
             actionTarget: "map.tbar"
+        }, {
+            ptype: "gxp_featureeditor",
+            featureManager: "nhd-manager",
+            autoLoadFeatures: true,
+            toggleGroup: "main",
+            actionTarget: "map.tbar",
+            modifyOnly: true,
+            tolerance: 6
         }],
         
         // layer sources
