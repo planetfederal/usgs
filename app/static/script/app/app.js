@@ -55,7 +55,7 @@ Ext.onReady(function() {
         // layer sources
         sources: {
             local: {
-                ptype: "gxp_wmscsource",
+                ptype: "gxp_wmssource",
                 url: "/geoserver/wms",
                 version: "1.1.1"
             },
@@ -72,16 +72,24 @@ Ext.onReady(function() {
             units: "m",
             maxResolution: 156543.0339,
             maxExtent: [-20037508, -20037508, 20037508, 20037508],
-            center: [-10764594.758211, 4523072.3184791],
-            zoom: 3,
+            center: [-11746265.687635, 4694206.416048],
+            zoom: 6,
             layers: [{
                 source: "osm",
                 name: "mapnik",
                 group: "background"
             }, {
                 source: "local",
-                name: "usa:states",
-                selected: true
+                name: "usgs:NHDArea"
+            }, {
+                source: "local",
+                name: "usgs:NHDLine"
+            }, {
+                source: "local",
+                name: "usgs:NHDFlowline"
+            }, {
+                source: "local",
+                name: "usgs:NHDPoint"
             }],
             items: [{
                 xtype: "gx_zoomslider",
