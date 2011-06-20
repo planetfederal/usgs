@@ -69,7 +69,7 @@ Ext.onReady(function() {
         // layer sources
         sources: {
             local: {
-                ptype: "gxp_wmssource",
+                ptype: "gxp_wmscsource",
                 url: "/geoserver/wms",
                 version: "1.1.1"
             },
@@ -94,16 +94,19 @@ Ext.onReady(function() {
                 group: "background"
             }, {
                 source: "local",
-                name: "usgs:NHDArea"
+                name: "usgs:nhdwaterbody"
             }, {
                 source: "local",
-                name: "usgs:NHDLine"
+                name: "usgs:nhdarea"
             }, {
                 source: "local",
-                name: "usgs:NHDFlowline"
+                name: "usgs:nhdline"
             }, {
                 source: "local",
-                name: "usgs:NHDPoint"
+                name: "usgs:nhdflowline"
+            }, {
+                source: "local",
+                name: "usgs:nhdpoint"
             }],
             items: [{
                 xtype: "gx_zoomslider",
