@@ -64,6 +64,13 @@ Ext.onReady(function() {
             actionTarget: "map.tbar",
             modifyOnly: true,
             tolerance: 6
+        }, {
+           ptype: "app_metadataentry",
+           actionTarget: "map.tbar",
+            outputConfig: {
+                width: 400,
+                height: 200
+            }
         }],
         
         // layer sources
