@@ -38,6 +38,11 @@ Ext.onReady(function() {
         }, {
             ptype: "gxp_featuremanager",
             id: "nhd-manager",
+            listeners: {
+                "beforesave": function(tool, store, params) {
+                    params.nativeElements = [{vendorId: 'ORACLE', safeToIgnore: false, value: 'xxxxxx'}];
+                }
+            },
             paging: false,
             autoSetLayer: true,
             maxFeatures: 1
