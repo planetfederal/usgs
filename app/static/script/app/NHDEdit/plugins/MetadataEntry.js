@@ -79,7 +79,15 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
             }
         });
         feature.state = OpenLayers.State.INSERT;
-        this.featureStore.proxy.protocol.commit([feature]);
+        var options = {
+            callback: function(response) {
+                if (response && response.insertIds) {
+                    this.target.metadataId = response.insertIds[0];
+                }
+            },
+            scope: this
+        };
+        this.featureStore.proxy.protocol.commit([feature], options);
     },
 
     /** api: method[addOutput]
