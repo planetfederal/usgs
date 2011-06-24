@@ -26,7 +26,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
 
     featureType: null,
 
-    featurePrefix: null,
+    featureNS: null,
 
     url: null,
 
@@ -66,19 +66,31 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
             fields: fields,
             url: this.schema.url,
             featureType: this.featureType,
-            featurePrefix: this.featurePrefix
+            featureNS: this.featureNS
         });
+    },
+
+    saveEntry: function() {
+        var feature = new OpenLayers.Feature.Vector(null, {});
+        this.form.getForm().items.each(function(item) {
+            var value = item.getRawValue();
+            if (value !== "") {
+                feature.attributes[item.name] = value;
+            }
+        });
+        feature.state = OpenLayers.State.INSERT;
+        this.featureStore.proxy.protocol.commit([feature]);
     },
 
     /** api: method[addOutput]
      */
     addOutput: function() {
-        var output = {
-            xtype: 'form',
+        this.form = new Ext.form.FormPanel({
             labelWidth: 200,
+            fbar: [{text: "Save", handler: this.saveEntry, scope: this}],
             plugins: [new GeoExt.plugins.AttributeForm({attributeStore: this.schema})]
-        };
-        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, output);
+        });
+        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, this.form);
     },
 
     /** api: method[addActions]

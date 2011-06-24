@@ -72,7 +72,7 @@ Ext.onReady(function() {
         }, {
            ptype: "app_metadataentry",
            featureType: "nhdmetadata",
-           featurePrefix: "usgs",
+           featureNS: "http://www.usgs.gov/",
            url: "/geoserver/wfs?",
            actionTarget: "map.tbar",
             outputConfig: {
