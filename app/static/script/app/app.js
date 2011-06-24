@@ -54,19 +54,19 @@ Ext.onReady(function() {
             actionTarget: ["tree.tbar", "tree.contextMenu"]
         }, {
             ptype: "gxp_zoomtoextent",
-            actionTarget: "map.tbar"
+            actionTarget: {target: "map.tbar", index: 0}
         }, {
             ptype: "gxp_zoom",
-            actionTarget: "map.tbar"
+            actionTarget: {target: "map.tbar", index: 1}
         }, {
             ptype: "gxp_navigationhistory",
-            actionTarget: "map.tbar"
+            actionTarget: {target: "map.tbar", index: 3}
         }, {
             ptype: "gxp_featureeditor",
             featureManager: "nhd-manager",
             autoLoadFeatures: true,
             toggleGroup: "main",
-            actionTarget: "map.tbar",
+            actionTarget: {target: "map.tbar", index: 5},
             modifyOnly: true,
             tolerance: 6
         }, {
@@ -74,15 +74,23 @@ Ext.onReady(function() {
            featureType: "nhdmetadata",
            featureNS: "http://www.usgs.gov/",
            url: "/geoserver/wfs?",
-           actionTarget: "map.tbar",
-            outputConfig: {
-                title: "Metadata entry",
-                width: 400, 
-                defaults: { 
-                    autoScroll: true
-                },
-                height: 200
-            }
+           actionTarget: {target: "map.tbar", index: 7},
+           outputConfig: {
+               title: "Metadata entry",
+               width: 400, 
+               defaults: { 
+                   autoScroll: true
+               },
+               height: 200
+           }
+       }, {
+           ptype: "app_preferences",
+           actionTarget: {target: "map.tbar", index: 9},
+           outputConfig: {
+               title: "Preferences",
+               width: 400,
+               height: 200
+           } 
         }],
         
         // layer sources
@@ -107,6 +115,7 @@ Ext.onReady(function() {
             maxExtent: [-20037508, -20037508, 20037508, 20037508],
             center: [-11746265.687635, 4694206.416048],
             zoom: 6,
+            tbar: ['->'],
             layers: [{
                 source: "osm",
                 name: "mapnik",
