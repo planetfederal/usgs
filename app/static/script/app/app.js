@@ -77,7 +77,10 @@ Ext.onReady(function() {
            actionTarget: "map.tbar",
             outputConfig: {
                 title: "Metadata entry",
-                width: 400,
+                width: 400, 
+                defaults: { 
+                    autoScroll: true
+                },
                 height: 200
             }
         }],
