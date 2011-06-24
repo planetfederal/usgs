@@ -71,8 +71,12 @@ Ext.onReady(function() {
             tolerance: 6
         }, {
            ptype: "app_metadataentry",
+           featureType: "nhdmetadata",
+           featurePrefix: "usgs",
+           url: "/geoserver/wfs?",
            actionTarget: "map.tbar",
             outputConfig: {
+                title: "Metadata entry",
                 width: 400,
                 height: 200
             }
