@@ -67,7 +67,6 @@ Ext.onReady(function() {
             autoLoadFeatures: true,
             toggleGroup: "main",
             actionTarget: {target: "map.tbar", index: 5},
-            modifyOnly: true,
             tolerance: 6
         }, {
            ptype: "app_metadataentry",
