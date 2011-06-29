@@ -92,6 +92,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
             callback: function(response) {
                 if (response && response.insertIds) {
                     this.target.metadataId = response.insertIds[0];
+                    this.removeOutput();
                 }
             },
             scope: this
@@ -102,6 +103,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
     openEntry: function() {
         var fid = this.grid.getSelectionModel().getSelected().get("feature").fid;
         this.target.metadataId = fid;
+        this.removeOutput();
     },
 
     /** api: method[addOutput]
@@ -121,7 +123,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
             title: 'Open existing entry',
             fbar: [{text: "Open", handler: this.openEntry, scope: this}]
         });
-        var items = [{xtype: 'tabpanel', autoScroll: true, activeTab: 0, items: [this.grid, this.form]}];
+        var items = {xtype: 'tabpanel', autoScroll: true, activeTab: 0, items: [this.grid, this.form]};
         return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, items);
     },
 
