@@ -63,15 +63,18 @@
                     tools: [{
                         ptype: "gxp_layertree",
                         outputConfig: {
-                        id: "tree",
-                        border: true,
-                        tbar: []
+                            id: "tree",
+                            border: true,
+                            tbar: []
                         },
                         outputTarget: "westpanel"
                     }, {
                         ptype: "gxp_featuremanager",
                         id: "nhd-manager",
                         listeners: {
+                            "exception": function(tool, exceptionReport, msg) {
+                                console.log(exceptionReport); console.log(msg);
+                            },
                             "beforesave": function(tool, store, params) {
                                 params.nativeElements = [{vendorId: 'ORACLE', safeToIgnore: false, value: 'xxxxxx'}];
                             }
@@ -106,7 +109,7 @@
                        featureType: "nhdmetadata",
                        featureNS: "http://www.usgs.gov/",
                        url: "/geoserver/wfs?",
-                       actionTarget: {target: "map.tbar", index: 7},
+                       actionTarget: null,
                        outputConfig: {
                            title: "Metadata entry",
                            width: 400,
