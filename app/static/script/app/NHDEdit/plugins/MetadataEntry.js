@@ -64,10 +64,19 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
         }, this);
         this.featureStore = new gxp.data.WFSFeatureStore({
             fields: fields,
+            autoLoad: true,
+            listeners: {
+                "load": this.bindStore,
+                scope: this
+            },
             url: this.schema.url,
             featureType: this.featureType,
             featureNS: this.featureNS
         });
+    },
+
+    bindStore: function() {
+        this.grid.setStore(this.featureStore, this.schema);
     },
 
     saveEntry: function() {
@@ -90,15 +99,30 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
         this.featureStore.proxy.protocol.commit([feature], options);
     },
 
+    openEntry: function() {
+        var fid = this.grid.getSelectionModel().getSelected().get("feature").fid;
+        this.target.metadataId = fid;
+    },
+
     /** api: method[addOutput]
      */
     addOutput: function() {
         this.form = new Ext.form.FormPanel({
             labelWidth: 200,
+            autoHeight: true,
+            title: "New entry",
             fbar: [{text: "Save", handler: this.saveEntry, scope: this}],
             plugins: [new GeoExt.plugins.AttributeForm({attributeStore: this.schema})]
         });
-        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, this.form);
+        this.grid = new gxp.grid.FeatureGrid({
+            xtype: "gxp_featuregrid",
+            loadMask: true,
+            autoHeight: true,
+            title: 'Open existing entry',
+            fbar: [{text: "Open", handler: this.openEntry, scope: this}]
+        });
+        var items = [{xtype: 'tabpanel', autoScroll: true, activeTab: 0, items: [this.grid, this.form]}];
+        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, items);
     },
 
     /** api: method[addActions]
