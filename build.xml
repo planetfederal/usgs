@@ -2,12 +2,13 @@
 <project name="usgs" default="dist" basedir=".">
 
     <description>
-        Ready GXP Build File
+        USGS National Mapper Build File
     </description>
 
     <property name="build" location="build"/>
     <property name="app.proxy.geoserver" value=""/>
     <property name="app.port" value="8080"/>
+    <property name="server" location="${basedir}/server"/>
 
     <target name="init">
 
@@ -123,6 +124,21 @@
             <arg path="app/main.js"/>
             <arg line="-p ${app.port}"/>
         </java>
+    </target>
+    
+    <target name="server">
+        <!-- 
+            Shuffle to get geoscript-js as a geoserver community module.  This
+            could be simplified by making the extension a community module.
+        -->
+        <symlink link="${server}/geoserver/src/community/geoscript-js" resource="${server}/geoserver-geoscript-js" overwrite="true"/>
+        <!-- revert previously patched pom.xml -->
+        <exec executable="git" dir="${server}/geoserver" failonerror="true">
+            <arg value="checkout"/>
+            <arg value="src"/>
+        </exec>
+        <!-- patch pom.xml to include geoscript-js extension -->
+        <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="0" dir="${server}/geoserver"/>
     </target>
 
     <target name="static-war" depends="dist">
