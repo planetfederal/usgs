@@ -7,3 +7,9 @@
 [submodule "app/static/externals/openlayers"]
 	path = app/static/externals/openlayers
 	url = https://github.com/openlayers/openlayers.git
+[submodule "server/geoserver"]
+	path = server/geoserver
+	url = git://github.com/opengeo/geoserver.git
+[submodule "server/geoserver-geoscript-js"]
+	path = server/geoserver-geoscript-js
+	url = git://github.com/tschaub/geoserver-geoscript-js.git
