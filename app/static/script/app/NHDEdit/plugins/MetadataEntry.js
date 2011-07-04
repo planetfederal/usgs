@@ -119,11 +119,11 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
         this.grid = new gxp.grid.FeatureGrid({
             xtype: "gxp_featuregrid",
             loadMask: true,
-            autoHeight: true,
+            height: 300,
             title: 'Open existing entry',
-            fbar: [{text: "Open", handler: this.openEntry, scope: this}]
+            bbar: ["->", {text: "Open", handler: this.openEntry, scope: this}]
         });
-        var items = {xtype: 'tabpanel', autoScroll: true, activeTab: 0, items: [this.grid, this.form]};
+        var items = {xtype: 'tabpanel', autoScroll: false, activeTab: 0, items: [this.grid, this.form]};
         return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, items);
     },
 
