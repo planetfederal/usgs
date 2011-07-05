@@ -72,9 +72,6 @@
                         ptype: "gxp_featuremanager",
                         id: "nhd-manager",
                         listeners: {
-                            "exception": function(tool, exceptionReport, msg) {
-                                console.log(exceptionReport); console.log(msg);
-                            },
                             "beforesave": function(tool, store, params) {
                                 params.nativeElements = [{vendorId: 'ORACLE', safeToIgnore: false, value: 'xxxxxx'}];
                             }
@@ -82,6 +79,14 @@
                         paging: false,
                         autoSetLayer: true,
                         maxFeatures: 1
+                    }, {
+                        ptype: "app_saveerror",
+                        featureType: "nhdexceptions",
+                        featurePrefix: "usgs",
+                        featureNS: "http://www.usgs.gov/",
+                        url: "/geoserver/wfs?",
+                        actionTarget: null,
+                        featureManager: "nhd-manager"
                     }, {
                         ptype: "gxp_addlayers",
                         actionTarget: "tree.tbar"
@@ -105,20 +110,20 @@
                         actionTarget: {target: "map.tbar", index: 5},
                         tolerance: 6
                     }, {
-                       ptype: "app_metadataentry",
-                       featureType: "nhdmetadata",
-                       featurePrefix: "usgs",
-                       featureNS: "http://www.usgs.gov/",
-                       url: "/geoserver/wfs?",
-                       actionTarget: null,
-                       outputConfig: {
-                           title: "Metadata",
-                           width: 400,
-                           defaults: { 
-                               autoScroll: true
-                           },
-                           height: 200
-                       }
+                        ptype: "app_metadataentry",
+                        featureType: "nhdmetadata",
+                        featurePrefix: "usgs",
+                        featureNS: "http://www.usgs.gov/",
+                        url: "/geoserver/wfs?",
+                        actionTarget: null,
+                        outputConfig: {
+                            title: "Metadata",
+                            width: 400,
+                            defaults: { 
+                                autoScroll: true
+                            },
+                            height: 200
+                        }
                    }, {
                        ptype: "app_preferences",
                        actionTarget: {target: "map.tbar", index: 9},
