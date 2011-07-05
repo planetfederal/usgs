@@ -1,13 +1,10 @@
-# Ready GXP
-
-The intention of this project is to provide a simple reusable template for 
-GeoExt applications bound for a servlet container.
+# USGS National Map Editor
 
 ## Setup
 
-    curl https://github.com/opengeo/readygxp/raw/master/readygxp.sh | sh -s myapp
+Clone the repository.
 
-Enhancements to come later.  For now, an application can be run as follows:
+    git://github.com/opengeo/usgs.git
 
 ## Debug Mode
 
