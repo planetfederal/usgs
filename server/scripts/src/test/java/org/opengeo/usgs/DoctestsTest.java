@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.geoserver.geoscript.javascript.JavaScriptModules;
 import org.geoserver.test.GeoServerTestSupport;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -33,11 +34,17 @@ public class DoctestsTest extends GeoServerTestSupport {
     String name;
     String source;
     int optimizationLevel;
-
-    public DoctestsTest(String name, String source, int optimizationLevel) {
+    
+    public DoctestsTest(String name, String source, int optimizationLevel) throws Exception {
         this.name = name;
         this.source = source;
         this.optimizationLevel = optimizationLevel;
+        oneTimeSetUp();
+    }
+    
+    @Before
+    public void setUpDoctests() throws Exception {
+        setUp();
     }
 
     public static File[] getDoctestFiles() {
@@ -66,11 +73,12 @@ public class DoctestsTest extends GeoServerTestSupport {
 
     @Test
     public void runDoctest() throws Exception {
+        
         JavaScriptModules jsModules = (JavaScriptModules) applicationContext.getBean("JSModules");
+        Global global = jsModules.createGlobal();
         Context cx = jsModules.enterContext();
         try {
             cx.setOptimizationLevel(optimizationLevel);
-            Global global = jsModules.createGlobal();
             // global.runDoctest throws an exception on any failure
             int testsPassed = global.runDoctest(cx, global, source, name, 1);
             System.out.println(name + "(" + optimizationLevel + "): " +
