@@ -142,7 +142,7 @@
     
     <target name="server">
         <!-- build with maven -->
-        <exec executable="mvn" dir="${server}/geoserver/src" failonerror="true">
+        <exec executable="mvn" dir="${server}" failonerror="true">
             <arg value="-DskipTests"/>
             <arg value="-P geoscript-js,wps"/>
             <arg value="clean"/>
