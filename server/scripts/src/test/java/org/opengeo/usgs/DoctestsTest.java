@@ -1,16 +1,15 @@
 package org.opengeo.usgs;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.geoserver.geoscript.javascript.JavaScriptModules;
+import org.geoserver.test.GeoServerTestSupport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -29,7 +28,7 @@ import org.mozilla.javascript.tools.shell.Global;
  * Distributed under MPL 1.1 (http://www.mozilla.org/MPL/).
  */
 @RunWith(Parameterized.class)
-public class DoctestsTest {
+public class DoctestsTest extends GeoServerTestSupport {
     static final String baseDirectory = "src" + File.separator + "test" + File.separator + "doc";
     String name;
     String source;
@@ -67,13 +66,11 @@ public class DoctestsTest {
 
     @Test
     public void runDoctest() throws Exception {
-        Context cx = Context.enter();
-        cx.setLanguageVersion(170);
-        cx.setOptimizationLevel(optimizationLevel);
-        Global global = new Global();
-        global.initStandardObjects(cx, true);
-        global.installRequire(cx, (List<String>) Arrays.asList(""), false);
+        JavaScriptModules jsModules = (JavaScriptModules) applicationContext.getBean("JSModules");
+        Context cx = jsModules.enterContext();
         try {
+            cx.setOptimizationLevel(optimizationLevel);
+            Global global = jsModules.createGlobal();
             // global.runDoctest throws an exception on any failure
             int testsPassed = global.runDoctest(cx, global, source, name, 1);
             System.out.println(name + "(" + optimizationLevel + "): " +
