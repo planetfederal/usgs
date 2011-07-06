@@ -69,7 +69,8 @@
         </exec>
         <!-- patch pom.xml to include geoscript-js extension -->
         <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="0" dir="${server}/geoserver"/>
-
+        <!-- finally, link the minimal directory so the build doesn't fail without a specific configId and configDirectory -->
+        <symlink link="${server}/geoserver/src/web/app/minimal" resource="${server}/geoserver/data/minimal" overwrite="true"/>
     </target>
     
     <target name="buildjs">
@@ -144,8 +145,6 @@
         <exec executable="mvn" dir="${server}/geoserver/src" failonerror="true">
             <arg value="-DskipTests"/>
             <arg value="-P geoscript-js,wps"/>
-            <arg value="-DconfigId=release"/>
-            <arg value="-DconfigDirectory=../../../data"/>
             <arg value="clean"/>
             <arg value="install"/>
         </exec>
