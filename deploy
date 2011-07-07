@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# running as root messes up shared permissions
+if [[ $UID -eq 0 ]]; then
+    echo "don't run this as root"
+    exit 1
+fi
+
+# find script location
+WORKDIR=$(dirname $0)
+# set so group writable flag is on for new files
+umask 0002
+
+sudo service tomcat6 stop
+
+# minor local workarounds
+ANT_OPTS=-Xmx32m ant \
+ -Dlocalrepo=-Dmaven.repo.local=${WORKDIR}/.m2 \
+ -Dmvn=/opt/apache-maven-2.2.1/bin/mvn \
+ init server
+
+# build success, deploy war
+if [ "$?" == 0 ]; then
+    sudo mv server/geoserver/src/web/app/target/geoserver.war /var/lib/tomcat6/webapps/
+    sudo rm -rf /var/lib/tomcat6/webapps/geoserver
+    sudo service tomcat6 start 
+fi
