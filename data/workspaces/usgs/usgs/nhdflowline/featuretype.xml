@@ -1,0 +1,44 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--1bc55906:130729d4f6a:-7ffd</id>
+  <name>nhdflowline</name>
+  <nativeName>nhdflowline</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--11814b35:13067cdfb15:-7fff</id>
+  </namespace>
+  <title>NHD Flowline</title>
+  <nativeCRS>GEOGCS[&quot;NAD83&quot;, 
+  DATUM[&quot;North American Datum 1983&quot;, 
+    SPHEROID[&quot;GRS 1980&quot;, 6378137.0, 298.257222101, AUTHORITY[&quot;EPSG&quot;,&quot;7019&quot;]], 
+    TOWGS84[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 
+    AUTHORITY[&quot;EPSG&quot;,&quot;6269&quot;]], 
+  PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], 
+  UNIT[&quot;degree&quot;, 0.017453292519943295], 
+  AXIS[&quot;Geodetic longitude&quot;, EAST], 
+  AXIS[&quot;Geodetic latitude&quot;, NORTH], 
+  AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]]</nativeCRS>
+  <srs>EPSG:4269</srs>
+  <nativeBoundingBox>
+    <minx>-110.411</minx>
+    <maxx>-100.193</maxx>
+    <miny>35.722</miny>
+    <maxy>41.976</maxy>
+    <crs>EPSG:4269</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-110.411</minx>
+    <maxx>-100.193</maxx>
+    <miny>35.722</miny>
+    <maxy>41.976</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--1bc55906:130729d4f6a:-8000</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+</featureType>

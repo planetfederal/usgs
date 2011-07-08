@@ -1,0 +1,22 @@
+<layer>
+  <name>nhdmetadata</name>
+  <id>LayerInfoImpl--1bc55906:130729d4f6a:-7f21</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--1bc55906:130729d4f6a:-7f22</id>
+  </resource>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="GWC.metaTilingX">4</entry>
+    <entry key="GWC.autoCacheStyles">true</entry>
+    <entry key="GWC.metaTilingY">4</entry>
+    <entry key="GWC.gutter">0</entry>
+    <entry key="GWC.enabled">true</entry>
+    <entry key="GWC.gridSets">EPSG:4326,EPSG:900913</entry>
+    <entry key="GWC.cacheFormats">image/jpeg,image/png</entry>
+  </metadata>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
