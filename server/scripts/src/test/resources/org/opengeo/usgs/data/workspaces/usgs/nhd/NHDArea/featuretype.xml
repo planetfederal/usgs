@@ -1,0 +1,38 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-668e6b80:13106f79fdc:-7ff9</id>
+  <name>NHDArea</name>
+  <nativeName>NHDArea</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-668e6b80:13106f79fdc:-7ffb</id>
+  </namespace>
+  <title>NHD Area</title>
+  <nativeCRS>GEOGCS[&quot;GCS_North_American_1983&quot;, 
+  DATUM[&quot;D_North_American_1983&quot;, 
+    SPHEROID[&quot;GRS_1980&quot;, 6378137.0, 298.257222101]], 
+  PRIMEM[&quot;Greenwich&quot;, 0.0], 
+  UNIT[&quot;degree&quot;, 0.017453292519943295], 
+  AXIS[&quot;Longitude&quot;, EAST], 
+  AXIS[&quot;Latitude&quot;, NORTH]]</nativeCRS>
+  <srs>EPSG:4269</srs>
+  <nativeBoundingBox>
+    <minx>-104.878</minx>
+    <maxx>-104.484</maxx>
+    <miny>39.974</miny>
+    <maxy>40.452</maxy>
+    <crs>EPSG:4269</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-104.878</minx>
+    <maxx>-104.484</maxx>
+    <miny>39.974</miny>
+    <maxy>40.452</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-668e6b80:13106f79fdc:-7ffa</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+</featureType>

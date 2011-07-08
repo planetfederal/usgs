@@ -3,6 +3,7 @@ package org.opengeo.usgs;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,6 +46,8 @@ public class DoctestsTest extends GeoServerTestSupport {
     @Before
     public void setUpDoctests() throws Exception {
         setUp();
+//        URL dataURL = getClass().getResource("data");
+//        File dir = new File(dataURL.getFile());
     }
 
     public static File[] getDoctestFiles() {
