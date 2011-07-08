@@ -7,7 +7,7 @@ if [[ $UID -eq 0 ]]; then
 fi
 
 # find script location
-WORKDIR=$(dirname $0)
+WORKDIR=$(cd $(dirname $0);pwd -P)
 # set so group writable flag is on for new files
 umask 0002
 
