@@ -122,6 +122,14 @@
                         actionTarget: {target: "map.tbar", index: 5},
                         tolerance: 6
                     }, {
+                        ptype: "gxp_legend",
+                        outputConfig: {
+                            defaults: {autoScroll: true},
+                            width: 300,
+                            height: 400
+                        },
+                        actionTarget: {target: "map.tbar", index: 7}
+                    }, {
                         ptype: "app_metadataentry",
                         featureType: "nhdmetadata",
                         featurePrefix: "usgs",
@@ -138,7 +146,7 @@
                         }
                    }, {
                        ptype: "app_preferences",
-                       actionTarget: {target: "map.tbar", index: 9},
+                       actionTarget: {target: "map.tbar", index: 10},
                        outputConfig: {
                            title: "Preferences",
                            width: 400,
