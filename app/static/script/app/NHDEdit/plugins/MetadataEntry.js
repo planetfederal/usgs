@@ -8,6 +8,10 @@
 
 Ext.ns("NHDEdit.plugins");
 
+/**
+ * @include NHDEdit/widgets/MetadataForm.js
+ */
+
 /** api: (define)
  *  module = NHDEdit.plugins
  *  class = MetadataEntry
@@ -109,12 +113,12 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
     /** api: method[addOutput]
      */
     addOutput: function() {
-        this.form = new Ext.form.FormPanel({
+        this.form = new NHDEdit.MetadataForm({
             labelWidth: 200,
             autoHeight: true,
             title: "New entry",
             fbar: [{text: "Save", handler: this.saveEntry, scope: this}],
-            plugins: [new GeoExt.plugins.AttributeForm({attributeStore: this.schema})]
+            schema: this.schema    
         });
         this.grid = new gxp.grid.FeatureGrid({
             xtype: "gxp_featuregrid",
@@ -123,7 +127,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
             title: 'Open existing entry',
             bbar: ["->", {text: "Open", handler: this.openEntry, scope: this}]
         });
-        var items = {xtype: 'tabpanel', autoScroll: false, activeTab: 0, items: [this.grid, this.form]};
+        var items = {xtype: 'tabpanel', autoScroll: false, activeTab: 0, items: [this.form, this.grid]};
         return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, items);
     },
 
