@@ -105,8 +105,16 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
     },
 
     openEntry: function() {
+        if (this.openWindow == null) {
+            this.openWindow = new Ext.Window({title: "Open", layout: "fit", items: [this.grid]});
+        }
+        this.openWindow.show();
+    },
+
+    openMetadata: function() {
         var fid = this.grid.getSelectionModel().getSelected().get("feature").fid;
         this.target.metadataId = fid;
+        this.openWindow.close();
         this.removeOutput();
     },
 
@@ -116,19 +124,29 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
         this.form = new NHDEdit.MetadataForm({
             labelWidth: 200,
             autoHeight: true,
-            title: "New entry",
-            fbar: [{text: "Save", handler: this.saveEntry, scope: this}],
+            fbar: [
+                {
+                    text: "Open",
+                    iconCls: "gxp-icon-open",
+                    handler: this.openEntry,
+                    scope: this
+                }, {
+                    text: "Save", 
+                    iconCls: "gxp-icon-save", 
+                    handler: this.saveEntry, 
+                    scope: this
+                }
+            ],
             schema: this.schema    
         });
         this.grid = new gxp.grid.FeatureGrid({
-            xtype: "gxp_featuregrid",
             loadMask: true,
+            /* TODO: in this case it would be easier to specify the includeFields */
+            ignoreFields: ['meta_processid', 'attributeaccuracyreport', 'logicalconsistencyreport', 'completenessreport', 'horizpositionalaccuracyreport', 'vertpositionalaccuracyreport', 'metadatastandardname', 'metadatastandardversion', 'metadatadate', 'datasetcredit', 'contactorganization', 'addresstype', 'address', 'city', 'stateorprovince', 'postalcode', 'contactvoicetelephone', 'contactinstructions'],
             height: 300,
-            title: 'Open existing entry',
-            bbar: ["->", {text: "Open", handler: this.openEntry, scope: this}]
+            bbar: ["->", {text: "Open", iconCls: "gxp-icon-open", handler: this.openMetadata, scope: this}]
         });
-        var items = {xtype: 'tabpanel', autoScroll: false, activeTab: 0, items: [this.form, this.grid]};
-        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, items);
+        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, this.form);
     },
 
     /** api: method[addActions]

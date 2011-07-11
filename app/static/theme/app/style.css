@@ -15,3 +15,11 @@ body {
     font-size: 9px;
     bottom: 2px;
 }
+
+.x-btn .gxp-icon-save, .x-menu-item .gxp-icon-save {
+    background-image: url(img/silk/disk.png);
+}
+
+.x-btn .gxp-icon-open, .x-menu-item .gxp-icon-open {
+    background-image: url(img/silk/folder.png);
+}
