@@ -25,8 +25,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     exceptionReport: null,
 
-    msg: null,
-
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
         this.add({
@@ -47,7 +45,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             grow: true, 
             fieldLabel: "Message",
             width: 150, 
-            value: this.msg
+            value: gxp.util.getOGCExceptionText(this.exceptionReport)
         });
         this.doLayout();
     },
