@@ -1,6 +1,6 @@
 <featureType>
   <id>FeatureTypeInfoImpl-668e6b80:13106f79fdc:-7ff7</id>
-  <name>NHDFlowline</name>
+  <name>nhdflowline</name>
   <nativeName>NHDFlowline</nativeName>
   <namespace>
     <id>NamespaceInfoImpl-668e6b80:13106f79fdc:-7ffb</id>

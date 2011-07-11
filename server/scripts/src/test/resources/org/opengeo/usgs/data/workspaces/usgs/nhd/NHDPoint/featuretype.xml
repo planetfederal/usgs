@@ -1,6 +1,6 @@
 <featureType>
   <id>FeatureTypeInfoImpl-668e6b80:13106f79fdc:-7ff3</id>
-  <name>NHDPoint</name>
+  <name>nhdpoint</name>
   <nativeName>NHDPoint</nativeName>
   <namespace>
     <id>NamespaceInfoImpl-668e6b80:13106f79fdc:-7ffb</id>
