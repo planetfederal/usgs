@@ -54,7 +54,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     getProperty: function(property) {
         var result;
-        // we only except one, so overwrite if multiple
+        // we only expect one, so overwrite if multiple
         Ext.each(this.exceptionReport.exceptions, function(exc) {
             result = exc[property];
         });
