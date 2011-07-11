@@ -186,9 +186,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
                 feature.attributes[a] = attributes[a];
             }
         }
-        if (modified && !feature.state) {
-            feature.state = OpenLayers.State.UPDATE;
-        }
+        modified && this.setFeatureState(OpenLayers.State.UPDATE);
 
         NHDEdit.FeatureEditWizard.superclass.stopEditing.apply(this, arguments);
     },
