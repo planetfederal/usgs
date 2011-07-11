@@ -19,6 +19,14 @@ Ext.ns("NHDEdit");
  */
 NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
     
+    /** private: property[store]
+     *  ``GeoExt.data.FeatureStore`` The store holding the feature being edited
+     */
+    
+    /** api: config[feature]
+     *  ``GeoExt.data.FeatureRecord``
+     */
+     
     /** private: method[initComponent]
      */
     initComponent: function() {
@@ -26,7 +34,11 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         // we only support editing mode for this subclass
         this.editing = true;
         
+        this.store = this.feature.store;
         var feature = this.feature;
+        if (feature instanceof GeoExt.data.FeatureRecord) {
+            feature = this.feature = feature.getFeature();
+        }
         if (!this.location) {
             this.location = feature;
         }
@@ -79,7 +91,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         this.attributeForm = new NHDEdit.AttributeForm({
             feature: feature,
             schema: this.schema,
-            padding: 5
+            padding: 5,
+            border: false
         });
         
         this.items = [
@@ -99,6 +112,21 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         // this initComponent implementation replaces the one of the superclass,
         // so we call it on the superclass's superclass.
         gxp.FeatureEditPopup.superclass.initComponent.call(this);
+        
+        this.store.on({
+            "exception": function(proxy, type, action, options, response, records) {
+                this.attributeForm.hide();
+                this.add(new NHDEdit.ExceptionPanel({
+                    padding: 5,
+                    border: false,
+                    //TODO maybe we can do autoHeight for the whole popup
+                    height: 325,
+                    exceptionReport: response.exceptionReport
+                }));
+                this.doLayout();
+            },
+            scope: this
+        });
         
         this.on({
             "show": function() {
