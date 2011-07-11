@@ -29,6 +29,13 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
     /** api: config[feature]
      *  ``GeoExt.data.FeatureRecord``
      */
+    
+    /** api: config[metadataSource]
+     *  ``Object``
+     */
+     
+    metadataForm: null,
+    attributeForm: null,
      
     /** private: method[initComponent]
      */
@@ -85,8 +92,33 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
             tooltip: this.saveButtonTooltip,
             iconCls: "save",
             hidden: true,
+            disabled: true,
             handler: function() {
                 this.stopEditing(true);
+            },
+            scope: this
+        });
+        
+        this.previousButton = new Ext.Button({
+            text: "Previous",
+            iconCls: "x-tbar-page-prev",
+            disabled: true,
+            handler: function() {
+                this.metadataForm.hide();
+                this.attributeForm.show();
+                this.previousButton.disable();
+                this.nextButton.enable();
+            },
+            scope: this
+        });
+        this.nextButton = new Ext.Button({
+            text: "Next",
+            iconCls: "x-tbar-page-next",
+            handler: function() {
+                this.attributeForm.hide();
+                this.metadataForm.show();
+                this.nextButton.disable();
+                this.previousButton.enable();
             },
             scope: this
         });
@@ -98,8 +130,25 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
             border: false
         });
         
+        this.metadataForm = new NHDEdit.MetadataForm({
+            hidden: true,
+            padding: 5,
+            border: false,
+            url: this.metadataSource.url,
+            featureType: this.metadataSource.featureType,
+            featureNS: this.metadataSource.featureNS,
+            listeners: {
+                "metadataselected": function(cmp, id) {
+                    //TODO do somehting with the id
+                    this.saveButton.enable();
+                },
+                scope: this
+            }
+        });
+        
         this.items = [
-            this.attributeForm
+            this.attributeForm,
+            this.metadataForm
         ];
 
         this.bbar = new Ext.Toolbar({
@@ -108,7 +157,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
                 this.editButton,
                 this.deleteButton,
                 this.saveButton,
-                this.cancelButton
+                this.cancelButton,
+                "->",
+                this.previousButton,
+                this.nextButton
             ]
         });
         
@@ -119,6 +171,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         this.store.on({
             "exception": function(proxy, type, action, options, response, records) {
                 this.attributeForm.hide();
+                this.metadataForm.hide();
+                this.previousButton.hide();
+                this.nextButton.hide();
                 this.add(new NHDEdit.ExceptionPanel({
                     padding: 5,
                     border: false,

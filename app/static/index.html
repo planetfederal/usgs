@@ -124,7 +124,12 @@
                         outputConfig: {
                             xtype: "app_featureeditwizard",
                             width: 310,
-                            height: 400
+                            height: 400,
+                            metadataSource: {
+                                url: "/geoserver/wfs?",
+                                featureType: "nhdmetadata",
+                                featureNS: "http://www.usgs.gov/"
+                            }
                         }
                     }, {
                         ptype: "gxp_legend",
