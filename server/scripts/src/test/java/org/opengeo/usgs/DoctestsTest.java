@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.geoserver.geoscript.javascript.JavaScriptModules;
-import org.geoserver.test.GeoServerTestSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.tools.shell.Global;
 
 /**
- * Run doctests in folder src/test/doc.
+ * Run doctests in doc folder.
  * 
  * A doctest is a test in the form of an interactive shell session; Rhino
  * collects and runs the inputs to the shell prompt and compares them to the
@@ -30,11 +29,11 @@ import org.mozilla.javascript.tools.shell.Global;
  * Distributed under MPL 1.1 (http://www.mozilla.org/MPL/).
  */
 @RunWith(Parameterized.class)
-public class DoctestsTest extends GeoServerTestSupport {
-    static final String baseDirectory = "src" + File.separator + "test" + File.separator + "doc";
+public class DoctestsTest extends USGSTestSupport {
     String name;
     String source;
     int optimizationLevel;
+    static URL baseDirectory = DoctestsTest.class.getResource("doc");
     
     public DoctestsTest(String name, String source, int optimizationLevel) throws Exception {
         this.name = name;
@@ -46,12 +45,10 @@ public class DoctestsTest extends GeoServerTestSupport {
     @Before
     public void setUpDoctests() throws Exception {
         setUp();
-//        URL dataURL = getClass().getResource("data");
-//        File dir = new File(dataURL.getFile());
     }
 
     public static File[] getDoctestFiles() {
-        return recursiveListFiles(new File(baseDirectory));
+        return recursiveListFiles(new File(baseDirectory.getFile()));
     }
 
     public static String loadFile(File f) throws IOException {
@@ -67,9 +64,9 @@ public class DoctestsTest extends GeoServerTestSupport {
         List<Object[]> result = new ArrayList<Object[]>();
         for (File f : doctests) {
             String contents = loadFile(f);
-            result.add(new Object[] { f.getName(), contents, -1 });
-            result.add(new Object[] { f.getName(), contents, 0 });
-            result.add(new Object[] { f.getName(), contents, 9 });
+//            result.add(new Object[] { f.getName(), contents, -1 });
+//            result.add(new Object[] { f.getName(), contents, 0 });
+//            result.add(new Object[] { f.getName(), contents, 9 });
         }
         return result;
     }
