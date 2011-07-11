@@ -23,6 +23,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
      */
     initComponent: function() {
         
+        // we only support editing mode for this subclass
+        this.editing = true;
+        
         var feature = this.feature;
         if (!this.location) {
             this.location = feature;
@@ -174,57 +177,20 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
      *      ``featuremodified`` event will be fired.
      */
     stopEditing: function(save) {
-        if(this.editing) {
-            //TODO remove the line below when
-            // http://trac.openlayers.org/ticket/2210 is fixed.
-            this.modifyControl.deactivate();
-            this.modifyControl.destroy();
-            
-            var feature = this.feature;
-            if (feature.state === this.getDirtyState()) {
-                if (save === true) {
-                    //TODO When http://trac.osgeo.org/openlayers/ticket/3131
-                    // is resolved, remove the if clause below
-                    if (this.schema) {
-                        var attribute, rec;
-                        for (var i in feature.attributes) {
-                            rec = this.schema.getAt(this.schema.findExact("name", i));
-                            attribute = feature.attributes[i];
-                            if (attribute instanceof Date) {
-                                var type = rec.get("type").split(":").pop();
-                                feature.attributes[i] = attribute.format(
-                                    type == "date" ? "Y-m-d" : "c"
-                                );
-                            }
-                        }
-                    }
-                    this.fireEvent("featuremodified", this, feature);
-                } else if(feature.state === OpenLayers.State.INSERT) {
-                    this.editing = false;
-                    feature.layer.destroyFeatures([feature]);
-                    this.fireEvent("canceledit", this, null);
-                    this.close();
-                } else {
-                    var layer = feature.layer;
-                    layer.drawFeature(feature, {display: "none"});
-                    feature.geometry = this.geometry;
-                    feature.attributes = this.attributes;
-                    this.setFeatureState(null);
-                    this.grid.setSource(feature.attributes);
-                    layer.drawFeature(feature);
-                    this.fireEvent("canceledit", this, feature);
-                }
+        var feature = this.feature;
+        var attributes = this.attributeForm.getForm().getFieldValues();
+        var modified = false;
+        for (var a in attributes) {
+            if (attributes[a] != feature.attributes[a]) {
+                modified = true;
+                feature.attributes[a] = attributes[a];
             }
-
-            if (!this.isDestroyed) {
-                this.cancelButton.hide();
-                this.saveButton.hide();
-                this.editButton.show();
-                this.allowDelete && this.deleteButton.show();
-            }
-            
-            this.editing = false;
         }
+        if (modified && !feature.state) {
+            feature.state = OpenLayers.State.UPDATE;
+        }
+
+        NHDEdit.FeatureEditWizard.superclass.stopEditing.apply(this, arguments);
     },
     
     deleteFeature: function() {
