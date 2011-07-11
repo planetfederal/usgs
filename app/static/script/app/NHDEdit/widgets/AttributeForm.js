@@ -49,6 +49,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             if (name.toLowerCase() === "fcode") {
                 fieldCfg = {
                     xtype: "combo",
+                    listWidth: 650,
                     mode: "local",
                     name: name,
                     fieldLabel: name,
