@@ -11,7 +11,7 @@ Ext.ns("NHDEdit");
 /** api: (define)
  *  module = NHDEdit
  *  class = ExceptionPanel
- *  extends = Ext.Panel
+ *  extends = Ext.form.FormPanel
  */
 
 /** api: constructor
@@ -21,7 +21,7 @@ Ext.ns("NHDEdit");
  *    a question (e.g. is this feature over feature X?) a re-submit a 
  *    transaction.
  */
-NHDEdit.ExceptionPanel = Ext.extend(Ext.Panel, {
+NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     exceptionReport: null,
 
@@ -29,6 +29,36 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.Panel, {
 
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
+        this.add({
+            xtype: "displayfield", 
+            fieldLabel: "Process identifier", 
+            name: "locator", 
+            value: this.getProperty("locator")
+        });
+        this.add({
+            xtype: "displayfield", 
+            fieldLabel: "Exception code", 
+            name: "exceptionCode", 
+            value: this.getProperty("code")
+        });
+        this.add({
+            xtype: "textarea",
+            readOnly: true,
+            grow: true, 
+            fieldLabel: "Message",
+            width: 150, 
+            value: this.msg
+        });
+        this.doLayout();
+    },
+
+    getProperty: function(property) {
+        var result;
+        // we only expect one, so overwrite if multiple
+        Ext.each(this.exceptionReport.exceptions, function(exc) {
+            result = exc[property];
+        });
+        return result;
     }
 
 });
