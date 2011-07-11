@@ -36,6 +36,8 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
 
     featureStore: null,
 
+    openWindow: null,
+
     /** api: property[schema]
      *  ``GeoExt.data.AttributeStore`` 
      */
@@ -70,7 +72,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
             fields: fields,
             autoLoad: true,
             listeners: {
-                "load": this.bindStore,
+                "load": this.createGrid,
                 scope: this
             },
             url: this.schema.url,
@@ -79,8 +81,17 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
         });
     },
 
-    bindStore: function() {
-        this.grid.setStore(this.featureStore, this.schema);
+    createGrid: function() {
+        Ext.getCmp("app-open-button").setDisabled(false);
+        this.grid = new gxp.grid.FeatureGrid({
+            store: this.featureStore,
+            schema: this.schema,
+            loadMask: true,
+            /* TODO: in this case it would be easier to specify the includeFields */
+            ignoreFields: ['meta_processid', 'attributeaccuracyreport', 'logicalconsistencyreport', 'completenessreport', 'horizpositionalaccuracyreport', 'vertpositionalaccuracyreport', 'metadatastandardname', 'metadatastandardversion', 'metadatadate', 'datasetcredit', 'contactorganization', 'addresstype', 'address', 'city', 'stateorprovince', 'postalcode', 'contactvoicetelephone', 'contactinstructions'],
+            height: 300,
+            bbar: ["->", {text: "Open", iconCls: "gxp-icon-open", handler: this.openMetadata, scope: this}]
+        });
     },
 
     saveEntry: function() {
@@ -105,7 +116,7 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
     },
 
     openEntry: function() {
-        if (this.openWindow == null) {
+        if (this.openWindow === null) {
             this.openWindow = new Ext.Window({title: "Open", layout: "fit", items: [this.grid]});
         }
         this.openWindow.show();
@@ -128,6 +139,8 @@ NHDEdit.plugins.MetadataEntry = Ext.extend(gxp.plugins.Tool, {
                 {
                     text: "Open",
                     iconCls: "gxp-icon-open",
+                    disabled: true,
+                    id: "app-open-button",
                     handler: this.openEntry,
                     scope: this
                 }, {
