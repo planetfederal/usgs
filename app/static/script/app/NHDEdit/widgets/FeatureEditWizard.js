@@ -19,6 +19,9 @@ Ext.ns("NHDEdit");
  */
 NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
     
+    layout: null,
+    autoHeight: true,
+    
     /** private: property[store]
      *  ``GeoExt.data.FeatureStore`` The store holding the feature being edited
      */
@@ -119,8 +122,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
                 this.add(new NHDEdit.ExceptionPanel({
                     padding: 5,
                     border: false,
-                    //TODO maybe we can do autoHeight for the whole popup
-                    height: 325,
                     exceptionReport: response.exceptionReport
                 }));
                 this.doLayout();
