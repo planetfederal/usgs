@@ -22,11 +22,26 @@ Ext.ns("NHDEdit");
  */
 NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
 
-    featureManager: null,
+    feature: null,
+
+    schema: null,
+
+    autoScroll: true,
 
     initComponent : function() {
-        this.plugins = [new GeoExt.plugins.AttributeForm({attributeStore: this.featureManager.schema})];
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
+        this.schema.each(function(r) {
+            var type = r.get("type");
+            if (type.match(/^[^:]*:?((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry))/)) {
+                // exclude gml geometries
+                return;
+            }
+            var name = r.get("name");
+            var value = this.feature.attributes[name];
+            var fieldCfg = GeoExt.form.recordToField(r);
+            fieldCfg.value = value;
+            this.add(fieldCfg);
+        }, this);
     }
 
 });
