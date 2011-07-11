@@ -136,42 +136,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
             scope: this
         });
     },
-    
-    /** private: method[getDirtyState]
-     *  Get the appropriate OpenLayers.State value to indicate a dirty feature.
-     *  We don't cache this value because the popup may remain open through
-     *  several state changes.
-     */
-    getDirtyState: function() {
-        return this.feature.state === OpenLayers.State.INSERT ?
-            this.feature.state : OpenLayers.State.UPDATE;
-    },
-    
-    /** private: method[startEditing]
-     */
-    startEditing: function() {
-        if(!this.editing) {
-            this.editing = true;
-            this.anc && this.unanchorPopup();
-
-            this.editButton.hide();
-            this.deleteButton.hide();
-            this.saveButton.show();
-            this.cancelButton.show();
-            
-            this.geometry = this.feature.geometry.clone();
-            this.attributes = Ext.apply({}, this.feature.attributes);
-
-            this.modifyControl = new OpenLayers.Control.ModifyFeature(
-                this.feature.layer,
-                {standalone: true, vertexRenderIntent: this.vertexRenderIntent}
-            );
-            this.feature.layer.map.addControl(this.modifyControl);
-            this.modifyControl.activate();
-            this.modifyControl.selectFeature(this.feature);
-        }
-    },
-    
+        
     /** private: method[stopEditing]
      *  :arg save: ``Boolean`` If set to true, changes will be saved and the
      *      ``featuremodified`` event will be fired.
@@ -189,37 +154,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         modified && this.setFeatureState(OpenLayers.State.UPDATE);
 
         NHDEdit.FeatureEditWizard.superclass.stopEditing.apply(this, arguments);
-    },
-    
-    deleteFeature: function() {
-        Ext.Msg.show({
-            title: this.deleteMsgTitle,
-            msg: this.deleteMsg,
-            buttons: Ext.Msg.YESNO,
-            fn: function(button) {
-                if(button === "yes") {
-                    this.setFeatureState(OpenLayers.State.DELETE);
-                    this.fireEvent("featuremodified", this, this.feature);
-                    this.close();
-                }
-            },
-            scope: this,
-            icon: Ext.MessageBox.QUESTION,
-            animEl: this.getEl()
-        });
-    },
-    
-    /** private: method[setFeatureState]
-     *  Set the state of this popup's feature and trigger a featuremodified
-     *  event on the feature's layer.
-     */
-    setFeatureState: function(state) {
-        this.feature.state = state;
-        var layer = this.feature.layer;
-        layer && layer.events.triggerEvent("featuremodified", {
-            feature: this.feature
-        });
     }
+    
 });
 
 /** api: xtype = app_featureeditwizard */
