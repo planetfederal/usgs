@@ -23,6 +23,10 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     schema: null,
 
+    border: false,
+
+    bodyStyle: "padding: 5px",
+
     initComponent : function() {
         NHDEdit.MetadataForm.superclass.initComponent.call(this);
         this.schema.on({
@@ -32,6 +36,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     onLoad: function() {
+        var fieldSet = new Ext.form.FieldSet({collapsible: true, collapsed: true, title: "Advanced"});
         this.schema.each(function(r) {
             var type = r.get("type");
             if (type.match(/^[^:]*:?((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry))/)) {
@@ -40,8 +45,16 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
             var name = r.get("name");
             var fieldCfg = GeoExt.form.recordToField(r);
-            this.add(fieldCfg);
+            if (name.toLowerCase() === "processdescription") {
+                fieldCfg.xtype = "textarea";
+                fieldCfg.grow = true;
+                fieldCfg.width = 150;
+                this.add(fieldCfg);
+            } else {
+                fieldSet.add(fieldCfg);
+            }
         }, this);
+        this.add(fieldSet);
         this.doLayout();
     }
 
