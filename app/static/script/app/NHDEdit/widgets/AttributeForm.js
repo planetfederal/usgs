@@ -8,6 +8,10 @@
 
 Ext.ns("NHDEdit");
 
+/**
+ * @include NHDEdit/data/NHDFCode.js
+ */
+
 /** api: (define)
  *  module = NHDEdit
  *  class = AttributeForm
@@ -30,6 +34,10 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
 
     initComponent : function() {
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
+        var store = new Ext.data.ArrayStore({
+            fields: ['value', 'description'],
+            data : NHDEdit.fCodes
+        });
         this.schema.each(function(r) {
             var type = r.get("type");
             if (type.match(/^[^:]*:?((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry))/)) {
@@ -37,8 +45,22 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 return;
             }
             var name = r.get("name");
+            var fieldCfg;
+            if (name.toLowerCase() === "fcode") {
+                fieldCfg = {
+                    xtype: "combo",
+                    mode: "local",
+                    name: name,
+                    fieldLabel: name,
+                    store: store, 
+                    triggerAction: 'all',
+                    displayField: 'description',
+                    valueField: 'value'
+                };
+            } else {
+                fieldCfg = GeoExt.form.recordToField(r);
+            }
             var value = this.feature.attributes[name];
-            var fieldCfg = GeoExt.form.recordToField(r);
             fieldCfg.value = value;
             this.add(fieldCfg);
         }, this);
