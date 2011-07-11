@@ -36,6 +36,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     onLoad: function() {
+        var commitFieldset = new Ext.form.FieldSet({title: "Commit message"});
         var fieldSet = new Ext.form.FieldSet({collapsible: true, collapsed: true, title: "Advanced"});
         this.schema.each(function(r) {
             var type = r.get("type");
@@ -48,12 +49,13 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             if (name.toLowerCase() === "processdescription") {
                 fieldCfg.xtype = "textarea";
                 fieldCfg.grow = true;
-                fieldCfg.width = 150;
-                this.add(fieldCfg);
+                fieldCfg.width = 140;
+                commitFieldset.add(fieldCfg);
             } else {
                 fieldSet.add(fieldCfg);
             }
         }, this);
+        this.add(commitFieldset);
         this.add(fieldSet);
         this.doLayout();
     }
