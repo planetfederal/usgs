@@ -120,7 +120,13 @@
                         snappingAgent: "flowline-snapping",
                         toggleGroup: "main",
                         actionTarget: {target: "map.tbar", index: 5},
-                        tolerance: 6
+                        tolerance: 6,
+                        outputConfig: {
+                            xtype: "app_featureeditwizard",
+                            width: 310,
+                            height: 400,
+                            editing: true
+                        }
                     }, {
                         ptype: "gxp_legend",
                         outputConfig: {
@@ -165,7 +171,6 @@
                     },  
                     map: {
                         id: "mymap",
-                        title: "Map",
                         projection: "EPSG:900913",
                         units: "m",
                         maxResolution: 156543.0339,
