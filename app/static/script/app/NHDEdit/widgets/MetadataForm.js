@@ -66,6 +66,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         });
         NHDEdit.MetadataForm.superclass.initComponent.call(this);
+        this.addEvents(
+            'metadataselected'
+        );
     },
 
     createGrid: function() {
@@ -93,8 +96,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         var options = {
             callback: function(response) {
                 if (response && response.insertIds) {
-                    // TODO: figure out how to give metadataId to viewer
-                    //this.target.metadataId = response.insertIds[0];
+                    this.fireEvent('metadataselected', this, response.insertIds[0]);
                 }
             },
             scope: this
@@ -111,8 +113,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     openMetadata: function() {
         var fid = this.grid.getSelectionModel().getSelected().get("feature").fid;
-        // TODO: figure out how to give metadataId to viewer
-        //this.target.metadataId = fid;
+        this.fireEvent('metadataselected', this, fid);
         this.openWindow.close();
     },
 
