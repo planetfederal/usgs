@@ -1,22 +1,22 @@
 <layer>
   <name>nhdline</name>
-  <id>LayerInfoImpl--1bc55906:130729d4f6a:-7ffa</id>
+  <id>LayerInfoImpl--1cfd7180:13120847f4c:-7ffb</id>
   <type>VECTOR</type>
   <defaultStyle>
     <id>StyleInfoImpl--6a5a06df:13109f6b21d:-8000</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--1bc55906:130729d4f6a:-7ffb</id>
+    <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-7ffc</id>
   </resource>
   <enabled>true</enabled>
   <metadata>
-    <entry key="GWC.autoCacheStyles">true</entry>
     <entry key="GWC.metaTilingX">4</entry>
+    <entry key="GWC.autoCacheStyles">true</entry>
     <entry key="GWC.metaTilingY">4</entry>
     <entry key="GWC.gutter">0</entry>
     <entry key="GWC.enabled">true</entry>
-    <entry key="GWC.cacheFormats">image/jpeg,image/png</entry>
     <entry key="GWC.gridSets">EPSG:4326,EPSG:900913</entry>
+    <entry key="GWC.cacheFormats">image/png,image/jpeg</entry>
   </metadata>
   <attribution>
     <logoWidth>0</logoWidth>

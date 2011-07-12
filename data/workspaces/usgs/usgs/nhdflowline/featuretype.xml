@@ -1,7 +1,7 @@
 <featureType>
-  <id>FeatureTypeInfoImpl--1bc55906:130729d4f6a:-7ffd</id>
+  <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-7ffe</id>
   <name>nhdflowline</name>
-  <nativeName>nhdflowline</nativeName>
+  <nativeName>NHDFlowline</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--11814b35:13067cdfb15:-7fff</id>
   </namespace>
@@ -18,17 +18,17 @@
   AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]]</nativeCRS>
   <srs>EPSG:4269</srs>
   <nativeBoundingBox>
-    <minx>-110.411</minx>
-    <maxx>-100.193</maxx>
-    <miny>35.722</miny>
-    <maxy>41.976</maxy>
+    <minx>-106.112</minx>
+    <maxx>-105.337</maxx>
+    <miny>40.027</miny>
+    <maxy>40.424</maxy>
     <crs>EPSG:4269</crs>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-110.411</minx>
-    <maxx>-100.193</maxx>
-    <miny>35.722</miny>
-    <maxy>41.976</maxy>
+    <minx>-106.112</minx>
+    <maxx>-105.337</maxx>
+    <miny>40.027</miny>
+    <maxy>40.424</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>

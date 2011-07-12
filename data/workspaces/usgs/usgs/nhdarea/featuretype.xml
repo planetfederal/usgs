@@ -1,7 +1,7 @@
 <featureType>
-  <id>FeatureTypeInfoImpl--1bc55906:130729d4f6a:-7fff</id>
+  <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-8000</id>
   <name>nhdarea</name>
-  <nativeName>nhdarea</nativeName>
+  <nativeName>NHDArea</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--11814b35:13067cdfb15:-7fff</id>
   </namespace>
@@ -18,17 +18,17 @@
   AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]]</nativeCRS>
   <srs>EPSG:4269</srs>
   <nativeBoundingBox>
-    <minx>-110.217</minx>
-    <maxx>-100.145</maxx>
-    <miny>35.722</miny>
-    <maxy>42.027</maxy>
+    <minx>-107.194</minx>
+    <maxx>-105.312</maxx>
+    <miny>39.541</miny>
+    <maxy>40.433</maxy>
     <crs>EPSG:4269</crs>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-110.217</minx>
-    <maxx>-100.145</maxx>
-    <miny>35.722</miny>
-    <maxy>42.027</maxy>
+    <minx>-107.194</minx>
+    <maxx>-105.312</maxx>
+    <miny>39.541</miny>
+    <maxy>40.433</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>

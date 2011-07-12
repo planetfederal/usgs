@@ -1,7 +1,7 @@
 <featureType>
-  <id>FeatureTypeInfoImpl--1bc55906:130729d4f6a:-7ff9</id>
+  <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-7ffa</id>
   <name>nhdpoint</name>
-  <nativeName>nhdpoint</nativeName>
+  <nativeName>NHDPoint</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--11814b35:13067cdfb15:-7fff</id>
   </namespace>
@@ -18,17 +18,17 @@
   AUTHORITY[&quot;EPSG&quot;,&quot;4269&quot;]]</nativeCRS>
   <srs>EPSG:4269</srs>
   <nativeBoundingBox>
-    <minx>-110.338</minx>
-    <maxx>-100.865</maxx>
-    <miny>35.739</miny>
-    <maxy>41.975</maxy>
+    <minx>-105.689</minx>
+    <maxx>-105.446</maxx>
+    <miny>40.091</miny>
+    <maxy>40.392</maxy>
     <crs>EPSG:4269</crs>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-110.338</minx>
-    <maxx>-100.865</maxx>
-    <miny>35.739</miny>
-    <maxy>41.975</maxy>
+    <minx>-105.689</minx>
+    <maxx>-105.446</maxx>
+    <miny>40.091</miny>
+    <maxy>40.392</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>
