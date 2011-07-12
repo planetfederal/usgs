@@ -36,7 +36,14 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
     
     initComponent : function() {
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
-        var store = new Ext.data.ArrayStore({
+        var fTypeStore = new Ext.data.ArrayStore({
+            fields: ['value', 'description'],
+            data : NHDEdit.fTypes
+        });
+        fTypeStore.filterBy(function(r) {
+            return NHDEdit.layerFTypes[this.schema.reader.raw.featureTypes[0].typeName].indexOf(r.get("value")) != -1;
+        }, this);
+        var fCodeStore = new Ext.data.ArrayStore({
             fields: ['value', 'description'],
             data : NHDEdit.fCodes
         });
@@ -51,18 +58,48 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 return;
             }
             var fieldCfg;
-            if (name.toLowerCase() === "fcode") {
+            if (name.toLowerCase() == "ftype") {
                 fieldCfg = {
                     xtype: "combo",
-                    listWidth: 650,
                     mode: "local",
+                    lastQuery: "",
+                    forceSelection: true,
                     name: name,
                     fieldLabel: name,
-                    store: store, 
+                    store: fTypeStore, 
+                    triggerAction: 'all',
+                    displayField: 'description',
+                    valueField: 'value',
+                    listeners: {
+                        "valid": function(field) {
+                            window.setTimeout(function() {
+                                var value = field.getValue();
+                                fCodeStore.filterBy(function(r) {
+                                    return r.get("value").indexOf(value) == 0
+                                }, this);
+                                var fCode = field.ownerCt.fCode;
+                                if (fCodeStore.findExact("value", fCode.getValue()) == -1) {
+                                    fCode.setValue(fCodeStore.getAt(0).get("value"));
+                                }
+                            }, 0);
+                        } 
+                    }
+                };
+            } else if (name.toLowerCase() == "fcode") {
+                fieldCfg = {
+                    xtype: "combo",
+                    ref: "fCode",
+                    listWidth: 650,
+                    mode: "local",
+                    lastQuery: "",
+                    forceSelection: true,
+                    name: name,
+                    fieldLabel: name,
+                    store: fCodeStore, 
                     triggerAction: 'all',
                     displayField: 'description',
                     valueField: 'value'
-                };
+                };            
             } else {
                 fieldCfg = GeoExt.form.recordToField(r);
             }
