@@ -126,6 +126,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         this.attributeForm = new NHDEdit.AttributeForm({
             feature: feature,
             schema: this.schema,
+            excludeFields: this.excludeFields || [],
             padding: 5,
             border: false
         });

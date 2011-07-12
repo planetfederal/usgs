@@ -31,6 +31,8 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
     schema: null,
 
     autoScroll: true,
+    
+    excludeFields: null,
 
     initComponent : function() {
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
@@ -39,12 +41,15 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             data : NHDEdit.fCodes
         });
         this.schema.each(function(r) {
+            var name = r.get("name");
+            if (this.excludeFields.indexOf(name) != -1) {
+                return;
+            }
             var type = r.get("type");
             if (type.match(/^[^:]*:?((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry))/)) {
                 // exclude gml geometries
                 return;
             }
-            var name = r.get("name");
             var fieldCfg;
             if (name.toLowerCase() === "fcode") {
                 fieldCfg = {
