@@ -11,4 +11,9 @@ public abstract class USGSTestSupport extends GeoServerAbstractTestSupport {
         return new USGSTestData();
     }
 
+    @Override
+    protected boolean useLegacyDataDirectory() {
+        return false;
+    }
+
 }
