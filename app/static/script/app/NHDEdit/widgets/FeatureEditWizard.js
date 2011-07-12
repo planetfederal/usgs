@@ -7,29 +7,91 @@ Ext.ns("NHDEdit");
 /** api: (define)
  *  module = app
  *  class = FeatureEditWizard
- *  extends = gxp.FeatureEditPopup
+ *  extends = Ext.Window
  */
 
 /** api: constructor
- *  .. class:: FeatureEditPopup(config)
+ *  .. class:: FeatureEditWizard(config)
  *
  *      Create a new popup which displays the attributes of a feature and
  *      makes the feature editable,
- *      using an ``OpenLayers.Control.MofidyFeature``.
+ *      using an ``OpenLayers.Control.ModifyFeature``.
  */
-NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
+NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     
-    layout: null,
+    /** i18n **/
+    closeMsgTitle: 'Changes will be lost?',
+    closeMsg: 'Any changes will be lost after closing this window. Are you sure you want to close the window?',
+    deleteMsgTitle: 'Delete Feature?',
+    deleteMsg: 'Are you sure you want to delete this feature?',
+    deleteButtonText: 'Delete',
+    deleteButtonTooltip: 'Delete this feature',
+    saveButtonText: 'Save',
+    saveButtonTooltip: 'Save changes',
+    
+    /** private config overrides **/
     autoHeight: true,
+        
+    /** api: config[feature]
+     *  ``OpenLayers.Feature.Vector``|``GeoExt.data.FeatureRecord`` The feature
+     *  to edit and display.
+     */
+    
+    /** api: config[vertexRenderIntent]
+     *  ``String`` renderIntent for feature vertices when modifying. Undefined
+     *  by default.
+     */
+    
+    /** api: config[feature]
+     *  ``GeoExt.data.FeatureRecord`` The feature being edited
+     */
+    feature: null,
+    
+    /** api: config[schema]
+     *  ``GeoExt.data.AttributeStore`` Optional. If provided, available
+     *  feature attributes will be determined from the schema instead of using
+     *  the attributes that the feature has currently set.
+     */
+    schema: null,
+    
+   /** api: config[excludeFields]
+     *  ``Array`` Optional list of field names (case sensitive) that are to be
+     *  excluded from the attributeForm.
+     */
+    
+    /** private: property[excludeFields]
+     */
+    
+    /** private: property[modifyControl]
+     *  ``OpenLayers.Control.ModifyFeature`` control for editing the geometry.
+     */
+    modifyControl: null,
+    
+    /** private: property[geometry]
+     *  ``OpenLayers.Geometry`` The original geometry of the feature we are
+     *  editing.
+     */
+    geometry: null,
+    
+    /** private: property[attributes]
+     *  ``Object`` The original attributes of the feature we are editing.
+     */
+    attributes: null,
+    
+    /** private: property[saveButton]
+     *  ``Ext.Button``
+     */
+    saveButton: null,
+    
+    /** private: property[deleteButton]
+     *  ``Ext.Button``
+     */
+    deleteButton: null,
     
     /** private: property[store]
      *  ``GeoExt.data.FeatureStore`` The store holding the feature being edited
      */
-    
-    /** api: config[feature]
-     *  ``GeoExt.data.FeatureRecord``
-     */
-    
+        
     /** api: config[metadataSource]
      *  ``Object``
      */
@@ -41,31 +103,15 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
      */
     initComponent: function() {
         
-        // we only support editing mode for this subclass
-        this.editing = true;
-        
         this.store = this.feature.store;
         var feature = this.feature;
         if (feature instanceof GeoExt.data.FeatureRecord) {
             feature = this.feature = feature.getFeature();
         }
-        if (!this.location) {
-            this.location = feature;
-        }
-        
-        this.anchored = !this.editing;
         
         if(!this.title && feature.fid) {
             this.title = feature.fid;
         }
-        
-        this.editButton = new Ext.Button({
-            text: this.editButtonText,
-            tooltip: this.editButtonTooltip,
-            iconCls: "edit",
-            handler: this.startEditing,
-            scope: this
-        });
         
         this.deleteButton = new Ext.Button({
             text: this.deleteButtonText,
@@ -76,22 +122,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
             scope: this
         });
         
-        this.cancelButton = new Ext.Button({
-            text: this.cancelButtonText,
-            tooltip: this.cancelButtonTooltip,
-            iconCls: "cancel",
-            hidden: true,
-            handler: function() {
-                this.stopEditing(false);
-            },
-            scope: this
-        });
-        
         this.saveButton = new Ext.Button({
             text: this.saveButtonText,
             tooltip: this.saveButtonTooltip,
             iconCls: "save",
-            hidden: true,
             disabled: true,
             handler: function() {
                 this.stopEditing(true);
@@ -140,7 +174,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
             featureNS: this.metadataSource.featureNS,
             listeners: {
                 "metadataselected": function(cmp, id) {
-                    //TODO do somehting with the id
+                    //TODO do something with the id
                     this.saveButton.enable();
                 },
                 scope: this
@@ -153,21 +187,16 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         ];
 
         this.bbar = new Ext.Toolbar({
-            hidden: this.readOnly,
             items: [
-                this.editButton,
-                this.deleteButton,
                 this.saveButton,
-                this.cancelButton,
+                this.deleteButton,
                 "->",
                 this.previousButton,
                 this.nextButton
             ]
         });
         
-        // this initComponent implementation replaces the one of the superclass,
-        // so we call it on the superclass's superclass.
-        gxp.FeatureEditPopup.superclass.initComponent.call(this);
+        NHDEdit.FeatureEditWizard.superclass.initComponent.call(this);
         
         this.store.on({
             "exception": function(proxy, type, action, options, response, records) {
@@ -187,23 +216,21 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         
         this.on({
             "show": function() {
-                if(this.editing) {
-                    this.editing = null;
-                    this.startEditing();
-                }
+                this.startEditing();
             },
             "beforeclose": function() {
-                if(!this.editing) {
-                    return;
-                }
+                this.updateFeature();
                 if(this.feature.state === this.getDirtyState()) {
                     Ext.Msg.show({
                         title: this.closeMsgTitle,
                         msg: this.closeMsg,
-                        buttons: Ext.Msg.YESNOCANCEL,
+                        buttons: Ext.Msg.YESNO,
                         fn: function(button) {
-                            if(button && button !== "cancel") {
-                                this.stopEditing(button === "yes");
+                            if(button && button === "yes") {
+                                this.fireEvent("canceledit", this, null);
+                                // don't fire another beforeclose event
+                                this.suspendEvents();
+                                this.modifyControl.unselectFeature(this.feature);
                                 this.close();
                             } else {
                                 this.fireEvent("cancelclose", this);
@@ -222,25 +249,122 @@ NHDEdit.FeatureEditWizard = Ext.extend(gxp.FeatureEditPopup, {
         });
     },
         
+    /** private: method[getDirtyState]
+     *  Get the appropriate OpenLayers.State value to indicate a dirty feature.
+     *  We don't cache this value because the popup may remain open through
+     *  several state changes.
+     */
+    getDirtyState: function() {
+        return this.feature.state === OpenLayers.State.INSERT ?
+            this.feature.state : OpenLayers.State.UPDATE;
+    },
+    
+    /** private: method[startEditing]
+     */
+    startEditing: function() {
+        this.geometry = this.feature.geometry.clone();
+        this.attributes = Ext.apply({}, this.feature.attributes);
+
+        this.modifyControl = new OpenLayers.Control.ModifyFeature(
+            this.feature.layer,
+            {standalone: true, vertexRenderIntent: this.vertexRenderIntent}
+        );
+        this.feature.layer.map.addControl(this.modifyControl);
+        this.modifyControl.activate();
+        this.modifyControl.selectFeature(this.feature);
+    },
+    
+    updateFeature: function() {
+        var feature = this.feature;
+        var fields = this.attributeForm.items;
+        var modified = false;
+        fields.each(function(f) {
+            if (f.isDirty()) {
+                modified = true;
+                feature.attributes[f.getName()] = f.getValue();
+            }
+        });
+        modified && this.setFeatureState(OpenLayers.State.UPDATE);
+    },
+    
     /** private: method[stopEditing]
      *  :arg save: ``Boolean`` If set to true, changes will be saved and the
      *      ``featuremodified`` event will be fired.
      */
     stopEditing: function(save) {
+        save && this.updateFeature();
+        
+        //TODO remove the line below when
+        // http://trac.openlayers.org/ticket/2210 is fixed.
+        this.modifyControl.deactivate();
+        this.modifyControl.destroy();
+        
         var feature = this.feature;
-        var attributes = this.attributeForm.getForm().getFieldValues();
-        var modified = false;
-        for (var a in attributes) {
-            if (attributes[a] != feature.attributes[a]) {
-                modified = true;
-                feature.attributes[a] = attributes[a];
+        if (feature.state === this.getDirtyState()) {
+            if (save === true) {
+                //TODO When http://trac.osgeo.org/openlayers/ticket/3131
+                // is resolved, remove the if clause below
+                if (this.schema) {
+                    var attribute, rec;
+                    for (var i in feature.attributes) {
+                        rec = this.schema.getAt(this.schema.findExact("name", i));
+                        attribute = feature.attributes[i];
+                        if (attribute instanceof Date) {
+                            var type = rec.get("type").split(":").pop();
+                            feature.attributes[i] = attribute.format(
+                                type == "date" ? "Y-m-d" : "c"
+                            );
+                        }
+                    }
+                }
+                this.fireEvent("featuremodified", this, feature);
+            } else if(feature.state === OpenLayers.State.INSERT) {
+                this.editing = false;
+                feature.layer.destroyFeatures([feature]);
+                this.fireEvent("canceledit", this, null);
+                this.close();
+            } else {
+                var layer = feature.layer;
+                layer.drawFeature(feature, {display: "none"});
+                feature.geometry = this.geometry;
+                feature.attributes = this.attributes;
+                this.setFeatureState(null);
+                layer.drawFeature(feature);
+                this.fireEvent("canceledit", this, feature);
             }
         }
-        modified && this.setFeatureState(OpenLayers.State.UPDATE);
-
-        NHDEdit.FeatureEditWizard.superclass.stopEditing.apply(this, arguments);
-    }
+    },
     
+    deleteFeature: function() {
+        Ext.Msg.show({
+            title: this.deleteMsgTitle,
+            msg: this.deleteMsg,
+            buttons: Ext.Msg.YESNO,
+            fn: function(button) {
+                if(button === "yes") {
+                    this.setFeatureState(OpenLayers.State.DELETE);
+                    this.fireEvent("featuremodified", this, this.feature);
+                    this.close();
+                }
+            },
+            scope: this,
+            icon: Ext.MessageBox.QUESTION,
+            animEl: this.getEl()
+        });
+    },
+    
+    /** private: method[setFeatureState]
+     *  Set the state of this popup's feature and trigger a featuremodified
+     *  event on the feature's layer.
+     */
+    setFeatureState: function(state) {
+        this.feature.state = state;
+        var layer = this.feature.layer;
+        layer && layer.events.triggerEvent("featuremodified", {
+            feature: this.feature
+        });
+    }
+
 });
 
 /** api: xtype = app_featureeditwizard */
