@@ -19,23 +19,6 @@
                             <CssParameter name="stroke-width">1.5</CssParameter>
                         </Stroke>
                     </LineSymbolizer>
-                    <PointSymbolizer>
-                        <Geometry>
-                            <ogc:Function name="endPoint">
-                                <ogc:PropertyName>Shape</ogc:PropertyName>
-                            </ogc:Function>
-                        </Geometry>
-                        <Graphic>
-                            <Mark>
-                                <WellKnownName>square</WellKnownName>
-                                <Fill>
-                                    <CssParameter name="fill">#000000</CssParameter>
-                                </Fill>
-                            </Mark>
-                            <Opacity>1</Opacity>
-                            <Size>7</Size>
-                        </Graphic>
-                    </PointSymbolizer>
                 </Rule>
                 <Rule>
                     <Name>CanalDitch</Name>
@@ -69,23 +52,6 @@
                             <CssParameter name="stroke-width">2</CssParameter>
                         </Stroke>
                     </LineSymbolizer>
-                    <PointSymbolizer>
-                        <Geometry>
-                            <ogc:Function name="endPoint">
-                                <ogc:PropertyName>Shape</ogc:PropertyName>
-                            </ogc:Function>
-                        </Geometry>
-                        <Graphic>
-                            <Mark>
-                                <WellKnownName>square</WellKnownName>
-                                <Fill>
-                                    <CssParameter name="fill">#000000</CssParameter>
-                                </Fill>
-                            </Mark>
-                            <Opacity>1</Opacity>
-                            <Size>7</Size>
-                        </Graphic>
-                    </PointSymbolizer>
                 </Rule>
                 <Rule>
                     <Name>Connector</Name>
@@ -102,23 +68,6 @@
                             <CssParameter name="stroke-width">2</CssParameter>
                         </Stroke>
                     </LineSymbolizer>
-                    <PointSymbolizer>
-                        <Geometry>
-                            <ogc:Function name="endPoint">
-                                <ogc:PropertyName>Shape</ogc:PropertyName>
-                            </ogc:Function>
-                        </Geometry>
-                        <Graphic>
-                            <Mark>
-                                <WellKnownName>square</WellKnownName>
-                                <Fill>
-                                    <CssParameter name="fill">#000000</CssParameter>
-                                </Fill>
-                            </Mark>
-                            <Opacity>1</Opacity>
-                            <Size>7</Size>
-                        </Graphic>
-                    </PointSymbolizer>
                 </Rule>
                 <Rule>
                     <Name>Pipeline</Name>
@@ -136,23 +85,6 @@
                             <CssParameter name="stroke-dasharray"> 1 1</CssParameter>
                         </Stroke>
                     </LineSymbolizer>
-                    <PointSymbolizer>
-                        <Geometry>
-                            <ogc:Function name="endPoint">
-                                <ogc:PropertyName>Shape</ogc:PropertyName>
-                            </ogc:Function>
-                        </Geometry>
-                        <Graphic>
-                            <Mark>
-                                <WellKnownName>square</WellKnownName>
-                                <Fill>
-                                    <CssParameter name="fill">#000000</CssParameter>
-                                </Fill>
-                            </Mark>
-                            <Opacity>1</Opacity>
-                            <Size>12</Size>
-                        </Graphic>
-                    </PointSymbolizer>
                 </Rule>
                 <Rule>
                     <Name>StreamRiver</Name>
@@ -169,23 +101,6 @@
                             <CssParameter name="stroke-width">2</CssParameter>
                         </Stroke>
                     </LineSymbolizer>
-                    <PointSymbolizer>
-                        <Geometry>
-                            <ogc:Function name="endPoint">
-                                <ogc:PropertyName>Shape</ogc:PropertyName>
-                            </ogc:Function>
-                        </Geometry>
-                        <Graphic>
-                            <Mark>
-                                <WellKnownName>square</WellKnownName>
-                                <Fill>
-                                    <CssParameter name="fill">#000000</CssParameter>
-                                </Fill>
-                            </Mark>
-                            <Opacity>1</Opacity>
-                            <Size>7</Size>
-                        </Graphic>
-                    </PointSymbolizer>
                 </Rule>
                 <Rule>
                     <Name>&lt;all other values&gt;</Name>
