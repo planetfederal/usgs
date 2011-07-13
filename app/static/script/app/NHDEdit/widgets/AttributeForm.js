@@ -75,7 +75,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                             window.setTimeout(function() {
                                 var value = field.getValue();
                                 fCodeStore.filterBy(function(r) {
-                                    return r.get("value").indexOf(value) == 0
+                                    return r.get("value").indexOf(value) === 0;
                                 }, this);
                                 var fCode = field.ownerCt.fCode;
                                 if (fCodeStore.findExact("value", fCode.getValue()) == -1) {
@@ -104,7 +104,12 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 fieldCfg = GeoExt.form.recordToField(r);
             }
             var value = this.feature.attributes[name];
-            fieldCfg.value = value;
+            if (fieldCfg.xtype == "datefield") {
+                var date = Date.parseDate(value.replace(/Z$/, ""), "c");
+                fieldCfg.value = date;
+            } else {
+                fieldCfg.value = value;
+            }
             this.add(fieldCfg);
         }, this);
     }
