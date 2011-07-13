@@ -207,6 +207,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.add(new NHDEdit.ExceptionPanel({
                     padding: 5,
                     border: false,
+                    store: this.store,
                     exceptionReport: response.exceptionReport
                 }));
                 this.doLayout();
