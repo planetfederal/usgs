@@ -31,22 +31,36 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     },
 
     apply: function() {
-        var prefs = this.target.preferences || {};
+        if (!NHDEdit.preferences) {
+            NHDEdit.preferences = {};
+        }
         this.form.getForm().items.each(function(item) {
-            prefs[item.name] = item.getValue();
+            NHDEdit.preferences[item.name] = item.getValue();
         });
-        this.target.preferences = prefs;
     },
 
     /** api: method[addOutput]
      */
     addOutput: function() {
         this.form = new Ext.form.FormPanel({
-            labelWidth: 200,
+            labelWidth: 100,
+            padding: 5,
+            border: false,
             fbar: [{text: "Apply", handler: this.apply, scope: this}],
-            items: [{xtype: "checkbox", name: "A_OVER_B", fieldLabel: "Always over"}]
+            items: [{
+                xtype: "fieldset",
+                title: "Vertical relationships",
+                items: [{
+                    xtype: "combo",
+                    store: [["over", "Always over"], ["under", "Always under"]],
+                    name: "js:vert",
+                    mode: "local",
+                    triggerAction: "all",
+                    fieldLabel: "Default"
+                }]
+            }]
         });
-        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, this.form);
+        return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, this.form);
     },
 
     /** api: method[addActions]

@@ -98,6 +98,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      
     metadataForm: null,
     attributeForm: null,
+    exceptionPanel: null,
      
     /** private: method[initComponent]
      */
@@ -204,12 +205,16 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.metadataForm.hide();
                 this.previousButton.hide();
                 this.nextButton.hide();
-                this.add(new NHDEdit.ExceptionPanel({
+                if (this.exceptionPanel !== null) {
+                    this.remove(this.exceptionPanel);
+                }
+                this.exceptionPanel = new NHDEdit.ExceptionPanel({
                     padding: 5,
                     border: false,
                     store: this.store,
                     exceptionReport: response.exceptionReport
-                }));
+                });
+                this.add(this.exceptionPanel);
                 this.doLayout();
             },
             scope: this

@@ -25,33 +25,104 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     exceptionReport: null,
 
+    store: null,
+
+    vendorId: 'GeoServer',
+
+    isUnrecoverable: function(code) {
+        return (code === null || this.writers[code] === undefined);
+    },
+
+    writers: {
+        "queue": function(code) {
+            return {
+                xtype: "checkbox",
+                fieldLabel: "Queue exception",
+                value: false,
+                name: "queue",
+                listeners: {
+                    "check": function(checkbox, checked) {
+                        this.getForm().items.each(function(item) {
+                            if (item.name !== "queue") {
+                                item.setDisabled(checked);
+                            }
+                        });
+                        var beforeWriteQueue;
+                        if (checked === true) {
+                            beforeWriteQueue = function(store, action, rs, options) {
+                                options.params.nativeElements = [{
+                                    vendorId: this.vendorId,
+                                    safeToIgnore: true,
+                                    value: '{"'+code+'": {"queue": "'+checked+'"}}'
+                                }];
+                            };
+                            this.store.addListener('beforewrite', beforeWriteQueue, this, {single: true});
+                        } else {
+                            this.store.removeListener("beforewrite", beforeWriteQueue, this);
+                        }
+                    },
+                    scope: this
+                }
+            };
+        },
+        "js:PipelineVerticalRelationship": function(code) {
+            var result = [];
+            result.push(this.writers.queue.apply(this, arguments));
+            result.push({
+                xtype: "combo",
+                store: ["over", "under"],
+                fieldLabel: "Specify the vertical relationship",
+                triggerAction: "all",
+                mode: 'local',
+                listeners: {
+                    "select": function(combo, record, index) {
+                        var value = combo.getValue();
+                        var beforeWrite = function(store, action, rs, options) {
+                            options.params.nativeElements = [{
+                                vendorId: this.vendorId,
+                                safeToIgnore: true,
+                                value: '{"'+code+'": {"relationship": "'+value+'"}}'
+                            }];
+                        };
+                        this.store.addListener('beforewrite', beforeWrite, this, {single: true});
+                    },
+                    scope: this
+                }
+            });
+            return result;
+        }
+    },
+
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
+        var code = this.getProperty("code");
+        var locator = this.getProperty("locator");
         this.add({
-            xtype: "displayfield", 
-            fieldLabel: "Process identifier", 
-            name: "locator", 
-            value: this.getProperty("locator")
-        });
-        this.add({
-            xtype: "displayfield", 
-            fieldLabel: "Exception code", 
-            name: "exceptionCode", 
-            value: this.getProperty("code")
-        });
-        this.add({
-            xtype: "textarea",
-            readOnly: true,
-            grow: true, 
+            xtype: "label",
             fieldLabel: "Message",
-            width: 150, 
-            value: gxp.util.getOGCExceptionText(this.exceptionReport)
+            text: gxp.util.getOGCExceptionText(this.exceptionReport)
         });
+        if (this.isUnrecoverable(code) === true) {
+            this.add({
+                xtype: "displayfield", 
+                fieldLabel: "Locator", 
+                name: "locator", 
+                value: locator
+            });
+            this.add({
+                xtype: "displayfield", 
+                fieldLabel: "Exception code", 
+                name: "exceptionCode", 
+                value: code
+            });
+        } else {
+            this.add(this.writers[code].apply(this, [code]));
+        }
         this.doLayout();
     },
 
     getProperty: function(property) {
-        var result;
+        var result = null;
         // we only expect one, so overwrite if multiple
         Ext.each(this.exceptionReport.exceptions, function(exc) {
             result = exc[property];
