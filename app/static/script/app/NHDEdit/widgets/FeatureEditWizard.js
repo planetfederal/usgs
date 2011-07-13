@@ -31,6 +31,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     
     /** private config overrides **/
     autoHeight: true,
+    shadow: false,
         
     /** api: config[feature]
      *  ``OpenLayers.Feature.Vector``|``GeoExt.data.FeatureRecord`` The feature

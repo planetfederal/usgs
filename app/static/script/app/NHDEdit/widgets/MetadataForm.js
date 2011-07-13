@@ -139,7 +139,18 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.createStore();
         Ext.getCmp("app-save-button").setDisabled(false);
         var commitFieldset = new Ext.form.FieldSet({title: "Commit message"});
-        var fieldSet = new Ext.form.FieldSet({collapsible: true, collapsed: true, title: "Advanced"});
+        var fieldSet = new Ext.form.FieldSet({
+            collapsible: true,
+            collapsed: true,
+            title: "Advanced",
+            height: 300,
+            autoHeight: false,
+            autoScroll: true,
+            labelWidth: 170,
+            listeners: {
+                "expand": function() { fieldSet.setHeight(250); }
+            }
+        });
         this.schema.each(function(r) {
             var type = r.get("type");
             if (type.match(/^[^:]*:?((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry))/)) {
@@ -148,10 +159,10 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
             var name = r.get("name");
             var fieldCfg = GeoExt.form.recordToField(r);
+            fieldCfg.anchor = "100%";
             if (name.toLowerCase() === "processdescription") {
                 fieldCfg.xtype = "textarea";
                 fieldCfg.grow = true;
-                fieldCfg.width = 140;
                 commitFieldset.add(fieldCfg);
             } else {
                 fieldSet.add(fieldCfg);
