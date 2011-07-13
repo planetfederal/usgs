@@ -38,8 +38,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             fieldLabel: "Message",
             text: gxp.util.getOGCExceptionText(this.exceptionReport)
         });
-        // dummy for testing, TODO remove
-        code = "js:PipelineVerticalRelationship";
         if (code === "js:PipelineVerticalRelationship") {
             this.add({
                 xtype: "combo",
