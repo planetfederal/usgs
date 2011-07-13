@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="usgs" default="dist" basedir=".">
+<project name="usgs" default="static-war" basedir=".">
 
     <description>
         USGS National Mapper Build File
