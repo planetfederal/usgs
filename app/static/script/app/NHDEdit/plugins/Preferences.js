@@ -46,7 +46,7 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
             fbar: [{text: "Apply", handler: this.apply, scope: this}],
             items: [{xtype: "checkbox", name: "A_OVER_B", fieldLabel: "Always over"}]
         });
-        return NHDEdit.plugins.MetadataEntry.superclass.addOutput.call(this, this.form);
+        return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, this.form);
     },
 
     /** api: method[addActions]
