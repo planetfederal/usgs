@@ -105,8 +105,9 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             }
             var value = this.feature.attributes[name];
             if (fieldCfg.xtype == "datefield") {
-                var date = Date.parseDate(value.replace(/Z$/, ""), "c");
-                fieldCfg.value = date;
+                var dateFormat = "Y-m-d";
+                fieldCfg.format = dateFormat;
+                fieldCfg.value = Date.parseDate(value.replace(/Z$/, ""), dateFormat);
             } else {
                 fieldCfg.value = value;
             }
