@@ -25,28 +25,59 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     exceptionReport: null,
 
+    store: null,
+
+    vendorId: 'GeoServer',
+
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
+        var code = this.getProperty("code");
+        var locator = this.getProperty("locator");
         this.add({
-            xtype: "displayfield", 
-            fieldLabel: "Process identifier", 
-            name: "locator", 
-            value: this.getProperty("locator")
-        });
-        this.add({
-            xtype: "displayfield", 
-            fieldLabel: "Exception code", 
-            name: "exceptionCode", 
-            value: this.getProperty("code")
-        });
-        this.add({
-            xtype: "textarea",
-            readOnly: true,
-            grow: true, 
+            xtype: "label",
             fieldLabel: "Message",
-            width: 150, 
-            value: gxp.util.getOGCExceptionText(this.exceptionReport)
+            text: gxp.util.getOGCExceptionText(this.exceptionReport)
         });
+        // dummy for testing, TODO remove
+        code = "js:PipelineVerticalRelationship";
+        if (code === "js:PipelineVerticalRelationship") {
+            this.add({
+                xtype: "combo",
+                store: ["over", "under"],
+                fieldLabel: "Specify the vertical relationship",
+                triggerAction: "all",
+                mode: 'local',
+                listeners: {
+                    "select": function(combo, record, index) {
+                        var value = combo.getValue();
+                        // TODO we should not be doing this on every select, unless we unregister
+                        // previous event handlers
+                        var beforeWrite = function(store, action, rs, options) {
+                            options.params.nativeElements = [{
+                                vendorId: this.vendorId, 
+                                safeToIgnore: true, 
+                                value: '{"js:PipelineVerticalRelationship": {"relationship": "'+value+'"}}'
+                            }];
+                        };
+                        this.store.addListener('beforewrite', beforeWrite, this, {single: true});
+                    },
+                    scope: this
+                }
+            });
+        } else {
+            this.add({
+                xtype: "displayfield", 
+                fieldLabel: "Locator", 
+                name: "locator", 
+                value: locator
+            });
+            this.add({
+                xtype: "displayfield", 
+                fieldLabel: "Process identifier", 
+                name: "exceptionCode", 
+                value: code
+            });
+        }
         this.doLayout();
     },
 
