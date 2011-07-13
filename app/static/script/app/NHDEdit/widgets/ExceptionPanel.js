@@ -34,8 +34,40 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     writers: {
-        "js:PipelineVerticalRelationship": function() {
+        "queue": function(code) {
             return {
+                xtype: "checkbox",
+                fieldLabel: "Queue exception",
+                value: false,
+                name: "queue",
+                listeners: {
+                    "check": function(checkbox, checked) {
+                        this.getForm().items.each(function(item) {
+                            if (item.name !== "queue") {
+                                item.setDisabled(checked);
+                            }
+                        });
+                        if (checked === true) {
+                            var beforeWriteQueue = function(store, action, rs, options) {
+                                options.params.nativeElements = [{
+                                    vendorId: this.vendorId,
+                                    safeToIgnore: true,
+                                    value: '{"'+code+'": {"queue": "'+checked+'"}}'
+                                }];
+                            };
+                            this.store.addListener('beforewrite', beforeWriteQueue, this, {single: true});
+                        } else {
+                            this.store.removeListener("beforewrite", beforeWriteQueue, this);
+                        }
+                    },
+                    scope: this
+                }
+            };
+        },
+        "js:PipelineVerticalRelationship": function(code) {
+            var result = [];
+            result.push(this.writers["queue"].apply(this, arguments));
+            result.push({
                 xtype: "combo",
                 store: ["over", "under"],
                 fieldLabel: "Specify the vertical relationship",
@@ -48,14 +80,15 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                             options.params.nativeElements = [{
                                 vendorId: this.vendorId,
                                 safeToIgnore: true,
-                                value: '{"js:PipelineVerticalRelationship": {"relationship": "'+value+'"}}'
+                                value: '{"'+code+'": {"relationship": "'+value+'"}}'
                             }];
                         };
                         this.store.addListener('beforewrite', beforeWrite, this, {single: true});
                     },
                     scope: this
                 }
-            };
+            });
+            return result;
         }
     },
 
@@ -82,7 +115,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 value: code
             });
         } else {
-            this.add(this.writers[code].apply(this));
+            this.add(this.writers[code].apply(this, [code]));
         }
         this.doLayout();
     },
