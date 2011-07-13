@@ -29,17 +29,13 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     vendorId: 'GeoServer',
 
-    initComponent : function() {
-        NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
-        var code = this.getProperty("code");
-        var locator = this.getProperty("locator");
-        this.add({
-            xtype: "label",
-            fieldLabel: "Message",
-            text: gxp.util.getOGCExceptionText(this.exceptionReport)
-        });
-        if (code === "js:PipelineVerticalRelationship") {
-            this.add({
+    isUnrecoverable: function(code) {
+        return (code === null || this.writers[code] === undefined);
+    },
+
+    writers: {
+        "js:PipelineVerticalRelationship": function() {
+            return {
                 xtype: "combo",
                 store: ["over", "under"],
                 fieldLabel: "Specify the vertical relationship",
@@ -50,8 +46,8 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                         var value = combo.getValue();
                         var beforeWrite = function(store, action, rs, options) {
                             options.params.nativeElements = [{
-                                vendorId: this.vendorId, 
-                                safeToIgnore: true, 
+                                vendorId: this.vendorId,
+                                safeToIgnore: true,
                                 value: '{"js:PipelineVerticalRelationship": {"relationship": "'+value+'"}}'
                             }];
                         };
@@ -59,8 +55,20 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                     },
                     scope: this
                 }
-            });
-        } else {
+            };
+        }
+    },
+
+    initComponent : function() {
+        NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
+        var code = this.getProperty("code");
+        var locator = this.getProperty("locator");
+        this.add({
+            xtype: "label",
+            fieldLabel: "Message",
+            text: gxp.util.getOGCExceptionText(this.exceptionReport)
+        });
+        if (this.isUnrecoverable(code) === true) {
             this.add({
                 xtype: "displayfield", 
                 fieldLabel: "Locator", 
@@ -69,16 +77,18 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             });
             this.add({
                 xtype: "displayfield", 
-                fieldLabel: "Process identifier", 
+                fieldLabel: "Exception code", 
                 name: "exceptionCode", 
                 value: code
             });
+        } else {
+            this.add(this.writers[code].apply(this));
         }
         this.doLayout();
     },
 
     getProperty: function(property) {
-        var result;
+        var result = null;
         // we only expect one, so overwrite if multiple
         Ext.each(this.exceptionReport.exceptions, function(exc) {
             result = exc[property];
