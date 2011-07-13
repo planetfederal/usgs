@@ -47,8 +47,9 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                                 item.setDisabled(checked);
                             }
                         });
+                        var beforeWriteQueue;
                         if (checked === true) {
-                            var beforeWriteQueue = function(store, action, rs, options) {
+                            beforeWriteQueue = function(store, action, rs, options) {
                                 options.params.nativeElements = [{
                                     vendorId: this.vendorId,
                                     safeToIgnore: true,
@@ -66,7 +67,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         },
         "js:PipelineVerticalRelationship": function(code) {
             var result = [];
-            result.push(this.writers["queue"].apply(this, arguments));
+            result.push(this.writers.queue.apply(this, arguments));
             result.push({
                 xtype: "combo",
                 store: ["over", "under"],
