@@ -143,28 +143,13 @@
                         },
                         actionTarget: {target: "map.tbar", index: 7}
                     }, {
-                        ptype: "app_metadataentry",
-                        featureType: "nhdmetadata",
-                        featurePrefix: "usgs",
-                        featureNS: "http://www.usgs.gov/",
-                        url: "/geoserver/wfs?",
-                        actionTarget: null,
+                        ptype: "app_preferences",
+                        actionTarget: {target: "map.tbar", index: 10},
                         outputConfig: {
-                            title: "Metadata",
+                            title: "Preferences",
                             width: 400,
-                            defaults: { 
-                                autoScroll: true
-                            },
                             height: 200
-                        }
-                   }, {
-                       ptype: "app_preferences",
-                       actionTarget: {target: "map.tbar", index: 10},
-                       outputConfig: {
-                           title: "Preferences",
-                           width: 400,
-                           height: 200
-                       } 
+                        } 
                     }], 
                     sources: {
                         local: {
