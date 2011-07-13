@@ -50,8 +50,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 listeners: {
                     "select": function(combo, record, index) {
                         var value = combo.getValue();
-                        // TODO we should not be doing this on every select, unless we unregister
-                        // previous event handlers
                         var beforeWrite = function(store, action, rs, options) {
                             options.params.nativeElements = [{
                                 vendorId: this.vendorId, 
