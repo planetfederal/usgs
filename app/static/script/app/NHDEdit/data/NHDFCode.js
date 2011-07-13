@@ -1,5 +1,13 @@
 Ext.namespace("NHDEdit");
 (function() {
+    NHDEdit.layerFCodes = {																											
+        'nhdflowline':['42805','46000','42816','46007','42813','42801','42811','42812','42806','42814','33601','42800','42000','46006','42802','42804','42809','42803','33600','33400','42808','55800','42807','46003'],
+        'nhdarea':['48400','36200','46100','36400','43100','40300','34306','34305','33600','40309','46003','46000','40307','45500','40308','33601','46006'],
+        'nhdline':['36200','41100','34305','31800','47800','48300','36900','48700','34300','34306'],
+        'nhdpoint':['48500','48800','43624','45000','45800','48700','36900','36700'],
+        'nhdwaterbody':['39001','46600','43607','43604','43613','43619','43624','43601','39004','43617','39005','39011','43610','37800','43600','36100','39000','43609','39010','43612','39012','43625','43611','39006','43618','39009','43621']
+    };
+    
     NHDEdit.fCodeDict = {
         '30700':'Area to be Submerged',
         '31200':'Bay/Inlet',
@@ -123,8 +131,13 @@ Ext.namespace("NHDEdit");
         '56700':'Shoreline',
         '56800':'Levee'
     };
-    NHDEdit.fCodes = [];
-    for (var fCode in NHDEdit.fCodeDict) {
-        NHDEdit.fCodes.push([fCode, NHDEdit.fCodeDict[fCode]]);
-    }
+    
+    NHDEdit.getFCodes = function(layer) {
+        var fCodes = [], fCode;
+        for (var i=0,ii=NHDEdit.layerFCodes[layer].length; i<ii; ++i) {
+            fCode = NHDEdit.layerFCodes[layer][i];
+            fCodes.push([fCode, NHDEdit.fCodeDict[fCode]]);
+        }
+        return fCodes;
+    };
 })();

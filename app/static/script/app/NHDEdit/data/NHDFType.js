@@ -59,4 +59,13 @@ Ext.namespace("NHDEdit");
     for (var fType in NHDEdit.fTypeDict) {
         NHDEdit.fTypes.push([fType, NHDEdit.fTypeDict[fType]]);
     }
+
+    NHDEdit.getFTypes = function(layer) {
+        var fTypes = [], fType;
+        for (var i=0,ii=NHDEdit.layerFTypes[layer].length; i<ii; ++i) {
+            fType = NHDEdit.layerFTypes[layer][i];
+            fTypes.push([fType, NHDEdit.fTypeDict[fType]]);
+        }
+        return fTypes;
+    };
 })();

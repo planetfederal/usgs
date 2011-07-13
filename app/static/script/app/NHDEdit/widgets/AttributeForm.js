@@ -36,16 +36,14 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
     
     initComponent : function() {
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
+        var typeName = this.schema.reader.raw.featureTypes[0].typeName;
         var fTypeStore = new Ext.data.ArrayStore({
             fields: ['value', 'description'],
-            data : NHDEdit.fTypes
+            data : NHDEdit.getFTypes(typeName)
         });
-        fTypeStore.filterBy(function(r) {
-            return NHDEdit.layerFTypes[this.schema.reader.raw.featureTypes[0].typeName].indexOf(r.get("value")) != -1;
-        }, this);
         var fCodeStore = new Ext.data.ArrayStore({
             fields: ['value', 'description'],
-            data : NHDEdit.fCodes
+            data : NHDEdit.getFCodes(typeName)
         });
         this.schema.each(function(r) {
             var name = r.get("name");
@@ -62,7 +60,6 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 fieldCfg = {
                     xtype: "combo",
                     mode: "local",
-                    lastQuery: "",
                     forceSelection: true,
                     name: name,
                     fieldLabel: name,
