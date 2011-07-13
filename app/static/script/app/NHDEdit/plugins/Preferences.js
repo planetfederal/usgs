@@ -24,10 +24,30 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     /** api: ptype = app_preferences */
     ptype: "app_preferences",
 
+    featureManager: null,
+
+    vendorId: "GeoServer",
+
     /** private: method[init]
      */
     init: function(target) {
         NHDEdit.plugins.Preferences.superclass.init.apply(this, arguments);
+        var featureManager = this.target.tools[this.featureManager];
+        featureManager.addListener('layerchange', this.onLayerChange, this);
+    },
+
+    onLayerChange: function(tool, layer, schema) {
+        var store = tool.featureStore;
+        var beforeWrite = function(store, action, rs, options) {
+            if (NHDEdit.preferences) {
+                options.params.nativeElements = [{
+                    vendorId: this.vendorId,
+                    safeToIgnore: true,
+                    value: Ext.util.JSON.encode(NHDEdit.preferences)
+                }];
+            }
+        };
+        store.addListener('beforewrite', beforeWrite, this);
     },
 
     apply: function() {
