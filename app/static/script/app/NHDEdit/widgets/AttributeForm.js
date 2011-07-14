@@ -100,13 +100,11 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             } else {
                 fieldCfg = GeoExt.form.recordToField(r);
             }
-            var value = this.feature.attributes[name];
-            if (fieldCfg.xtype == "datefield") {
+            fieldCfg.value = this.feature.attributes[name];
+            if (fieldCfg.value && fieldCfg.xtype == "datefield") {
                 var dateFormat = "Y-m-d";
                 fieldCfg.format = dateFormat;
-                fieldCfg.value = Date.parseDate(value.replace(/Z$/, ""), dateFormat);
-            } else {
-                fieldCfg.value = value;
+                fieldCfg.value = Date.parseDate(fieldCfg.value.replace(/Z$/, ""), dateFormat);
             }
             this.add(fieldCfg);
         }, this);
