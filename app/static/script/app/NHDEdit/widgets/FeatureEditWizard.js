@@ -291,7 +291,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 feature.attributes[f.getName()] = f.getValue();
             }
         });
-        modified && this.setFeatureState(OpenLayers.State.UPDATE);
+        if (modified) {
+            this.setFeatureState(this.getDirtyState());
+        }
     },
     
     /** private: method[stopEditing]
