@@ -299,7 +299,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      *      ``featuremodified`` event will be fired.
      */
     stopEditing: function(save) {
-        save && this.updateFeature();
+        if (save) {
+            this.updateFeature();
+        }
         
         //TODO remove the line below when
         // http://trac.openlayers.org/ticket/2210 is fixed.
