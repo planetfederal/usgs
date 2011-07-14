@@ -64,9 +64,9 @@ public class DoctestsTest extends USGSTestSupport {
         List<Object[]> result = new ArrayList<Object[]>();
         for (File f : doctests) {
             String contents = loadFile(f);
-//            result.add(new Object[] { f.getName(), contents, -1 });
-//            result.add(new Object[] { f.getName(), contents, 0 });
-//            result.add(new Object[] { f.getName(), contents, 9 });
+            result.add(new Object[] { f.getName(), contents, -1 });
+            result.add(new Object[] { f.getName(), contents, 0 });
+            result.add(new Object[] { f.getName(), contents, 9 });
         }
         return result;
     }
