@@ -371,9 +371,11 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     setFeatureState: function(state) {
         this.feature.state = state;
         var layer = this.feature.layer;
-        layer && layer.events.triggerEvent("featuremodified", {
-            feature: this.feature
-        });
+        if (layer) {
+            layer.events.triggerEvent("featuremodified", {
+                feature: this.feature
+            });
+        }
     }
 
 });
