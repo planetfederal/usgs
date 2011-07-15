@@ -33,7 +33,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
     autoScroll: true,
     
     excludeFields: null,
-    
+
     initComponent : function() {
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
         var typeName = this.schema.reader.raw.featureTypes[0].typeName;
@@ -45,6 +45,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             fields: ['value', 'description'],
             data : NHDEdit.getFCodes(typeName)
         });
+        var fieldset = new Ext.form.FieldSet({title: "Attributes", defaults: {width: 150}});
         this.schema.each(function(r) {
             var name = r.get("name");
             if (this.excludeFields.indexOf(name) != -1) {
@@ -106,8 +107,9 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 fieldCfg.format = dateFormat;
                 fieldCfg.value = Date.parseDate(fieldCfg.value.replace(/Z$/, ""), dateFormat);
             }
-            this.add(fieldCfg);
+            fieldset.add(fieldCfg);
         }, this);
+        this.add(fieldset);
     }
 
 });
