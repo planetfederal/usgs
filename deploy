@@ -1,8 +1,27 @@
 #!/bin/bash
 
+# This script builds and deploys GeoServer and/or the editor app.  By default,
+# both are deployed.  Run `deploy server` or `deploy editor` to deploy just one.
+
 # running as root messes up shared permissions
 if [[ $UID -eq 0 ]]; then
     echo "don't run this as root"
+    exit 1
+fi
+
+SERVER=''
+EDITOR=''
+if [[ "$1" == 'server' ]]; then
+    SERVER='server'
+elif [[ "$1" == 'editor' ]]; then
+    EDITOR='static-war'
+elif [[ $# -eq 0 || "$1" == 'all' ]]; then
+    SERVER='server'
+    EDITOR='static-war'
+fi
+
+if [[ ( -z "$SERVER" && -z "$EDITOR" ) || ( $# -gt 1 ) ]]; then
+    echo "Usage: $0 [server|editor|all]"
     exit 1
 fi
 
@@ -17,11 +36,17 @@ sudo service tomcat6 stop
 ANT_OPTS=-Xmx32m ant \
  -Dlocalrepo=-Dmaven.repo.local=${WORKDIR}/.m2 \
  -Dmvn=/opt/apache-maven-2.2.1/bin/mvn \
- init server
+ init $EDITOR $SERVER
 
-# build success, deploy war
+# build success, deploy wars
 if [ "$?" == 0 ]; then
-    sudo mv server/geoserver/src/web/app/target/geoserver.war /var/lib/tomcat6/webapps/
-    sudo rm -rf /var/lib/tomcat6/webapps/geoserver
+    if [[ -n "$EDITOR" ]]; then
+        sudo mv build/usgs.war /var/lib/tomcat6/webapps/
+        sudo rm -rf /var/lib/tomcat6/webapps/usgs
+    fi
+    if [[ -n "$SERVER" ]]; then
+        sudo mv server/geoserver/src/web/app/target/geoserver.war /var/lib/tomcat6/webapps/
+        sudo rm -rf /var/lib/tomcat6/webapps/geoserver
+    fi
     sudo service tomcat6 start 
 fi
