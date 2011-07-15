@@ -12,7 +12,7 @@ exports.beforeCommit = function(details, request) {
         };
     }
     var inserts = details.PreInsert || [];
-    var featureInfo, feature, rules, rule, filter, process, inputs, outputs;
+    var featureInfo, feature, rules, rule, filter, process, outputs;
     for (var i=0, ii=inserts.length; i<ii; ++i) {
         featureInfo = inserts[i];
         feature = featureInfo.feature;
@@ -51,7 +51,7 @@ exports.beforeCommit = function(details, request) {
  * is assumed to be a JSON string.
  */
 function parseNatives(natives) {
-    var nativ, obj, exception;
+    var nativ, obj;
     for (var i=0, ii=natives.length; i<ii; ++i) {
         nativ = natives[i];
         if (nativ.vendorId === "usgs") {
