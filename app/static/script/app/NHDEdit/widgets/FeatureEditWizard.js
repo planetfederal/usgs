@@ -100,6 +100,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     metadataForm: null,
     attributeForm: null,
     exceptionPanel: null,
+    metadataId: null,
      
     /** private: method[initComponent]
      */
@@ -127,34 +128,47 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.saveButton = new Ext.Button({
             text: this.saveButtonText,
             tooltip: this.saveButtonTooltip,
-            iconCls: "save",
-            disabled: true,
+            hidden: true,
             handler: function() {
-                this.stopEditing(true);
+                if (this.metadataId === null) {
+                    this.metadataForm.saveEntry();
+                } else {
+                    this.stopEditing(true);
+                }
+            },
+            scope: this
+        });
+
+        this.cancelButton = new Ext.Button({
+            text: "Cancel",
+            handler: function() {
+                this.stopEditing(false);
             },
             scope: this
         });
         
         this.previousButton = new Ext.Button({
             text: "Previous",
-            iconCls: "x-tbar-page-prev",
-            disabled: true,
+            hidden: true,
             handler: function() {
                 this.metadataForm.hide();
                 this.attributeForm.show();
-                this.previousButton.disable();
-                this.nextButton.enable();
+                this.previousButton.hide();
+                this.saveButton.hide();
+                this.deleteButton.show();
+                this.nextButton.show();
             },
             scope: this
         });
         this.nextButton = new Ext.Button({
             text: "Next",
-            iconCls: "x-tbar-page-next",
             handler: function() {
                 this.attributeForm.hide();
                 this.metadataForm.show();
-                this.nextButton.disable();
-                this.previousButton.enable();
+                this.nextButton.hide();
+                this.saveButton.show();
+                this.deleteButton.hide();
+                this.previousButton.show();
             },
             scope: this
         });
@@ -175,11 +189,18 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             featureType: this.metadataSource.featureType,
             featureNS: this.metadataSource.featureNS,
             listeners: {
-                "metadataselected": function(cmp, id) {
+                "metadatasaved": function(cmp, id) {
+                    this.metadataId = id;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
                     } , this);
-                    this.saveButton.enable();
+                    this.stopEditing(true);
+                },
+                "metadataopened": function(cmp, id) {
+                    this.metadataId = id;
+                    this.store.addListener('beforewrite', function(store, action, rs, options) {
+                        options.params.handle = id;
+                    } , this);
                 },
                 scope: this
             }
@@ -192,11 +213,12 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
 
         this.bbar = new Ext.Toolbar({
             items: [
-                this.saveButton,
                 this.deleteButton,
                 "->",
                 this.previousButton,
-                this.nextButton
+                this.cancelButton,
+                this.nextButton,
+                this.saveButton
             ]
         });
         
@@ -285,7 +307,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     
     updateFeature: function() {
         var feature = this.feature;
-        var fields = this.attributeForm.items;
+        var fields = this.attributeForm.getForm().items;
         var modified = false;
         fields.each(function(f) {
             if (f.isDirty()) {
