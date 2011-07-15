@@ -176,7 +176,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             featureNS: this.metadataSource.featureNS,
             listeners: {
                 "metadataselected": function(cmp, id) {
-                    //TODO do something with the id
+                    this.store.addListener('beforewrite', function(store, action, rs, options) {
+                        options.params.handle = id;
+                    } , this);
                     this.saveButton.enable();
                 },
                 scope: this
