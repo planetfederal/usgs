@@ -34,23 +34,6 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     openWindow: null,
 
     initComponent : function() {
-        /*this.fbar = [
-            {
-                text: "Open",
-                iconCls: "gxp-icon-open",
-                disabled: true,
-                id: "app-open-button",
-                handler: this.openEntry,
-                scope: this
-            }, {
-                text: "Save",
-                iconCls: "gxp-icon-save",
-                handler: this.saveEntry,
-                scope: this,
-                id: "app-save-button",
-                disabled: true
-            }
-        ];*/
         this.schema = new GeoExt.data.AttributeStore({
             url: this.url,
             baseParams: {
@@ -66,6 +49,11 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         });
         NHDEdit.MetadataForm.superclass.initComponent.call(this);
+        this.deleteLabel = new Ext.form.Label({
+            hidden: true, 
+            html: '<p style="color:red;font-weight:bold">Are you sure you want to delete this feature?</p>'
+        });
+        this.add(this.deleteLabel);
         this.addEvents(
             'metadatasaved',
             'metadataopened'

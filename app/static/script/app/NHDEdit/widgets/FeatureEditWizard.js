@@ -88,6 +88,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      *  ``Ext.Button``
      */
     deleteButton: null,
+
+    postDeleteButton: null,
     
     /** private: property[store]
      *  ``GeoExt.data.FeatureStore`` The store holding the feature being edited
@@ -121,6 +123,14 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             tooltip: this.deleteButtonTooltip,
             iconCls: "delete",
             hidden: !this.allowDelete,
+            handler: this.preDeleteFeature,
+            scope: this
+        });
+
+        this.postDeleteButton = new Ext.Button({
+            text: this.deleteButtonText,
+            tooltip: this.deleteButtonTooltip,
+            hidden: true,
             handler: this.deleteFeature,
             scope: this
         });
@@ -194,7 +204,12 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
                     } , this);
-                    this.stopEditing(true);
+                    // TODO there must be some better way to determine if we are deleting or updating
+                    if (this.postDeleteButton.isVisible() === true) {
+                        this.deleteFeature();
+                    } else {
+                        this.stopEditing(true);
+                    }
                 },
                 "metadataopened": function(cmp, id) {
                     this.metadataId = id;
@@ -218,7 +233,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.previousButton,
                 this.cancelButton,
                 this.nextButton,
-                this.saveButton
+                this.saveButton,
+                this.postDeleteButton
             ]
         });
         
@@ -374,22 +390,25 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         }
     },
     
+    preDeleteFeature: function() {
+        this.attributeForm.hide();
+        this.metadataForm.deleteLabel.show();
+        this.metadataForm.show();
+        this.nextButton.hide();
+        this.saveButton.hide();
+        this.deleteButton.hide();
+        this.previousButton.hide();
+        this.postDeleteButton.show();
+    },
+
     deleteFeature: function() {
-        Ext.Msg.show({
-            title: this.deleteMsgTitle,
-            msg: this.deleteMsg,
-            buttons: Ext.Msg.YESNO,
-            fn: function(button) {
-                if(button === "yes") {
-                    this.setFeatureState(OpenLayers.State.DELETE);
-                    this.fireEvent("featuremodified", this, this.feature);
-                    this.close();
-                }
-            },
-            scope: this,
-            icon: Ext.MessageBox.QUESTION,
-            animEl: this.getEl()
-        });
+        if (this.metadataId === null) {
+            this.metadataForm.saveEntry();
+        } else {
+            this.setFeatureState(OpenLayers.State.DELETE);
+            this.fireEvent("featuremodified", this, this.feature);
+            this.close();
+        }
     },
     
     /** private: method[setFeatureState]
