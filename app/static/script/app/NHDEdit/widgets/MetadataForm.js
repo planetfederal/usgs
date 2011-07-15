@@ -138,11 +138,11 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     onLoad: function() {
         this.createStore();
         Ext.getCmp("app-save-button").setDisabled(false);
-        var commitFieldset = new Ext.form.FieldSet({title: "Commit message"});
+        var masterFieldset = new Ext.form.FieldSet({title: "Metadata Record"});
         var fieldSet = new Ext.form.FieldSet({
             collapsible: true,
             collapsed: true,
-            title: "Advanced",
+            title: "Optional",
             height: 300,
             autoHeight: false,
             autoScroll: true,
@@ -163,13 +163,15 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             if (name.toLowerCase() === "processdescription") {
                 fieldCfg.xtype = "textarea";
                 fieldCfg.grow = true;
-                commitFieldset.add(fieldCfg);
+                fieldCfg.hideLabel = true;
+                masterFieldset.add({xtype: 'label', text: "Commit message:"});
+                masterFieldset.add(fieldCfg);
             } else {
                 fieldSet.add(fieldCfg);
             }
         }, this);
-        this.add(commitFieldset);
-        this.add(fieldSet);
+        masterFieldset.add(fieldSet);
+        this.add(masterFieldset);
         this.doLayout();
     }
 
