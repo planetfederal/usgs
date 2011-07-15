@@ -242,6 +242,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.add(this.exceptionPanel);
                 this.doLayout();
             },
+            "write": function() {
+                this.suspendEvents();
+                this.close();
+            },
             scope: this
         });
         
