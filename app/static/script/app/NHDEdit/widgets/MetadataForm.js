@@ -34,7 +34,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     openWindow: null,
 
     initComponent : function() {
-        this.fbar = [
+        /*this.fbar = [
             {
                 text: "Open",
                 iconCls: "gxp-icon-open",
@@ -50,7 +50,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
                 id: "app-save-button",
                 disabled: true
             }
-        ];
+        ];*/
         this.schema = new GeoExt.data.AttributeStore({
             url: this.url,
             baseParams: {
@@ -78,7 +78,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             schema: this.schema,
             loadMask: true,
             /* TODO: in this case it would be easier to specify the includeFields */
-            ignoreFields: ['meta_processid', 'attributeaccuracyreport', 'logicalconsistencyreport', 'completenessreport', 'horizpositionalaccuracyreport', 'vertpositionalaccuracyreport', 'metadatastandardname', 'metadatastandardversion', 'metadatadate', 'datasetcredit', 'contactorganization', 'addresstype', 'address', 'city', 'stateorprovince', 'postalcode', 'contactvoicetelephone', 'contactinstructions'],
+            ignoreFields: ['AttributeAccuracyreport', 'LogicalConsistencyReport', 'CompletenessReport', 'HorizPositionalAccuracyReport', 'VertPositionalAccuracyReport', 'MetadataStandardName', 'MetadataStandardVersion', 'MetadataDate', 'DataSetCredit', 'ContactOrganization', 'AddressType', 'Address', 'City', 'StateOrProvince', 'PostalCode', 'ContactVoiceTelephone', 'ContactInstructions', 'ContactEmailAddress'],
             height: 300,
             bbar: ["->", {text: "Open", iconCls: "gxp-icon-open", handler: this.openMetadata, scope: this}]
         });
@@ -137,7 +137,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     onLoad: function() {
         this.createStore();
-        Ext.getCmp("app-save-button").setDisabled(false);
+        //Ext.getCmp("app-save-button").setDisabled(false);
         var masterFieldset = new Ext.form.FieldSet({title: "Metadata Record"});
         var fieldSet = new Ext.form.FieldSet({
             collapsible: true,
@@ -172,6 +172,15 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }, this);
         masterFieldset.add(fieldSet);
         this.add(masterFieldset);
+        this.add(new Ext.Button({
+            iconCls: "gxp-icon-search",
+            disabled: true,
+            id: "app-open-button",
+            text: "Find",
+            tooltip: "Find an existing metadata record",
+            handler: this.openEntry,
+            scope: this
+        }));
         this.doLayout();
     }
 

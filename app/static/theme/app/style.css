@@ -23,3 +23,7 @@ body {
 .x-btn .gxp-icon-open, .x-menu-item .gxp-icon-open {
     background-image: url(img/silk/folder.png);
 }
+
+.x-btn .gxp-icon-search, .x-menu-item .gxp-icon-search { 
+    background-image: url(img/silk/find.png);
+}
