@@ -164,6 +164,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
                 fieldCfg.xtype = "textarea";
                 fieldCfg.grow = true;
                 fieldCfg.hideLabel = true;
+                fieldCfg.allowBlank = false;
                 masterFieldset.add({xtype: 'label', text: "Commit message:"});
                 masterFieldset.add(fieldCfg);
             } else {

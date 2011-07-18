@@ -190,7 +190,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             monitorValid: true,
             listeners: {
                 clientvalidation: function(panel, valid) {
-                    this.saveButton.setDisabled(!valid);
+                    this.attributesValid = valid;
+                    this.saveButton.setDisabled(!(this.attributesValid && this.metadataValid));
                 },
                 scope: this
             },
@@ -204,10 +205,15 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             hidden: true,
             padding: 5,
             border: false,
+            monitorValid: true,
             url: this.metadataSource.url,
             featureType: this.metadataSource.featureType,
             featureNS: this.metadataSource.featureNS,
             listeners: {
+                "clientvalidation": function(panel, valid) {
+                    this.metadataValid = valid;
+                    this.saveButton.setDisabled(!(this.attributesValid && this.metadataValid));
+                },
                 "metadatasaved": function(cmp, record) {
                     NHDEdit.metadataRecord = record;
                     var id = record.get("feature").fid;
