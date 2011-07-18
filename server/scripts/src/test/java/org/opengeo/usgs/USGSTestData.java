@@ -1,39 +1,87 @@
 package org.opengeo.usgs;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import org.geoserver.data.test.LiveDbmsData;
 
-import org.geoserver.data.test.TestData;
 import org.geoserver.data.util.IOUtils;
 
-public class USGSTestData implements TestData {
+public class USGSTestData extends LiveDbmsData {
+    
+    private boolean runDBSetup = true;
 
-    /** 
-     * Root of the data directory 
-     */
-    File dataRoot;
-
-    public USGSTestData() throws IOException {
-        dataRoot = IOUtils.createRandomDirectory("./target", "mock", "data");
-        dataRoot.delete();
-        dataRoot.mkdir();
-        URL dataURL = getClass().getResource("data");
-        IOUtils.deepCopy(new File(dataURL.getFile()), dataRoot);
+    public USGSTestData() {
+        super(new File(USGSTestData.class.getResource("data").getFile()), "usgs", new File("usgs-script.sql"));
+        filteredPaths.clear();
+    }
+    
+    protected void setRunDBSetup(boolean runDBSetup) {
+        this.runDBSetup = runDBSetup;
     }
     
     public void setUp() throws Exception {
+        if (runDBSetup) {
+            setupDB();
+        }        
+        // set this to null since superclass will try to execute script
+        sqlScript = null;
+        super.setUp();
     }
 
-    public void tearDown() throws Exception {
-    }
+    private void setupDB() throws Exception {
+        // have to extract script temporarily
+        File scriptSource = new File("../../data/test_nhd.sql.zip");
+        ZipFile zip = new ZipFile(scriptSource);
+        ZipEntry ze = zip.getEntry("test_nhd.sql");
+        InputStream inputStream = zip.getInputStream(ze);
+        IOUtils.copy(inputStream, sqlScript);
+        
+        System.out.println("loading fixture data from SQL");
+        // this will lock if any connections remain open on the database
+        ProcessBuilder pb = new ProcessBuilder(("psql -h localhost -U opengeo usgs_test -f " + sqlScript).split(" "));
+        // read output in separate thread and build a list of lines
+        pb.redirectErrorStream(true);
+        Process start = pb.start();
+        final List<String> output = new ArrayList<String>();
+        final BufferedReader br = new BufferedReader(new InputStreamReader(start.getInputStream()));
+        new Thread() {
 
-    public File getDataDirectoryRoot() {
-        return dataRoot;
+            @Override
+            public void run() {
+                
+                while ( true ){
+                    try {
+                        String line = br.readLine();
+                        // if you want enable this:
+                        //System.out.println("script : " + line);
+                        if (line == null) break;
+                        output.add(line);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+            
+        }.start();
+        // wait, cleanup and dump if errors
+        int retval = start.waitFor();
+        sqlScript.delete();
+        if (retval != 0) {
+            for (String line: output) {
+                System.err.println(line);
+            }
+            throw new IOException("Error running load script, check messages before this one");
+        }
+        System.out.println("success!");
     }
-
-    public boolean isTestDataAvailable() {
-        return true;
-    }
-
+    
 }

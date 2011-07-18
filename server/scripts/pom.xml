@@ -17,10 +17,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.0</version>
-            <scope>test</scope>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <version>1.7R3</version>
         </dependency>
         <dependency>
             <groupId>org.geoserver.community</groupId>
@@ -39,6 +38,24 @@
             <groupId>com.mockrunner</groupId>
             <artifactId>mockrunner</artifactId>
             <version>0.3.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools.jdbc</groupId>
+            <artifactId>gt-jdbc-postgis</artifactId>
+            <version>8-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-main</artifactId>
+            <version>8-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
