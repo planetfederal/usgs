@@ -50,10 +50,16 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                         var beforeWriteQueue;
                         if (checked === true) {
                             beforeWriteQueue = function(store, action, rs, options) {
+                                var nativeElements = options.params.nativeElements;
+                                var obj = {};
+                                if (nativeElements && nativeElements.length === 1) {
+                                    obj = Ext.util.JSON.decode(nativeElements[0].value);
+                                }
+                                obj[code] = {queue: checked};
                                 options.params.nativeElements = [{
                                     vendorId: this.vendorId,
                                     safeToIgnore: true,
-                                    value: '{"'+code+'": {"queue": "'+checked+'"}}'
+                                    value: Ext.util.JSON.encode(obj)
                                 }];
                             };
                             this.store.addListener('beforewrite', beforeWriteQueue, this, {single: true});
@@ -78,10 +84,16 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                     "select": function(combo, record, index) {
                         var value = combo.getValue();
                         var beforeWrite = function(store, action, rs, options) {
+                            var nativeElements = options.params.nativeElements;
+                            var obj = {};
+                            if (nativeElements && nativeElements.length === 1) {
+                                obj = Ext.util.JSON.decode(nativeElements[0].value);
+                            }
+                            obj[code] = {relationship: value};
                             options.params.nativeElements = [{
                                 vendorId: this.vendorId,
                                 safeToIgnore: true,
-                                value: '{"'+code+'": {"relationship": "'+value+'"}}'
+                                value: Ext.util.JSON.encode(obj)
                             }];
                         };
                         this.store.addListener('beforewrite', beforeWrite, this, {single: true});
