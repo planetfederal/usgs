@@ -390,9 +390,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 layer.drawFeature(feature);
                 this.fireEvent("canceledit", this, feature);
             }
-        } else {
-            this.suspendEvents();
-            this.close();
         }
     },
     
