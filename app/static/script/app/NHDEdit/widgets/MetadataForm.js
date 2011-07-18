@@ -83,7 +83,6 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         });
         feature.state = OpenLayers.State.INSERT;
         this.featureStore.add(new this.featureStore.recordType({feature: feature}));
-        this.featureStore.save();
     },
 
     openEntry: function() {
