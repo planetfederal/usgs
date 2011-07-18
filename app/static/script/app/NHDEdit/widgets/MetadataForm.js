@@ -82,15 +82,17 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         });
         feature.state = OpenLayers.State.INSERT;
-        var options = {
+        /*var options = {
             callback: function(response) {
                 if (response && response.insertIds) {
                     this.fireEvent('metadatasaved', this, response.insertIds[0]);
                 }
             },
             scope: this
-        };
-        this.featureStore.proxy.protocol.commit([feature], options);
+        };*/
+        this.featureStore.add(new this.featureStore.recordType({feature: feature}));
+        this.featureStore.save();
+        //this.featureStore.proxy.protocol.commit([feature], options);
     },
 
     openEntry: function() {
@@ -110,8 +112,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().items.each(function(field) {
             field.setValue(record.get(field.name));
         });
-        var fid = record.get("feature").fid;
-        this.fireEvent('metadataopened', this, fid);
+        this.fireEvent('metadataopened', this, record);
         this.openWindow.hide();
     },
 
@@ -125,7 +126,10 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             autoLoad: true,
             listeners: {
                 "load": this.createGrid,
-                scope: this            
+                "write": function(store, action, data, response, rs) {
+                    this.fireEvent('metadatasaved', this, rs);
+                },
+                scope: this
             },
             url: this.schema.url,
             featureType: this.featureType,

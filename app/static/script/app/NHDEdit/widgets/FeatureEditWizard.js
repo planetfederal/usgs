@@ -207,7 +207,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             featureType: this.metadataSource.featureType,
             featureNS: this.metadataSource.featureNS,
             listeners: {
-                "metadatasaved": function(cmp, id) {
+                "metadatasaved": function(cmp, record) {
+                    var id = record.get("feature").fid;
                     this.metadataId = id;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
@@ -219,7 +220,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                         this.stopEditing(true);
                     }
                 },
-                "metadataopened": function(cmp, id) {
+                "metadataopened": function(cmp, record) {
+                    var id = record.get("feature").fid;
                     this.metadataId = id;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
