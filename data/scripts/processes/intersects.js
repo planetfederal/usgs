@@ -12,11 +12,6 @@ exports.process = new Process({
             title: "Input Geometry",
             description: "Input geometry that must intersect at least one target feature geometry."
         },
-        srs: {
-            type: "String",
-            title: "Input Geometry SRS",
-            description: "SRS identifier (e.g. 'EPSG:900913') for the geometry if this differs from the target feature type SRS (optional)."
-        },
         featureType: {
             type: "String",
             title: "Target Feature Type",
@@ -48,14 +43,8 @@ exports.process = new Process({
     run: function(inputs) {
         var geometry = inputs.geometry;
         var layer = catalog.getFeatureType(inputs.namespace, inputs.featureType);
-        if (inputs.srs && !geometry.projection) {
-            geometry.projection = input.srs;
-        }
-        if (geometry.projection && !geometry.projection.equals(layer.projection)) {
-            geometry = geometry.transform(layer.projection);
-        }
         // TODO: accept tolerance
-        var filter = where("DWITHIN", layer.schema.geometry.name, wkt.write(geometry), 0.000001, "meters"); // TODO: I'm suspicious this is actually being treated as decimal degrees
+        var filter = where("DWITHIN", layer.schema.geometry.name, wkt.write(geometry), 0.000001, "meters");
         if (inputs.filter) {
             filter = filter.and(inputs.filter);
         }
