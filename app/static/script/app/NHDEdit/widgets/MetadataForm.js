@@ -95,13 +95,21 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     openEntry: function() {
         if (this.openWindow === null) {
-            this.openWindow = new Ext.Window({title: "Open", layout: "fit", items: [this.grid]});
+            this.openWindow = new Ext.Window({
+                title: "Open", 
+                layout: "fit", 
+                items: [this.grid]
+            });
         }
         this.openWindow.show();
     },
 
     openMetadata: function() {
-        var fid = this.grid.getSelectionModel().getSelected().get("feature").fid;
+        var record = this.grid.getSelectionModel().getSelected();
+        this.getForm().items.each(function(field) {
+            field.setValue(record.get(field.name));
+        });
+        var fid = record.get("feature").fid;
         this.fireEvent('metadataopened', this, fid);
         this.openWindow.close();
     },
