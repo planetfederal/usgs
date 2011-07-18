@@ -82,17 +82,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         });
         feature.state = OpenLayers.State.INSERT;
-        /*var options = {
-            callback: function(response) {
-                if (response && response.insertIds) {
-                    this.fireEvent('metadatasaved', this, response.insertIds[0]);
-                }
-            },
-            scope: this
-        };*/
         this.featureStore.add(new this.featureStore.recordType({feature: feature}));
         this.featureStore.save();
-        //this.featureStore.proxy.protocol.commit([feature], options);
     },
 
     openEntry: function() {
