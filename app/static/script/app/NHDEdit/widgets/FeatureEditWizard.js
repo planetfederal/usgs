@@ -152,7 +152,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.cancelButton = new Ext.Button({
             text: "Cancel",
             handler: function() {
-                this.feature.state = this.getDirtyState();
                 this.stopEditing(false);
             },
             scope: this
@@ -406,7 +405,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.setFeatureState(null);
                 layer.drawFeature(feature);
                 this.fireEvent("canceledit", this, feature);
-                this.close();
             }
         }
     },
