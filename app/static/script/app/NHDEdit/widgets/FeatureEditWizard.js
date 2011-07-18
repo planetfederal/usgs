@@ -174,6 +174,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         });
         this.nextButton = new Ext.Button({
             text: "Next",
+            disabled: true,
             handler: function() {
                 this.attributeForm.hide();
                 this.metadataForm.show();
@@ -190,6 +191,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             monitorValid: true,
             listeners: {
                 clientvalidation: function(panel, valid) {
+                    this.nextButton.setDisabled(!valid);
                     this.attributesValid = valid;
                     this.saveButton.setDisabled(!(this.attributesValid && this.metadataValid));
                 },
