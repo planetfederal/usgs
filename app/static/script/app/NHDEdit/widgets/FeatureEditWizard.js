@@ -259,7 +259,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.doLayout();
             },
             "write": function() {
-                this.suspendEvents();
+                this.feature.state = null;
                 this.close();
             },
             scope: this
@@ -332,7 +332,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         fields.each(function(f) {
             if (f.isDirty()) {
                 modified = true;
-                feature.attributes[f.getName()] = f.getValue();
+                var value = f.getValue();
+                // set original value so that the next time the field is not dirty
+                f.originalValue = value;
+                feature.attributes[f.getName()] = value;
             }
         });
         if (modified) {
