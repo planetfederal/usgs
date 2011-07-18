@@ -1,12 +1,12 @@
 <layer>
   <name>nhdpoint</name>
-  <id>LayerInfoImpl--1cfd7180:13120847f4c:-7ff9</id>
+  <id>LayerInfoImpl-1cafacbb:1313f40c517:-7ff3</id>
   <type>VECTOR</type>
   <defaultStyle>
     <id>StyleInfoImpl--2e96cd9b:13109c9a7b3:-7fff</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-7ffa</id>
+    <id>FeatureTypeInfoImpl-1cafacbb:1313f40c517:-7ff4</id>
   </resource>
   <enabled>true</enabled>
   <metadata>

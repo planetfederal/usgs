@@ -1,12 +1,12 @@
 <layer>
   <name>nhdline</name>
-  <id>LayerInfoImpl--1cfd7180:13120847f4c:-7ffb</id>
+  <id>LayerInfoImpl-1cafacbb:1313f40c517:-7ff7</id>
   <type>VECTOR</type>
   <defaultStyle>
     <id>StyleInfoImpl--6a5a06df:13109f6b21d:-8000</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-7ffc</id>
+    <id>FeatureTypeInfoImpl-1cafacbb:1313f40c517:-7ff8</id>
   </resource>
   <enabled>true</enabled>
   <metadata>

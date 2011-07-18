@@ -1,12 +1,12 @@
 <layer>
   <name>nhdflowline</name>
-  <id>LayerInfoImpl--1cfd7180:13120847f4c:-7ffd</id>
+  <id>LayerInfoImpl-1cafacbb:1313f40c517:-7ffb</id>
   <type>VECTOR</type>
   <defaultStyle>
     <id>StyleInfoImpl--6a5a06df:13109f6b21d:-7ffd</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--1cfd7180:13120847f4c:-7ffe</id>
+    <id>FeatureTypeInfoImpl-1cafacbb:1313f40c517:-7ffc</id>
   </resource>
   <enabled>true</enabled>
   <metadata>
