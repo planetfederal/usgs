@@ -139,6 +139,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             text: this.saveButtonText,
             tooltip: this.saveButtonTooltip,
             hidden: true,
+            disabled: true,
             handler: function() {
                 if (this.metadataId === null) {
                     this.metadataForm.saveEntry();
@@ -185,6 +186,13 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         
         this.attributeForm = new NHDEdit.AttributeForm({
             feature: feature,
+            monitorValid: true,
+            listeners: {
+                clientvalidation: function(panel, valid) {
+                    this.saveButton.setDisabled(!valid);
+                },
+                scope: this
+            },
             schema: this.schema,
             excludeFields: this.excludeFields || [],
             padding: 5,

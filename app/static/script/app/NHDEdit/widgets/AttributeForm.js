@@ -62,6 +62,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                     xtype: "combo",
                     mode: "local",
                     forceSelection: true,
+                    allowBlank:false,
                     name: name,
                     fieldLabel: name,
                     store: fTypeStore, 
@@ -87,6 +88,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 fieldCfg = {
                     xtype: "combo",
                     ref: "fCode",
+                    allowBlank:false,
                     listWidth: 650,
                     mode: "local",
                     lastQuery: "",
