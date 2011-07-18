@@ -54,6 +54,14 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             html: '<p style="color:red;font-weight:bold">Are you sure you want to delete this feature?</p>'
         });
         this.add(this.deleteLabel);
+        this.on('show', function() {
+            // restore previous record
+            if (NHDEdit.metadataRecord) {
+                this.getForm().items.each(function(field) {
+                    field.setValue(NHDEdit.metadataRecord.get(field.name));
+                });
+            }
+        }, this);
         this.addEvents(
             'metadatasaved',
             'metadataopened'

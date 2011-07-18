@@ -102,7 +102,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     metadataForm: null,
     attributeForm: null,
     exceptionPanel: null,
-    metadataId: null,
      
     /** private: method[initComponent]
      */
@@ -138,10 +137,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.saveButton = new Ext.Button({
             text: this.saveButtonText,
             tooltip: this.saveButtonTooltip,
-            hidden: true,
+            hidden: !NHDEdit.metadataRecord,
             disabled: true,
             handler: function() {
-                if (this.metadataId === null) {
+                if (!NHDEdit.metadataRecord) {
                     this.metadataForm.saveEntry();
                 } else {
                     this.stopEditing(true);
@@ -165,7 +164,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.metadataForm.hide();
                 this.attributeForm.show();
                 this.previousButton.hide();
-                this.saveButton.hide();
+                if (!NHDEdit.metadataRecord) {
+                    this.saveButton.hide();
+                }
                 this.deleteButton.show();
                 this.nextButton.show();
             },
@@ -208,8 +209,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             featureNS: this.metadataSource.featureNS,
             listeners: {
                 "metadatasaved": function(cmp, record) {
+                    NHDEdit.metadataRecord = record;
                     var id = record.get("feature").fid;
-                    this.metadataId = id;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
                     } , this);
@@ -221,8 +222,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                     }
                 },
                 "metadataopened": function(cmp, record) {
+                    NHDEdit.metadataRecord = record;
                     var id = record.get("feature").fid;
-                    this.metadataId = id;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
                     } , this);
@@ -412,7 +413,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     },
 
     deleteFeature: function() {
-        if (this.metadataId === null) {
+        if (!NHDEdit.metadataRecord) {
             this.metadataForm.saveEntry();
         } else {
             this.setFeatureState(OpenLayers.State.DELETE);
