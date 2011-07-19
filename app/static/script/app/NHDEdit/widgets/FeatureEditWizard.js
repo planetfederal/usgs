@@ -260,27 +260,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         NHDEdit.FeatureEditWizard.superclass.initComponent.call(this);
         
         this.store.on({
-            "exception": function(proxy, type, action, options, response, records) {
-                this.attributeForm.hide();
-                this.metadataForm.hide();
-                this.previousButton.hide();
-                this.nextButton.hide();
-                if (this.exceptionPanel !== null) {
-                    this.remove(this.exceptionPanel);
-                }
-                this.exceptionPanel = new NHDEdit.ExceptionPanel({
-                    padding: 5,
-                    border: false,
-                    store: this.store,
-                    exceptionReport: response.exceptionReport
-                });
-                this.add(this.exceptionPanel);
-                this.doLayout();
-            },
-            "write": function() {
-                this.feature.state = null;
-                this.close();
-            },
+            "exception": this.handleStoreException,
+            "write": this.handleStoreWrite,
             scope: this
         });
         
@@ -288,32 +269,62 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             "show": function() {
                 this.startEditing();
             },
-            "beforeclose": function() {
-                this.updateFeature();
-                if(this.feature.state === this.getDirtyState()) {
-                    Ext.Msg.show({
-                        title: this.closeMsgTitle,
-                        msg: this.closeMsg,
-                        buttons: Ext.Msg.YESNO,
-                        fn: function(button) {
-                            if(button && button === "yes") {
-                                this.feature.state = null;
-                                this.close();
-                            } else {
-                                this.fireEvent("cancelclose", this);
-                            }
-                        },
-                        scope: this,
-                        icon: Ext.MessageBox.QUESTION,
-                        animEl: this.getEl()
-                    });
-                    return false;
-                } else {
-                    this.stopEditing(false);
-                }
+            "beforeclose": this.handleBeforeClose,
+            "beforedestroy": function() {
+                this.store.un("exception", this.handleException, this);
+                this.store.commitChanges();
+                this.editing = false;
             },
             scope: this
         });
+    },
+    
+    handleBeforeClose: function() {
+        this.updateFeature();
+        if(this.feature.state === this.getDirtyState()) {
+            Ext.Msg.show({
+                title: this.closeMsgTitle,
+                msg: this.closeMsg,
+                buttons: Ext.Msg.YESNO,
+                fn: function(button) {
+                    if(button && button === "yes") {
+                        this.un("beforeclose", this.handleBeforeClose, this);
+                        this.close();
+                    } else {
+                        this.fireEvent("cancelclose", this);
+                    }
+                },
+                scope: this,
+                icon: Ext.MessageBox.QUESTION,
+                animEl: this.getEl()
+            });
+            return false;
+        } else {
+            this.stopEditing(false);
+        }
+    },
+    
+    handleStoreException: function(proxy, type, action, options, response, records) {
+        this.attributeForm.hide();
+        this.metadataForm.hide();
+        this.previousButton.hide();
+        this.nextButton.hide();
+        if (this.exceptionPanel !== null) {
+            this.remove(this.exceptionPanel);
+        }
+        this.exceptionPanel = new NHDEdit.ExceptionPanel({
+            padding: 5,
+            border: false,
+            store: this.store,
+            exceptionReport: response.exceptionReport
+        });
+        this.add(this.exceptionPanel);
+        this.doLayout();
+    },
+    
+    handleStoreWrite: function() {
+        this.un("beforeclose", this.handleBeforeClose, this);
+        this.close();
     },
         
     /** private: method[getDirtyState]
@@ -396,7 +407,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.editing = false;
                 feature.layer.destroyFeatures([feature]);
                 this.fireEvent("canceledit", this, null);
-                this.close();
             } else {
                 var layer = feature.layer;
                 layer.drawFeature(feature, {display: "none"});
@@ -426,7 +436,6 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         } else {
             this.setFeatureState(OpenLayers.State.DELETE);
             this.fireEvent("featuremodified", this, this.feature);
-            this.close();
         }
     },
     
