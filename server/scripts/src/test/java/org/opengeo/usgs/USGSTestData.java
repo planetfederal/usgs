@@ -7,12 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import org.geoserver.data.test.LiveDbmsData;
 
+import org.geoserver.data.test.LiveDbmsData;
 import org.geoserver.data.util.IOUtils;
 
 public class USGSTestData extends LiveDbmsData {

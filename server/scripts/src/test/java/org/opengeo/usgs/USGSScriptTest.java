@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.opengeo.usgs;
 
 import org.geoserver.geoscript.javascript.JavaScriptModules;
@@ -23,7 +19,7 @@ public class USGSScriptTest extends USGSScriptTestSupport {
     
     public void testSanity() {
         JavaScriptModules jsModules = (JavaScriptModules) applicationContext.getBean("JSModules");
-        Scriptable require = jsModules.require("usgs");
-        assertNotNull(require);
+        Scriptable exports = jsModules.require("usgs");
+        assertNotNull(exports);
     }
 }

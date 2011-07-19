@@ -15,7 +15,6 @@ import org.opengis.feature.Feature;
 import org.opengis.feature.type.FeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
-import org.opengis.filter.expression.Expression;
 
 public class USGSTest extends USGSTestSupport {
 
@@ -47,7 +46,7 @@ public class USGSTest extends USGSTestSupport {
     }
     
     private void deleteFeatures(DataAccess<? extends FeatureType, ? extends Feature> ds,String name) throws IOException {
-        FeatureStore fs = (FeatureStore) ds.getFeatureSource(new NameImpl(name)).getDataStore().getFeatureSource(new NameImpl(name));
+        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) ds.getFeatureSource(new NameImpl(name)).getDataStore().getFeatureSource(new NameImpl(name));
         FilterFactory ff = new FilterFactoryImpl();
         Filter g = ff.greater(ff.property("ComID"), ff.literal(0));
         fs.removeFeatures(g);        

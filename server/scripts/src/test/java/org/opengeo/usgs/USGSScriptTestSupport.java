@@ -5,7 +5,7 @@
 package org.opengeo.usgs;
 
 import java.io.File;
-import java.util.Arrays;
+
 import org.geoserver.data.test.LiveData;
 import org.geoserver.data.util.IOUtils;
 
