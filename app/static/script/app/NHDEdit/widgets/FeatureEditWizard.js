@@ -20,8 +20,8 @@ Ext.ns("NHDEdit");
 NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     
     /** i18n **/
-    closeMsgTitle: 'Changes will be lost?',
-    closeMsg: 'Any changes will be lost after closing this window. Are you sure you want to close the window?',
+    closeMsgTitle: 'Undo changes?',
+    closeMsg: 'Any changes will be lost. Are you sure you want to cancel and close the window?',
     deleteMsgTitle: 'Delete Feature?',
     deleteMsg: 'Are you sure you want to delete this feature?',
     deleteButtonText: 'Delete',
@@ -152,7 +152,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.cancelButton = new Ext.Button({
             text: "Cancel",
             handler: function() {
-                this.stopEditing(false);
+                this.close();
             },
             scope: this
         });
