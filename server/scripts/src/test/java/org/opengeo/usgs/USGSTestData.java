@@ -2,11 +2,13 @@ package org.opengeo.usgs;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -18,6 +20,7 @@ public class USGSTestData extends LiveDbmsData {
     private boolean runDBSetup = true;
 
     public USGSTestData() {
+        // the usgs-script.sql is bogus just to trick super class
         super(new File(USGSTestData.class.getResource("data").getFile()), "usgs", new File("usgs-script.sql"));
         filteredPaths.clear();
     }
@@ -36,6 +39,15 @@ public class USGSTestData extends LiveDbmsData {
     }
 
     private void setupDB() throws Exception {
+        // load properties and assign defaults
+        Properties p = new Properties();
+        p.load(new FileInputStream(fixture));
+        String host = p.getProperty("host","localhost");
+        String psql = p.getProperty("psql","psql");
+        String user = p.getProperty("user","opengeo");
+        String database = p.getProperty("database","usgs_test");
+        String password = p.getProperty("passwd"); 
+        
         // have to extract script temporarily
         File scriptSource = new File("../../data/test_nhd.sql.zip");
         ZipFile zip = new ZipFile(scriptSource);
@@ -45,7 +57,17 @@ public class USGSTestData extends LiveDbmsData {
         
         System.out.println("loading fixture data from SQL");
         // this will lock if any connections remain open on the database
-        ProcessBuilder pb = new ProcessBuilder(("psql -h localhost -U opengeo usgs_test -f " + sqlScript).split(" "));
+        String[] args = {
+            psql,
+            "-h",host,
+            "-U",user,
+            "-f",sqlScript.getAbsolutePath(),
+            database
+        };
+        ProcessBuilder pb = new ProcessBuilder(args);
+        if (password != null) {
+            pb.environment().put("PGPASSWORD", password); 
+        }
         // read output in separate thread and build a list of lines
         pb.redirectErrorStream(true);
         Process start = pb.start();
