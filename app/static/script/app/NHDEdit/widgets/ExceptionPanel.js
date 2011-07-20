@@ -27,10 +27,29 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     store: null,
 
-    vendorId: 'GeoServer',
+    vendorId: 'usgs',
 
     isUnrecoverable: function(processId) {
         return (processId === null || this.writers[processId] === undefined);
+    },
+
+    templates: {
+        "intersects": new Ext.XTemplate(
+            '{subjectFType:this.getSubject} features must intersect a feature from the {objectLayer} layer.',
+            {
+                getSubject: function(value) {
+                    var result;
+                    switch(value) {
+                        case 487: result = "Waterfall"; break;
+                        case 431: result = "Rapids"; break;
+                        case 460: result = "Sink/Rise"; break;
+                        case 369: result = "Gate"; break;
+                        default: result = "Unknown";
+                    }
+                    return result;
+                }
+            }
+        )
     },
 
     writers: {
@@ -109,10 +128,20 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
         var code = this.getProperty("code");
         var locator = this.getProperty("locator");
+        var messageObj = this.getMessageObject();
+        var text;
+        if (messageObj && messageObj.rule && messageObj.rule.name) {
+            var tpl = this.templates[messageObj.rule.name];
+            if (tpl) {
+                text = messageObj.message + ": " + tpl.applyTemplate(messageObj.rule);
+            }
+        } else {
+            text = gxp.util.getOGCExceptionText(this.exceptionReport);
+        }
         this.add({
             xtype: "label",
             fieldLabel: "Message",
-            text: gxp.util.getOGCExceptionText(this.exceptionReport)
+            text: text
         });
         if (this.isUnrecoverable(locator) === true) {
             this.add({
@@ -131,6 +160,14 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             this.add(this.writers[locator].apply(this, [locator]));
         }
         this.doLayout();
+    },
+
+    getMessageObject: function() {
+        var result = null;
+        Ext.each(this.exceptionReport.exceptions, function(exc) {
+            result = Ext.util.JSON.decode(exc.texts[0]);
+        });
+        return result;
     },
 
     getProperty: function(property) {

@@ -26,7 +26,7 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
 
     featureManager: null,
 
-    vendorId: "GeoServer",
+    vendorId: "usgs",
 
     /** private: method[init]
      */
