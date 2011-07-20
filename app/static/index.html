@@ -84,14 +84,6 @@
                     }, {
                         ptype: "gxp_featuremanager",
                         id: "nhd-manager",
-                        /*listeners: {
-                            "beforesave": {
-                                "fn": function(tool, store, params) {
-                                    params.nativeElements = [{vendorId: 'ORACLE', safeToIgnore: false, value: 'xxxxxx'}];
-                                },
-                                single: true
-                            }
-                        },*/
                         paging: false,
                         autoSetLayer: true,
                         maxFeatures: 1
@@ -138,9 +130,16 @@
                         },
                         actionTarget: {target: "map.tbar", index: 7}
                     }, {
+                        ptype: "gxp_googlegeocoder",
+                        outputTarget: "search",
+                        outputConfig: {
+                            emptyText: "Search for a location ...",
+                            listEmptyText: "- no matches -"
+                        }
+                    }, {
                         ptype: "app_preferences",
                         featureManager: "nhd-manager",
-                        actionTarget: {target: "map.tbar", index: 10},
+                        actionTarget: {target: "map.tbar", index: 11},
                         outputConfig: {
                             title: "Preferences",
                             width: 400,
@@ -168,7 +167,10 @@
                         maxExtent: [-20037508, -20037508, 20037508, 20037508],
                         center: [-11746265.687635, 4694206.416048],
                         zoom: 6,
-                        tbar: ['->'],
+                        tbar: {
+                            id: "maptoolbar",
+                            items: ['-', {xtype: 'container', id: 'search'}, '->']
+                        },
                         layers: [{
                             source: "osm",
                             name: "mapnik",
