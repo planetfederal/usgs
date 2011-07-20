@@ -29,12 +29,12 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     vendorId: 'GeoServer',
 
-    isUnrecoverable: function(code) {
-        return (code === null || this.writers[code] === undefined);
+    isUnrecoverable: function(processId) {
+        return (processId === null || this.writers[processId] === undefined);
     },
 
     writers: {
-        "queue": function(code) {
+        "queue": function(processId) {
             return {
                 xtype: "checkbox",
                 fieldLabel: "Queue exception",
@@ -55,7 +55,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                                 if (nativeElements && nativeElements.length === 1) {
                                     obj = Ext.util.JSON.decode(nativeElements[0].value);
                                 }
-                                obj[code] = {queue: checked};
+                                obj[processId] = {queue: checked};
                                 options.params.nativeElements = [{
                                     vendorId: this.vendorId,
                                     safeToIgnore: true,
@@ -71,7 +71,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 }
             };
         },
-        "js:PipelineVerticalRelationship": function(code) {
+        "js:PipelineVerticalRelationship": function(processId) {
             var result = [];
             result.push(this.writers.queue.apply(this, arguments));
             result.push({
@@ -89,7 +89,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                             if (nativeElements && nativeElements.length === 1) {
                                 obj = Ext.util.JSON.decode(nativeElements[0].value);
                             }
-                            obj[code] = {relationship: value};
+                            obj[processId] = {relationship: value};
                             options.params.nativeElements = [{
                                 vendorId: this.vendorId,
                                 safeToIgnore: true,
@@ -114,7 +114,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             fieldLabel: "Message",
             text: gxp.util.getOGCExceptionText(this.exceptionReport)
         });
-        if (this.isUnrecoverable(code) === true) {
+        if (this.isUnrecoverable(locator) === true) {
             this.add({
                 xtype: "displayfield", 
                 fieldLabel: "Locator", 
@@ -128,7 +128,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 value: code
             });
         } else {
-            this.add(this.writers[code].apply(this, [code]));
+            this.add(this.writers[locator].apply(this, [locator]));
         }
         this.doLayout();
     },
