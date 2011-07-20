@@ -213,7 +213,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             featureNS: this.metadataSource.featureNS,
             listeners: {
                 "clientvalidation": function(panel, valid) {
-                    this.metadataValid = valid;
+                    this.metadataValid = valid || NHDEdit.metadataRecord;
                     this.saveButton.setDisabled(!(this.attributesValid && this.metadataValid));
                 },
                 "metadatasaved": function(cmp, record) {
