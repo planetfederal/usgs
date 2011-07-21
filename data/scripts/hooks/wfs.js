@@ -13,7 +13,7 @@ exports.beforeCommit = function(details, request) {
         };
     }
     var features = details.PreInsert || [];
-    features = features.concat(details.PreUpdate || []);
+    features = features.concat(details.PostUpdate || []);
     var featureInfo, feature, rules, rule, inputs, filter, process, outputs;
 
     for (var i=0, ii=features.length; i<ii; ++i) {
