@@ -18,13 +18,27 @@ import org.opengis.filter.FilterFactory;
 
 public class USGSTest extends USGSTestSupport {
 
+    DataAccess<? extends FeatureType, ? extends Feature> dataStore;
+    
+    @Override
+    protected void setUpInternal() throws Exception {
+        super.setUpInternal();
+        dataStore = getCatalog().getDataStoreByName("usgs","nhd").getDataStore(null);
+    }
+
+    @Override
+    protected void tearDownInternal() throws Exception {
+        super.tearDownInternal();
+        dataStore.dispose();
+    }
+
     public void testSanity() throws Exception {
         Catalog cat = getCatalog();
         assertNotNull(cat);
         assertEquals("namespaces count", 1, cat.getNamespaces().size());
         List<LayerInfo> layers = cat.getLayers();
         assertEquals(5,layers.size());        
-        DataAccess<? extends FeatureType, ? extends Feature> dataStore = cat.getDataStoreByName("usgs","nhd").getDataStore(null);
+        
         checkFeatures(dataStore, "NHDArea", 49);
 //        checkFeatures(dataStore, "NHDFlowline", 8004);
 //        checkFeatures(dataStore, "NHDLine", 38);
@@ -39,14 +53,14 @@ public class USGSTest extends USGSTestSupport {
      * before each test case.
      */
     public void testSanity2() throws Exception {
-        Catalog cat = getCatalog();
-        DataAccess<? extends FeatureType, ? extends Feature> dataStore = cat.getDataStoreByName("usgs","nhd").getDataStore(null);
         checkFeatures(dataStore, "NHDArea", 49);
-        deleteFeatures(dataStore, "NHDArea");
+        deleteFeatures(dataStore, "NHDArea");        
+        dataStore.dispose();
     }
     
     private void deleteFeatures(DataAccess<? extends FeatureType, ? extends Feature> ds,String name) throws IOException {
-        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) ds.getFeatureSource(new NameImpl(name)).getDataStore().getFeatureSource(new NameImpl(name));
+        DataAccess<? extends FeatureType, ? extends Feature> da = ds.getFeatureSource(new NameImpl(name)).getDataStore();
+        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) da.getFeatureSource(new NameImpl(name));
         FilterFactory ff = new FilterFactoryImpl();
         Filter g = ff.greater(ff.property("ComID"), ff.literal(0));
         fs.removeFeatures(g);        
@@ -54,15 +68,10 @@ public class USGSTest extends USGSTestSupport {
     }
     
     private void checkFeatures(DataAccess<? extends FeatureType, ? extends Feature> ds,String name,int count) throws IOException {
-        FeatureSource<? extends FeatureType, ? extends Feature> fs = ds.getFeatureSource(new NameImpl(name));
+        DataAccess<? extends FeatureType, ? extends Feature> da = ds.getFeatureSource(new NameImpl(name)).getDataStore();
+        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) da.getFeatureSource(new NameImpl(name));
         assertNotNull(fs);
-        FeatureIterator<? extends Feature> features = fs.getFeatures().features();
-        int cnt = 0;
-        while (features.hasNext()) {
-            features.next();
-            cnt++;
-        }
-        assertEquals(cnt, count);
+        assertEquals(count, fs.getFeatures().size());
     }
 
 }

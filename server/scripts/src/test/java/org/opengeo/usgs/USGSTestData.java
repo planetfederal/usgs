@@ -15,6 +15,13 @@ import java.util.zip.ZipFile;
 import org.geoserver.data.test.LiveDbmsData;
 import org.geoserver.data.util.IOUtils;
 
+/**
+ * We are very much abusing the original intension of this class. Instead of
+ * providing a real SQL script to run, we use psql directly, but take advantage
+ * of the other aspects of this class - checking for properties file and setting
+ * up the data dir.
+ * @author Ian Schneider
+ */
 public class USGSTestData extends LiveDbmsData {
     
     private boolean runDBSetup = true;
