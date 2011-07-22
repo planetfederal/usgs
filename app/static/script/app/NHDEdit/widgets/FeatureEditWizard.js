@@ -218,6 +218,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 },
                 "metadatasaved": function(cmp, record) {
                     NHDEdit.metadataRecord = record;
+                    var map = this.feature.layer.map;
+                    var permalink = map.getControlsByClass("NHDEdit.Control.Permalink")[0];
+                    permalink.updateLink();
                     var id = record.get("feature").fid;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
@@ -231,6 +234,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 },
                 "metadataopened": function(cmp, record) {
                     NHDEdit.metadataRecord = record;
+                    var map = this.feature.layer.map;
+                    var permalink = map.getControlsByClass("NHDEdit.Control.Permalink")[0];
+                    permalink.updateLink();
                     var id = record.get("feature").fid;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
