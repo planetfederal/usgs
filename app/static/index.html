@@ -171,6 +171,13 @@
                             id: "maptoolbar",
                             items: ['-', {xtype: 'container', id: 'search'}, '->']
                         },
+                        controls: [
+                            new OpenLayers.Control.Navigation({zoomWheelOptions: {interval: 250}}),
+                            new OpenLayers.Control.PanPanel(),
+                            new OpenLayers.Control.ZoomPanel(),
+                            new OpenLayers.Control.Attribution(),
+                            new OpenLayers.Control.Permalink({anchor: true})
+                        ],
                         layers: [{
                             source: "osm",
                             name: "mapnik",
