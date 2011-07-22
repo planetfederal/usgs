@@ -289,6 +289,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 fn: function(button) {
                     if(button && button === "yes") {
                         this.un("beforeclose", this.handleBeforeClose, this);
+                        this.stopEditing(false);
                         this.close();
                     } else {
                         this.fireEvent("cancelclose", this);
