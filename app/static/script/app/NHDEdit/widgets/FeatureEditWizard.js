@@ -272,6 +272,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             "beforeclose": this.handleBeforeClose,
             "beforedestroy": function() {
                 this.store.un("exception", this.handleStoreException, this);
+                this.store.un("write", this.handleStoreWrite, this);
                 this.store.commitChanges();
                 this.editing = false;
             },
