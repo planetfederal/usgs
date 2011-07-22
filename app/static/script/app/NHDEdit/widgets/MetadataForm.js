@@ -64,8 +64,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }, this);
         this.addEvents(
             'metadatasaved',
-            'metadataopened'
-        );
+            'metadataopened');
     },
 
     createGrid: function() {
@@ -123,7 +122,6 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             fields: fields,
             autoLoad: true,
             listeners: {
-                "load": this.createGrid,
                 "write": function(store, action, data, response, rs) {
                     this.fireEvent('metadatasaved', this, rs);
                 },
@@ -133,6 +131,20 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             featureType: this.featureType,
             featureNS: this.featureNS
         });
+        if (NHDEdit.metadataId !== undefined) {
+            this.featureStore.setOgcFilter(new OpenLayers.Filter.FeatureId({fids: [NHDEdit.metadataId]}));
+            this.featureStore.addListener('load', function(store, records, options) {
+                delete NHDEdit.metadataId;
+                NHDEdit.metadataRecord = records[0];
+                this.featureStore.setOgcFilter(null);
+                this.featureStore.addListener('load', this.createGrid, this, {single: true});
+                this.featureStore.load();
+            }, this, {single: true});
+            this.featureStore.load();
+        } else {
+            this.featureStore.addListener('load', this.createGrid, this, {single: true});
+            this.featureStore.load();
+        }
     },
 
     onLoad: function() {
