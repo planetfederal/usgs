@@ -44,7 +44,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                         case 431: result = "Rapids"; break;
                         case 460: result = "Sink/Rise"; break;
                         case 369: result = "Gate"; break;
-                        default: result = "Unknown";
+                        default: result = "Unknown"; break;
                     }
                     return result;
                 }
