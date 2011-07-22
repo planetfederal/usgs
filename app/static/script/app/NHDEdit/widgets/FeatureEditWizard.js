@@ -307,6 +307,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         return true;
     },
     
+    /** Method: handleStoreException
+     *  Handler that shows an exception report in the wizard after an
+     *  unsuccessful write that caused an exception.
+     */
     handleStoreException: function(proxy, type, action, options, response, records) {
         this.attributeForm.hide();
         this.metadataForm.hide();
@@ -325,6 +329,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.doLayout();
     },
     
+    /** Method: handleStoreWrite
+     *  Handler that closes the wizard popup after a successful write that
+     *  resolves an exception
+     */
     handleStoreWrite: function() {
         this.un("beforeclose", this.handleBeforeClose, this);
         this.close();
