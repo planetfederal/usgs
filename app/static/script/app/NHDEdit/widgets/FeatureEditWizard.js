@@ -302,6 +302,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         } else {
             this.stopEditing(false);
         }
+        return true;
     },
     
     handleStoreException: function(proxy, type, action, options, response, records) {
@@ -397,8 +398,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                         if (attribute instanceof Date) {
                             var type = rec.get("type").split(":").pop();
                             feature.attributes[i] = attribute.format(
-                                type == "date" ? "Y-m-d" : "c"
-                            );
+                                type == "date" ? "Y-m-d" : "c");
                         }
                     }
                 }
