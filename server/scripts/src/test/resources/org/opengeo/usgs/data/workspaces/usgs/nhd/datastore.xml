@@ -8,11 +8,11 @@
     <id>WorkspaceInfoImpl-668e6b80:13106f79fdc:-7ffc</id>
   </workspace>
   <connectionParameters>
-    <entry key="user">opengeo</entry>
-    <entry key="port">5432</entry>
+    <entry key="user">${user}</entry>
+    <entry key="port">${port}</entry>
     <entry key="passwd">opengeo78902</entry>
-    <entry key="host">localhost</entry>
-    <entry key="database">usgs_test</entry>
+    <entry key="host">${host}</entry>
+    <entry key="database">${database}</entry>
     <entry key="url">jdbc:postgresql://localhost/usgs-test</entry>
     <entry key="driver">org.postgresql.Driver</entry>
     <entry key="dbtype">postgisng</entry>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
@@ -29,9 +30,9 @@ public class USGSTestData extends LiveDbmsData {
     public USGSTestData() {
         // the usgs-script.sql is bogus just to trick super class
         super(new File(USGSTestData.class.getResource("data").getFile()), "usgs", new File("usgs-script.sql"));
-        filteredPaths.clear();
+        filteredPaths = new ArrayList<String>(Arrays.asList("workspaces/usgs/nhd/datastore.xml"));
     }
-    
+
     protected void setRunDBSetup(boolean runDBSetup) {
         this.runDBSetup = runDBSetup;
     }
