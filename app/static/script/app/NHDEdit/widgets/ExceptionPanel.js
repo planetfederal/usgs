@@ -8,6 +8,10 @@
 
 Ext.ns("NHDEdit");
 
+/**
+ * @include NHDEdit/data/NHDFType.js
+ */
+
 /** api: (define)
  *  module = NHDEdit
  *  class = ExceptionPanel
@@ -38,15 +42,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             '{subjectFType:this.getSubject} features must intersect a feature from the {objectLayer} layer.',
             {
                 getSubject: function(value) {
-                    var result;
-                    switch(value) {
-                        case 487: result = "Waterfall"; break;
-                        case 431: result = "Rapids"; break;
-                        case 460: result = "Sink/Rise"; break;
-                        case 369: result = "Gate"; break;
-                        default: result = "Unknown"; break;
-                    }
-                    return result;
+                    return NHDEdit.fTypeDict[value];
                 }
             }
         )
