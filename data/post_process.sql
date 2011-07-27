@@ -72,6 +72,16 @@ alter table "WBD_HU12" add constraint "enforce_srid_Shape" check (SRID("Shape")=
 alter table "WBD_HU14" add constraint "enforce_srid_Shape" check (SRID("Shape")=900913);
 alter table "WBD_HU16" add constraint "enforce_srid_Shape" check (SRID("Shape")=900913);
 
+CREATE TABLE "NHDExceptions" (
+    exceptionid integer PRIMARY KEY,
+    metadataid char(40),
+    namespace char(100),
+    featuretype char(40),
+    featureid char(40),
+    processid char(40),
+    exceptionmessage char(4000)
+);
+
 select populate_geometry_columns();
 
 create index "NHDPoint_geom_idx" on "NHDPoint" using GIST ("Shape");
