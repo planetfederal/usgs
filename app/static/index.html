@@ -43,9 +43,13 @@
             OpenLayers.ImgPath = "theme/app/img/";
             Ext.onReady(function() {
                 var app = new gxp.Viewer({
-                    mapItems: {
+                    mapItems: [{
+                        xtype: "gx_zoomslider",
+                        vertical: true,
+                        height: 100
+                    }, {
                         xtype: "gxp_scaleoverlay"
-                    },
+                    }],
                     portalConfig: {
                         layout: "border",
                         region: "center",
@@ -220,11 +224,6 @@
                         }, {
                             source: "local",
                             name: "usgs:nhdpoint"
-                        }],
-                        items: [{
-                            xtype: "gx_zoomslider",
-                            vertical: true,
-                            height: 100
                         }]
                     }
                 });
