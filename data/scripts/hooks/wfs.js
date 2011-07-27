@@ -85,7 +85,7 @@ exports.afterTransaction = function(details, request) {
                 process = require("processes/" + rule.name).process;
                 outputs = process.run({
                     geometry: feature.geometry,
-                    featureType: featureType,
+                    featureType: rule.objectLayer,
                     namespace: usgs.NAMESPACE_URI,
                     filter: filter
                 });
@@ -96,7 +96,7 @@ exports.afterTransaction = function(details, request) {
                     exceptions.add({
                         metadataid: "bogusid", // TODO: add handle to details
                         namespace: usgs.NAMESPACE_URI,
-                        featuretype: rule.objectLayer,
+                        featuretype: featureType,
                         featureid: feature.id, // TODO: continue the discussion about PostInsert
                         // see https://github.com/groldan/geoserver_trunk/blob/gss/community/geosync/src/main/java/org/geoserver/gss/wfsbridge/GSSTransactionListener.java#L310
                         // also see http://pastebin.com/P6PCCzBe
