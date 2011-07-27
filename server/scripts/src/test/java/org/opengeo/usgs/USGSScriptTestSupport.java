@@ -50,7 +50,7 @@ public class USGSScriptTestSupport extends USGSTestSupport {
     protected void oneTimeSetUp() throws Exception {
         super.oneTimeSetUp();
         
-        File base = new File("../../data/scripts");        
+        File base = new File("../../data/scripts");
         File datadir = ((LiveData)getTestData()).getDataDirectoryRoot();
         File scripts = new File(datadir,"scripts");
         

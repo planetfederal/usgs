@@ -38,10 +38,6 @@ public class USGSTest extends USGSTestSupport {
         assertEquals(5,layers.size());        
         
         checkFeatures(dataStore, "NHDArea", 49);
-//        checkFeatures(dataStore, "NHDFlowline", 8004);
-//        checkFeatures(dataStore, "NHDLine", 38);
-//        checkFeatures(dataStore, "NHDPoint", 47);
-//        checkFeatures(dataStore, "NHDWaterbody", 1148);
         deleteFeatures(dataStore, "NHDArea");
     }
     

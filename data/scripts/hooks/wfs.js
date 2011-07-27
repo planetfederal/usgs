@@ -64,15 +64,13 @@ exports.afterTransaction = function(details, request) {
     var features = details.PreInsert || [];
     features = features.concat(details.PostUpdate || []);
     var featureInfo, featureType, feature, rules, rule, inputs, filter, process, outputs;
-    
-    LOGGER.info("afterTransaction");
 
     for (var i=0, ii=features.length; i<ii; ++i) {
         featureInfo = features[i];
         feature = featureInfo.feature;
         featureType = featureInfo.name;
         rules = usgs.getRules(featureInfo);
-        LOGGER.info("rules: " + rules.length);
+
         for (var j=0, jj=rules.length; j<jj; ++j) {
             rule = rules[i];
             inputs = nativ["js:" + rule.name] || {};
@@ -89,7 +87,7 @@ exports.afterTransaction = function(details, request) {
                     namespace: usgs.NAMESPACE_URI,
                     filter: filter
                 });
-                LOGGER.info(j + ": " + outputs.results);
+
                 if (outputs.result == false) {
                     // add the exception to the queue
                     var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdexceptions");
@@ -97,9 +95,7 @@ exports.afterTransaction = function(details, request) {
                         metadataid: details.handle,
                         namespace: usgs.NAMESPACE_URI,
                         featuretype: featureType,
-                        featureid: feature.id, // TODO: continue the discussion about PostInsert
-                        // see https://github.com/groldan/geoserver_trunk/blob/gss/community/geosync/src/main/java/org/geoserver/gss/wfsbridge/GSSTransactionListener.java#L310
-                        // also see http://pastebin.com/P6PCCzBe
+                        featureid: feature.id, // TODO: https://github.com/opengeo/usgs/issues/54
                         processid: "js:" + rule.name,
                         exceptionmessage: JSON.stringify({
                             message: process.title + " Failed",
