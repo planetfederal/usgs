@@ -73,8 +73,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             store: this.featureStore,
             schema: this.schema,
             loadMask: true,
-            /* TODO: in this case it would be easier to specify the includeFields */
-            ignoreFields: ['AttributeAccuracyreport', 'LogicalConsistencyReport', 'CompletenessReport', 'HorizPositionalAccuracyReport', 'VertPositionalAccuracyReport', 'MetadataStandardName', 'MetadataStandardVersion', 'MetadataDate', 'DataSetCredit', 'ContactOrganization', 'AddressType', 'Address', 'City', 'StateOrProvince', 'PostalCode', 'ContactVoiceTelephone', 'ContactInstructions', 'ContactEmailAddress'],
+            includeFields: ['DuuID', 'Meta_ProcessID', 'ProcessDescription', 'ProcessDate'],
             height: 300,
             bbar: ["->", {text: "Open", iconCls: "gxp-icon-open", handler: this.openMetadata, scope: this}]
         });
