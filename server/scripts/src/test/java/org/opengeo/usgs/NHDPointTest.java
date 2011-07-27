@@ -3,6 +3,9 @@ package org.opengeo.usgs;
 //import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 
@@ -14,15 +17,42 @@ public class NHDPointTest extends USGSScriptTestSupport {
     }
     
     public void testInsertsFail() throws Exception {
-        Document dom = postRequest("xml/nhdpoint-insert-waterfall-fail.xml");
-        assertNotNull(dom);
-
-        String locator = xpath.evaluate("//ows:Exception/@locator", dom);
-        assertEquals("js:intersects", locator);
         
-        JSONObject result = extractJSONException(dom);
-        assertEquals("intersects", result.get("name"));
-        assertEquals("nhdpoint", result.get("subjectLayer"));
+        // nhdpoint intersects rules
+        List<String> files = (List<String>) Arrays.asList(
+                "xml/nhdpoint-insert-waterfall-fail.xml",
+                "xml/nhdpoint-insert-rapid-fail.xml",
+                "xml/nhdpoint-insert-gate-fail.xml");
+        
+        for (String file : files) {
+            Document dom = postRequest(file);
+            assertNotNull(dom);
+
+            String locator = xpath.evaluate("//ows:Exception/@locator", dom);
+            assertEquals(file, "js:intersects", locator);
+            
+            JSONObject result = extractJSONException(dom);
+            assertEquals(file, "intersects", result.get("name"));
+            assertEquals(file, "nhdpoint", result.get("subjectLayer"));
+        }
+
+        // nhdpoint intersectsEndpoint rules
+        files = (List<String>) Arrays.asList(
+                "xml/nhdpoint-insert-sinkrise-fail.xml");
+        
+        for (String file : files) {
+            Document dom = postRequest(file);
+            assertNotNull(dom);
+
+            String locator = xpath.evaluate("//ows:Exception/@locator", dom);
+            assertEquals(file, "js:intersectsEndpoint", locator);
+            
+            JSONObject result = extractJSONException(dom);
+            assertEquals(file, "intersectsEndpoint", result.get("name"));
+            assertEquals(file, "nhdpoint", result.get("subjectLayer"));
+        }
+
+        
     }
     
     public void testInsertsQueue() throws Exception {

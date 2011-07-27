@@ -6,6 +6,7 @@ var featureRules = [
     {name: "intersects", subjectLayer: "nhdpoint", subjectFType: 431, objects: [{layer: "nhdflowline"}]},
     {name: "intersects", subjectLayer: "nhdpoint", subjectFType: 487, objects: [{layer: "nhdflowline"}]},
     {name: "intersects", subjectLayer: "nhdpoint", subjectFType: 369, objects: [{layer: "nhdline", ftypes: [398]}, {layer: "nhdarea", ftypes: [398]}]},
+    {name: "intersects", subjectLayer: "nhdpoint", subjectFType: 398, objects: [{layer: "nhdflowline", ftypes: [336, 340]}, {layer: "nhdarea", ftypes: [460]}]},
     {name: "intersectsEndpoint", subjectLayer: "nhdpoint", subjectFType: 450, objects: [{layer: "nhdflowline", ftypes: [420, 460]}]}
 ];
 
@@ -27,4 +28,4 @@ exports.getRules = function(featureInfo) {
         }
     }
     return rules;
-}
+};

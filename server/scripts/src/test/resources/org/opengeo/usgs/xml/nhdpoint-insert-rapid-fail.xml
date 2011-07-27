@@ -1,0 +1,15 @@
+<wfs:Transaction xmlns:wfs="http://www.opengis.net/wfs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WFS" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+    <wfs:Insert>
+        <feature:nhdpoint xmlns:feature="http://www.usgs.gov/">
+            <feature:Shape>
+                <gml:Point xmlns:gml="http://www.opengis.net/gml" srsName="EPSG:900913">
+                    <!-- this point doesn't intersect any flowline -->
+                    <gml:pos>-11808999 4925999</gml:pos>
+                </gml:Point>
+            </feature:Shape>
+            <!-- this is a rapid -->
+            <feature:FType>431</feature:FType>
+            <feature:FCode>43100</feature:FCode>
+        </feature:nhdpoint>
+    </wfs:Insert>
+</wfs:Transaction>
