@@ -37,3 +37,10 @@ body {
 .x-btn .gxp-icon-queue, .x-menu-item .gxp-icon-queue {
     background-image: url(img/silk/error_go.png);
 }
+
+.x-action-col, .gxp-icon-zoomtofeature {
+    background-image: url(img/silk/magnifier.png);
+    width: 16px;
+    height: 16px;
+}
+
