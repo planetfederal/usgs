@@ -21,10 +21,8 @@ public class NHDPointTest extends USGSScriptTestSupport {
         assertEquals("js:intersects", locator);
         
         JSONObject result = extractJSONException(dom);
-        assertEquals("Intersection Test Failed", result.get("message"));
-
-        JSONObject rule = (JSONObject) result.get("rule");
-        assertEquals("intersects", rule.get("name"));
+        assertEquals("intersects", result.get("name"));
+        assertEquals("nhdpoint", result.get("subjectLayer"));
     }
     
     public void testInsertsQueue() throws Exception {

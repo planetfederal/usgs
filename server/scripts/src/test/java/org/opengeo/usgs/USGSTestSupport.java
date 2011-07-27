@@ -19,6 +19,12 @@ public abstract class USGSTestSupport extends GeoServerAbstractTestSupport {
     static boolean runOnce = false;
     private boolean runDBSetup = true;
 
+    
+    @Override
+    protected String getLogConfiguration() {
+        return "/DEFAULT_LOGGING.properties";
+    }
+
     /**
      * Allow disabling of DB teardown/setup before each test
      * @param runDBSetup 
