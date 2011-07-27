@@ -5,13 +5,13 @@ var catalog = require("geoserver/catalog");
 var TOLERANCE = require("../usgs").TOLERANCE;
 
 exports.process = new Process({
-    title: "Intersection Test",
-    description: "Determines whether a given geometry intersect target features.",
+    title: "Endpoint Intersection Test",
+    description: "Determines whether a given geometry intersects an endpoint of target features.",
     inputs: {
         geometry: {
             type: "Geometry",
             title: "Input Geometry",
-            description: "Input geometry that must intersect at least one target feature geometry."
+            description: "Input geometry that must intersect at least one target feature geometry endpoint."
         },
         featureType: {
             type: "String",
@@ -33,12 +33,7 @@ exports.process = new Process({
         result: {
             type: "Boolean",
             title: "Intersection Result",
-            description: "The input geometry intersects at least one feature in the target feature set."
-        },
-        count: {
-            type: "Integer",
-            title: "Number of Intersections",
-            description: "The number of target features intersected by the input geometry."
+            description: "The input geometry intersects at least one endpoint of one feature in the target feature set."
         }
     },
     run: function(inputs) {
@@ -49,10 +44,20 @@ exports.process = new Process({
         if (inputs.filter) {
             filter = filter.and(inputs.filter);
         }
-        var count = layer.getCount(filter);
+        var cursor = layer.query(filter);
+        var intersects = false;
+        cursor.forEach(function(feature) {
+            var target = feature.geometry;
+            if (geometry.distance(target.startPoint) <= TOLERANCE || geometry.distance(target.endPoint) <= TOLERANCE) {
+                // hit endpoint
+                intersects = true;
+                return false;
+            }
+        });
+        // in case we stopped early
+        cursor.close();
         return {
-            result: count > 0,
-            count: count
+            result: intersects
         };
     }
 });

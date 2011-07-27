@@ -57,18 +57,22 @@ exports.afterTransaction = function(details, request) {
         nativ = parseNatives(details.natives);
     } catch (err) {
         return {
-            locator: "beforeCommit",
+            locator: "afterTransaction",
             message: err.message
         };
     }
     var features = details.PreInsert || [];
     features = features.concat(details.PostUpdate || []);
-    var featureInfo, feature, rules, rule, inputs, filter, process, outputs;
+    var featureInfo, featureType, feature, rules, rule, inputs, filter, process, outputs;
+    
+    LOGGER.info("afterTransaction");
 
     for (var i=0, ii=features.length; i<ii; ++i) {
         featureInfo = features[i];
         feature = featureInfo.feature;
+        featureType = featureInfo.name;
         rules = usgs.getRules(featureInfo);
+        LOGGER.info("rules: " + rules.length);
         for (var j=0, jj=rules.length; j<jj; ++j) {
             rule = rules[i];
             inputs = nativ["js:" + rule.name] || {};
@@ -81,15 +85,18 @@ exports.afterTransaction = function(details, request) {
                 process = require("processes/" + rule.name).process;
                 outputs = process.run({
                     geometry: feature.geometry,
-                    featureType: rule.objectLayer,
+                    featureType: featureType,
                     namespace: usgs.NAMESPACE_URI,
                     filter: filter
                 });
+                LOGGER.info(j + ": " + outputs.results);
                 if (outputs.result == false) {
                     // add the exception to the queue
                     var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdexceptions");
                     exceptions.add({
                         metadataid: "bogusid", // TODO: add handle to details
+                        namespace: usgs.NAMESPACE_URI,
+                        featuretype: rule.objectLayer,
                         featureid: feature.id, // TODO: continue the discussion about PostInsert
                         // see https://github.com/groldan/geoserver_trunk/blob/gss/community/geosync/src/main/java/org/geoserver/gss/wfsbridge/GSSTransactionListener.java#L310
                         // also see http://pastebin.com/P6PCCzBe
