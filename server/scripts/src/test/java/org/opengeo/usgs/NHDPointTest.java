@@ -15,15 +15,16 @@ public class NHDPointTest extends USGSScriptTestSupport {
     
     public void testBogusInserts() throws Exception {
         Document dom = postRequest("xml/nhdpoint-insert-waterfall-fail.xml");
+        
+        assertNotNull(dom);
+
+        String locator = xpath.evaluate("//ows:Exception/@locator", dom);
+        assertEquals("js:intersects", locator);
+        
         JSONObject result = extractJSONException(dom);
         assertEquals("Intersection Test Failed", result.get("message"));
         JSONObject rule = (JSONObject) result.get("rule");
-        assertEquals("intersects",rule.get("name"));
-        // don't know how deep this should go, an alternative could be by JSON
-        // string comparison, but encoding gets painful
-        
-        // alternatively, if the JSON format is stable, some type of shortcut
-        // assertion method might be applicable
+        assertEquals("intersects", rule.get("name"));
     }
     
 }
