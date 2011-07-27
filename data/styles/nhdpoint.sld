@@ -205,6 +205,7 @@
                             <ogc:Literal><![CDATA[431]]></ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
+                    <MaxScaleDenominator>1000000</MaxScaleDenominator>
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
@@ -219,6 +220,33 @@
                             </Mark>
                             <Opacity>1</Opacity>
                             <Size>4</Size>
+                        </Graphic>
+                    </PointSymbolizer>
+                </Rule>
+                <Rule>
+                    <Name>Rapids</Name>
+                    <Title>Rapids</Title>
+                    <ogc:Filter>
+                        <ogc:PropertyIsEqualTo>
+                            <ogc:PropertyName>FType</ogc:PropertyName>
+                            <ogc:Literal><![CDATA[431]]></ogc:Literal>
+                        </ogc:PropertyIsEqualTo>
+                    </ogc:Filter>
+                    <MinScaleDenominator>1000000</MinScaleDenominator>
+                    <PointSymbolizer>
+                        <Graphic>
+                            <Mark>
+                                <WellKnownName>circle</WellKnownName>
+                                <Fill>
+                                    <CssParameter name="fill">#876300</CssParameter>
+                                </Fill>
+                                <Stroke>
+                                    <CssParameter name="stroke">#000000</CssParameter>
+                                    <CssParameter name="stroke-width">0.5</CssParameter>
+                                </Stroke>
+                            </Mark>
+                            <Opacity>1</Opacity>
+                            <Size>2</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
@@ -347,6 +375,7 @@
                             <ogc:Literal><![CDATA[450]]></ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
+                    <MaxScaleDenominator>1000000</MaxScaleDenominator>
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
@@ -357,6 +386,29 @@
                             </Mark>
                             <Opacity>1</Opacity>
                             <Size>8</Size>
+                        </Graphic>
+                    </PointSymbolizer>
+                </Rule>
+                <Rule>
+                    <Name>SinkRise</Name>
+                    <Title>SinkRise</Title>
+                    <ogc:Filter>
+                        <ogc:PropertyIsEqualTo>
+                            <ogc:PropertyName>FType</ogc:PropertyName>
+                            <ogc:Literal><![CDATA[450]]></ogc:Literal>
+                        </ogc:PropertyIsEqualTo>
+                    </ogc:Filter>
+                    <MinScaleDenominator>1000000</MinScaleDenominator>
+                    <PointSymbolizer>
+                        <Graphic>
+                            <Mark>
+                                <WellKnownName>ttf://ESRI Surveyor#99</WellKnownName>
+                                <Fill>
+                                    <CssParameter name="fill">#0070FF</CssParameter>
+                                </Fill>
+                            </Mark>
+                            <Opacity>1</Opacity>
+                            <Size>4</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
@@ -439,12 +491,67 @@
                             <ogc:Literal><![CDATA[485]]></ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
+                    <MaxScaleDenominator>1000000</MaxScaleDenominator>
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
                                 <WellKnownName>circle</WellKnownName>
                                 <Fill>
                                     <CssParameter name="fill">#22009C</CssParameter>
+                                </Fill>
+                                <Stroke>
+                                    <CssParameter name="stroke">#000000</CssParameter>
+                                    <CssParameter name="stroke-width">1</CssParameter>
+                                </Stroke>
+                            </Mark>
+                            <Opacity>1</Opacity>
+                            <Size>4</Size>
+                        </Graphic>
+                    </PointSymbolizer>
+                </Rule>
+                <Rule>
+                    <Name>Water IntakeOutflow</Name>
+                    <Title>Water IntakeOutflow</Title>
+                    <ogc:Filter>
+                        <ogc:PropertyIsEqualTo>
+                            <ogc:PropertyName>FType</ogc:PropertyName>
+                            <ogc:Literal><![CDATA[485]]></ogc:Literal>
+                        </ogc:PropertyIsEqualTo>
+                    </ogc:Filter>
+                    <MinScaleDenominator>1000000</MinScaleDenominator>
+                    <PointSymbolizer>
+                        <Graphic>
+                            <Mark>
+                                <WellKnownName>circle</WellKnownName>
+                                <Fill>
+                                    <CssParameter name="fill">#22009C</CssParameter>
+                                </Fill>
+                                <Stroke>
+                                    <CssParameter name="stroke">#000000</CssParameter>
+                                    <CssParameter name="stroke-width">0.5</CssParameter>
+                                </Stroke>
+                            </Mark>
+                            <Opacity>1</Opacity>
+                            <Size>2</Size>
+                        </Graphic>
+                    </PointSymbolizer>
+                </Rule>
+                <Rule>
+                    <Name>Waterfall</Name>
+                    <Title>Waterfall</Title>
+                    <ogc:Filter>
+                        <ogc:PropertyIsEqualTo>
+                            <ogc:PropertyName>FType</ogc:PropertyName>
+                            <ogc:Literal><![CDATA[487]]></ogc:Literal>
+                        </ogc:PropertyIsEqualTo>
+                    </ogc:Filter>
+                    <MaxScaleDenominator>1000000</MaxScaleDenominator>
+                    <PointSymbolizer>
+                        <Graphic>
+                            <Mark>
+                                <WellKnownName>circle</WellKnownName>
+                                <Fill>
+                                    <CssParameter name="fill">#0050A1</CssParameter>
                                 </Fill>
                                 <Stroke>
                                     <CssParameter name="stroke">#000000</CssParameter>
@@ -465,6 +572,7 @@
                             <ogc:Literal><![CDATA[487]]></ogc:Literal>
                         </ogc:PropertyIsEqualTo>
                     </ogc:Filter>
+                    <MinScaleDenominator>1000000</MinScaleDenominator>
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
@@ -474,11 +582,11 @@
                                 </Fill>
                                 <Stroke>
                                     <CssParameter name="stroke">#000000</CssParameter>
-                                    <CssParameter name="stroke-width">1</CssParameter>
+                                    <CssParameter name="stroke-width">0.5</CssParameter>
                                 </Stroke>
                             </Mark>
                             <Opacity>1</Opacity>
-                            <Size>4</Size>
+                            <Size>2</Size>
                         </Graphic>
                     </PointSymbolizer>
                 </Rule>
