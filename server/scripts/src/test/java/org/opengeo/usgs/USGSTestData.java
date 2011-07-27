@@ -50,6 +50,7 @@ public class USGSTestData extends LiveDbmsData {
         Properties p = new Properties();
         p.load(new FileInputStream(fixture));
         String host = p.getProperty("host","localhost");
+        String port = p.getProperty("port","5432");
         String psql = p.getProperty("psql","psql");
         String user = p.getProperty("user","opengeo");
         String database = p.getProperty("database","usgs_test");
@@ -67,6 +68,7 @@ public class USGSTestData extends LiveDbmsData {
         String[] args = {
             psql,
             "-h",host,
+            "-p",port,
             "-U",user,
             "-f",sqlScript.getAbsolutePath(),
             database
