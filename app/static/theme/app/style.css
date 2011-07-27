@@ -11,9 +11,15 @@ body {
 
 /* application css goes here */
 
-.olControlAttribution {
-    font-size: 9px;
+.map-overlay {
     bottom: 2px;
+    left: 10px;
+    right: inherit !important;
+}
+
+.olControlAttribution {
+    bottom: 2px;
+    font-size: 9px;
 }
 
 .x-btn .gxp-icon-save, .x-menu-item .gxp-icon-save {
