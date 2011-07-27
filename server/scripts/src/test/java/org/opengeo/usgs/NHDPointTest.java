@@ -2,9 +2,8 @@ package org.opengeo.usgs;
 
 //import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 
-import java.io.File;
 
-import org.apache.commons.io.FileUtils;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 
 public class NHDPointTest extends USGSScriptTestSupport {
@@ -15,15 +14,16 @@ public class NHDPointTest extends USGSScriptTestSupport {
     }
     
     public void testBogusInserts() throws Exception {
-        File file = new File(getClass().getResource("xml/nhdpoint-insert-waterfall-fail.xml").getFile());
-        String xml = FileUtils.readFileToString(file, "UTF-8");
-        Document dom = postAsDOM("wfs", xml);
-
-        assertNotNull(dom); 
-        print(dom);
+        Document dom = postRequest("xml/nhdpoint-insert-waterfall-fail.xml");
+        JSONObject result = extractJSONException(dom);
+        assertEquals("Intersection Test Failed", result.get("message"));
+        JSONObject rule = (JSONObject) result.get("rule");
+        assertEquals("intersects",rule.get("name"));
+        // don't know how deep this should go, an alternative could be by JSON
+        // string comparison, but encoding gets painful
         
-        //assertXpathExists( "ows:ExceptionReport/ows:Exception/ows:ExceptionText", dom);
-
+        // alternatively, if the JSON format is stable, some type of shortcut
+        // assertion method might be applicable
     }
     
 }
