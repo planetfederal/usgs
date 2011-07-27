@@ -1,5 +1,10 @@
 package org.opengeo.usgs;
 
+//import java.util.HashMap;
+//import java.util.Map;
+
+//import org.custommonkey.xmlunit.SimpleNamespaceContext;
+//import org.custommonkey.xmlunit.XMLUnit;
 import org.geoserver.data.test.TestData;
 import org.geoserver.platform.GeoServerExtensions;
 import org.geoserver.test.GeoServerAbstractTestSupport;
@@ -48,6 +53,19 @@ public abstract class USGSTestSupport extends GeoServerAbstractTestSupport {
             oneTimeSetUp();
         }
         runOnce = true;
+
+        // init xmlunit
+//        Map<String, String> namespaces = new HashMap<String, String>();
+//        namespaces.put("wps", "http://www.opengis.net/wps/1.0.0");
+//        namespaces.put("ows", "http://www.opengis.net/ows/1.1");
+//        namespaces.put("gml", "http://www.opengis.net/gml");
+//        namespaces.put("wfs", "http://www.opengis.net/wfs");
+//        namespaces.put("xlink", "http://www.w3.org/1999/xlink");
+//        namespaces.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+//        namespaces.put("feature", "http://geoserver.sf.net"); 
+//        
+//        XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
+
     }
 
     @Override
