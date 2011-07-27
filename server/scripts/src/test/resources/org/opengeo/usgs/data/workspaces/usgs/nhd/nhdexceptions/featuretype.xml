@@ -1,0 +1,30 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-3dd416e8:1316ba3cf24:-8000</id>
+  <name>nhdexceptions</name>
+  <nativeName>NHDExceptions</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-668e6b80:13106f79fdc:-7ffb</id>
+  </namespace>
+  <title>NHD Exceptions</title>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-668e6b80:13106f79fdc:-7ffa</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+</featureType>

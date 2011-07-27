@@ -13,9 +13,8 @@ public class NHDPointTest extends USGSScriptTestSupport {
         setRunDBSetup(true);
     }
     
-    public void testBogusInserts() throws Exception {
+    public void testInsertsFail() throws Exception {
         Document dom = postRequest("xml/nhdpoint-insert-waterfall-fail.xml");
-        
         assertNotNull(dom);
 
         String locator = xpath.evaluate("//ows:Exception/@locator", dom);
@@ -23,8 +22,21 @@ public class NHDPointTest extends USGSScriptTestSupport {
         
         JSONObject result = extractJSONException(dom);
         assertEquals("Intersection Test Failed", result.get("message"));
+
         JSONObject rule = (JSONObject) result.get("rule");
         assertEquals("intersects", rule.get("name"));
     }
     
+    public void testInsertsQueue() throws Exception {
+        assertEquals("no exceptions initially", 0, countFeatures("NHDExceptions"));
+
+        Document dom = postRequest("xml/nhdpoint-insert-waterfall-queue.xml");
+        assertNotNull(dom);
+
+        String handle = xpath.evaluate("//wfs:InsertResults/wfs:Feature/@handle", dom);
+        assertEquals("nhdmetadata.15", handle);
+
+        assertEquals("one exception", 1, countFeatures("NHDExceptions"));
+    }
+
 }

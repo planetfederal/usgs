@@ -94,7 +94,7 @@ exports.afterTransaction = function(details, request) {
                     // add the exception to the queue
                     var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdexceptions");
                     exceptions.add({
-                        metadataid: "bogusid", // TODO: add handle to details
+                        metadataid: details.handle,
                         namespace: usgs.NAMESPACE_URI,
                         featuretype: featureType,
                         featureid: feature.id, // TODO: continue the discussion about PostInsert
