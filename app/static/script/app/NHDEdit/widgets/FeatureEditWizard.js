@@ -167,8 +167,12 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 if (!NHDEdit.metadataRecord) {
                     this.saveButton.hide();
                 }
+                if (this.exceptionPanel) {
+                    this.exceptionPanel.hide();
+                } else {
+                    this.nextButton.show();
+                }
                 this.deleteButton.show();
-                this.nextButton.show();
             },
             scope: this
         });
@@ -177,7 +181,11 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             disabled: true,
             handler: function() {
                 this.attributeForm.hide();
-                this.metadataForm.show();
+                if (this.exceptionPanel) {
+                    this.exceptionPanel.show();
+                } else {
+                    this.metadataForm.show();
+                }
                 this.nextButton.hide();
                 this.saveButton.show();
                 this.deleteButton.hide();
@@ -257,8 +265,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 "->",
                 this.previousButton,
                 this.cancelButton,
-                this.nextButton,
                 this.saveButton,
+                this.nextButton,
                 this.postDeleteButton
             ]
         });
@@ -320,8 +328,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     handleStoreException: function(proxy, type, action, options, response, records) {
         this.attributeForm.hide();
         this.metadataForm.hide();
-        this.previousButton.hide();
         this.nextButton.hide();
+        this.previousButton.show();
         if (this.exceptionPanel !== null) {
             this.remove(this.exceptionPanel);
         }

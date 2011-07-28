@@ -50,8 +50,8 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     templates: {
         "intersects": new Ext.XTemplate(
-            ['Intersection: {subjectFType:this.getSubject} features must ', 
-            'intersect a feature from one of the following layers: <ul>',
+            ['<p>{subjectFType:this.getSubject} features must ', 
+            'intersect a feature from one of the following layers:</p><ul>',
             '<tpl for="objects"><li>{layer}</li></tpl></ul>'].join(""),
             {
                 getSubject: function(value) {
@@ -142,19 +142,25 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         if (messageObj && messageObj.name) {
             var tpl = this.templates[messageObj.name];
             if (tpl) {
-                text = tpl.applyTemplate(messageObj);
+                text = tpl.applyTemplate(messageObj) +
+                    "<p>Go back to the previous step and keep editing " +
+                    "attributes, or modify the geometry, or provide " +
+                    "additional information below.</p>";
             }
         } else {
             text = gxp.util.getOGCExceptionText(this.exceptionReport);
         }
         this.add({
-            xtype: "label",
-            fieldLabel: "Message",
-            html: text
+            xtype: "fieldset",
+            title: "Exception",
+            items: [{
+                xtype: "box",
+                html: text
+            }]
         });
-        var writer = this.getWriter(locator);
-        if (writer) {
-            this.add(writer.call(this, locator));
+        var recoveryForm = this.getWriter(locator);
+        if (recoveryForm) {
+            this.add(recoveryForm.call(this, locator));
         } else {
             this.add({
                 xtype: "displayfield", 
