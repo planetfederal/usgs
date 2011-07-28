@@ -50,7 +50,9 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     templates: {
         "intersects": new Ext.XTemplate(
-            '{subjectFType:this.getSubject} features must intersect a feature from the {objectLayer} layer.',
+            ['Intersection: {subjectFType:this.getSubject} features must ', 
+            'intersect a feature from one of the following layers: <ul>',
+            '<tpl for="objects"><li>{layer}</li></tpl></ul>'].join(""),
             {
                 getSubject: function(value) {
                     return NHDEdit.fTypeDict[value];
@@ -137,10 +139,10 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         var locator = this.getProperty("locator");
         var messageObj = this.getMessageObject();
         var text;
-        if (messageObj && messageObj.rule && messageObj.rule.name) {
-            var tpl = this.templates[messageObj.rule.name];
+        if (messageObj && messageObj.name) {
+            var tpl = this.templates[messageObj.name];
             if (tpl) {
-                text = messageObj.message + ": " + tpl.applyTemplate(messageObj.rule);
+                text = tpl.applyTemplate(messageObj);
             }
         } else {
             text = gxp.util.getOGCExceptionText(this.exceptionReport);
@@ -148,7 +150,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         this.add({
             xtype: "label",
             fieldLabel: "Message",
-            text: text
+            html: text
         });
         var writer = this.getWriter(locator);
         if (writer) {
