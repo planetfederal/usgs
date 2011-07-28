@@ -41,203 +41,200 @@
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             OpenLayers.ImgPath = "theme/app/img/";
-            Ext.onReady(function() {
-                var app = new gxp.Viewer({
-                    mapItems: [{
-                        xtype: "gx_zoomslider",
-                        vertical: true,
-                        height: 100
-                    }, {
-                        xtype: "gxp_scaleoverlay"
-                    }],
-                    portalConfig: {
-                        layout: "border",
+            var app = new NHDEdit({
+                mapItems: [{
+                    xtype: "gx_zoomslider",
+                    vertical: true,
+                    height: 100
+                }, {
+                    xtype: "gxp_scaleoverlay"
+                }],
+                portalConfig: {
+                    layout: "border",
+                    region: "center",
+                    items: [{
+                        id: "centerpanel",
+                        xtype: "panel",
+                        layout: "fit",
                         region: "center",
-                        items: [{
-                            id: "centerpanel",
-                            xtype: "panel",
-                            layout: "fit",
-                            region: "center",
-                            border: false,
-                            items: ["mymap"]
-                        }, {
-                            id: "westpanel",
-                            xtype: "container",
-                            layout: "fit",
-                            region: "west",
-                            width: 200
-                        }],
-                        bbar: {id: "mybbar"}
+                        border: false,
+                        items: ["mymap"]
+                    }, {
+                        id: "westpanel",
+                        xtype: "container",
+                        layout: "fit",
+                        region: "west",
+                        width: 200
+                    }],
+                    bbar: {id: "mybbar"}
+                },
+                tools: [{
+                    ptype: "gxp_layertree",
+                    outputConfig: {
+                        id: "tree",
+                        border: true,
+                        tbar: []
                     },
-                    tools: [{
-                        ptype: "gxp_layertree",
-                        outputConfig: {
-                            id: "tree",
-                            border: true,
-                            tbar: []
-                        },
-                        outputTarget: "westpanel"
-                    }, {
-                        ptype: "gxp_snappingagent",
-                        id: "flowline-snapping",
-                        targets: [{
-                            source: "local",
-                            name: "usgs:nhdflowline",
-                            maxResolution: 5,
-                            node: false,
-                            vertex: false,
-                            tolerance: 20 // in pixels - default is 10
-                        }]
-                    }, {
-                        ptype: "gxp_featuremanager",
-                        id: "nhd-manager",
-                        paging: false,
-                        autoSetLayer: true,
-                        maxFeatures: 1
-                    }, {
-                        ptype: "gxp_addlayers",
-                        actionTarget: "tree.tbar"
-                    }, {
-                        ptype: "gxp_removelayer",
-                        actionTarget: ["tree.tbar", "tree.contextMenu"]
-                    }, {
-                        ptype: "gxp_zoomtoextent",
-                        actionTarget: {target: "map.tbar", index: 0}
-                    }, {
-                        ptype: "gxp_zoom",
-                        actionTarget: {target: "map.tbar", index: 1}
-                    }, {
-                        ptype: "gxp_navigationhistory",
-                        actionTarget: {target: "map.tbar", index: 3}
-                    }, {
-                        ptype: "gxp_featureeditor",
-                        featureManager: "nhd-manager",
-                        autoLoadFeatures: true,
-                        snappingAgent: "flowline-snapping",
-                        toggleGroup: "main",
-                        actionTarget: {target: "map.tbar", index: 5},
-                        tolerance: 6,
-                        outputConfig: {
-                            xtype: "app_featureeditwizard",
-                            width: 310,
-                            height: 400,
-                            excludeFields: ["OBJECTID","ComID","Permanent_Identifier", "WBAreaComID", "WBArea_Permanent_Identifier"],
-                            metadataSource: {
-                                url: "/geoserver/wfs?",
-                                featureType: "nhdmetadata",
-                                featureNS: "http://www.usgs.gov/"
-                            }
+                    outputTarget: "westpanel"
+                }, {
+                    ptype: "gxp_snappingagent",
+                    id: "flowline-snapping",
+                    targets: [{
+                        source: "local",
+                        name: "usgs:nhdflowline",
+                        maxResolution: 5,
+                        node: false,
+                        vertex: false,
+                        tolerance: 20 // in pixels - default is 10
+                    }]
+                }, {
+                    ptype: "gxp_featuremanager",
+                    id: "nhd-manager",
+                    paging: false,
+                    autoSetLayer: true,
+                    maxFeatures: 1
+                }, {
+                    ptype: "gxp_addlayers",
+                    actionTarget: "tree.tbar"
+                }, {
+                    ptype: "gxp_removelayer",
+                    actionTarget: ["tree.tbar", "tree.contextMenu"]
+                }, {
+                    ptype: "gxp_zoomtoextent",
+                    actionTarget: {target: "map.tbar", index: 0}
+                }, {
+                    ptype: "gxp_zoom",
+                    actionTarget: {target: "map.tbar", index: 1}
+                }, {
+                    ptype: "gxp_navigationhistory",
+                    actionTarget: {target: "map.tbar", index: 3}
+                }, {
+                    ptype: "gxp_featureeditor",
+                    featureManager: "nhd-manager",
+                    autoLoadFeatures: true,
+                    snappingAgent: "flowline-snapping",
+                    toggleGroup: "main",
+                    actionTarget: {target: "map.tbar", index: 5},
+                    tolerance: 6,
+                    outputConfig: {
+                        xtype: "app_featureeditwizard",
+                        width: 310,
+                        height: 400,
+                        excludeFields: ["OBJECTID","ComID","Permanent_Identifier", "WBAreaComID", "WBArea_Permanent_Identifier"],
+                        metadataSource: {
+                            url: "/geoserver/wfs?",
+                            featureType: "nhdmetadata",
+                            featureNS: "http://www.usgs.gov/"
                         }
-                    }, {
-                        ptype: "gxp_legend",
-                        outputConfig: {
-                            defaults: {autoScroll: true},
-                            width: 300,
-                            height: 400
-                        },
-                        actionTarget: {target: "map.tbar", index: 7}
-                    }, {
-                        ptype: "app_queue",
-                        url: "/geoserver/wfs?",
-                        featureType: "nhdexceptions",
-                        featureNS: "http://www.usgs.gov/",
-                        outputConfig: {
-                            title: "Exception queue",
-                            width: 400,
-                            height: 200
-                        },
-                        actionTarget: {target: "map.tbar", index: 8}
-                    }, {
-                        ptype: "gxp_googlegeocoder",
-                        outputTarget: "search",
-                        outputConfig: {
-                            emptyText: "Search for a location ...",
-                            listEmptyText: "- no matches -"
-                        }
-                    }, {
-                        ptype: "app_preferences",
-                        featureManager: "nhd-manager",
-                        actionTarget: {target: "map.tbar", index: 12},
-                        outputConfig: {
-                            title: "Preferences",
-                            width: 400,
-                            height: 200
-                        } 
-                    }], 
-                    sources: {
-                        local: {
-                            ptype: "gxp_wmscsource",
-                            url: "/geoserver/wms",
-                            version: "1.1.1"
-                        },
-                        google: {
-                            ptype: "gxp_googlesource"
-                        },
-                        osm: {
-                            ptype: "gxp_osmsource"
-                        }
-                    },  
-                    map: {
-                        id: "mymap",
-                        projection: "EPSG:900913",
-                        units: "m",
-                        maxResolution: 156543.0339,
-                        maxExtent: [-20037508, -20037508, 20037508, 20037508],
-                        center: [-11746265.687635, 4694206.416048],
-                        zoom: 6,
-                        tbar: {
-                            id: "maptoolbar",
-                            items: ['-', {xtype: 'container', id: 'search'}, '->']
-                        },
-                        controls: [
-                            new OpenLayers.Control.Navigation({zoomWheelOptions: {interval: 250}}),
-                            new OpenLayers.Control.PanPanel(),
-                            new OpenLayers.Control.ZoomPanel(),
-                            new OpenLayers.Control.Attribution(),
-                            new NHDEdit.Control.Permalink({anchor: true})
-                        ],
-                        layers: [{
-                            source: "osm",
-                            name: "mapnik",
-                            group: "background",
-                            visibility: false
-                        }, {
-                            source: "google",
-                            name: "ROADMAP",
-                            group: "background"
-                        }, {
-                            source: "google",
-                            name: "SATELLITE",
-                            group: "background",
-                            visibility: false
-                        }, {
-                            source: "google",
-                            name: "HYBRID",
-                            group: "background",
-                            visibility: false
-                        }, {
-                            source: "google",
-                            name: "TERRAIN",
-                            group: "background",
-                            visibility: false
-                        }, {
-                            source: "local",
-                            name: "usgs:nhdwaterbody"
-                        }, {
-                            source: "local",
-                            name: "usgs:nhdarea"
-                        }, {
-                            source: "local",
-                            name: "usgs:nhdline"
-                        }, {
-                            source: "local",
-                            name: "usgs:nhdflowline"
-                        }, {
-                            source: "local",
-                            name: "usgs:nhdpoint"
-                        }]
                     }
-                });
+                }, {
+                    ptype: "gxp_legend",
+                    outputConfig: {
+                        defaults: {autoScroll: true},
+                        width: 300,
+                        height: 400
+                    },
+                    actionTarget: {target: "map.tbar", index: 7}
+                }, {
+                    ptype: "app_queue",
+                    url: "/geoserver/wfs?",
+                    featureType: "nhdexceptions",
+                    featureNS: "http://www.usgs.gov/",
+                    outputConfig: {
+                        title: "Exception queue",
+                        width: 400,
+                        height: 200
+                    },
+                    actionTarget: {target: "map.tbar", index: 8}
+                }, {
+                    ptype: "gxp_googlegeocoder",
+                    outputTarget: "search",
+                    outputConfig: {
+                        emptyText: "Search for a location ...",
+                        listEmptyText: "- no matches -"
+                    }
+                }, {
+                    ptype: "app_preferences",
+                    featureManager: "nhd-manager",
+                    actionTarget: {target: "map.tbar", index: 12},
+                    outputConfig: {
+                        title: "Preferences",
+                        width: 400,
+                        height: 200
+                    } 
+                }], 
+                sources: {
+                    local: {
+                        ptype: "gxp_wmscsource",
+                        url: "/geoserver/wms",
+                        version: "1.1.1"
+                    },
+                    google: {
+                        ptype: "gxp_googlesource"
+                    },
+                    osm: {
+                        ptype: "gxp_osmsource"
+                    }
+                },  
+                map: {
+                    id: "mymap",
+                    projection: "EPSG:900913",
+                    units: "m",
+                    maxResolution: 156543.0339,
+                    maxExtent: [-20037508, -20037508, 20037508, 20037508],
+                    center: [-11746265.687635, 4694206.416048],
+                    zoom: 6,
+                    tbar: {
+                        id: "maptoolbar",
+                        items: ['-', {xtype: 'container', id: 'search'}, '->']
+                    },
+                    controls: [
+                        new OpenLayers.Control.Navigation({zoomWheelOptions: {interval: 250}}),
+                        new OpenLayers.Control.PanPanel(),
+                        new OpenLayers.Control.ZoomPanel(),
+                        new OpenLayers.Control.Attribution()
+                    ],
+                    layers: [{
+                        source: "osm",
+                        name: "mapnik",
+                        group: "background",
+                        visibility: false
+                    }, {
+                        source: "google",
+                        name: "ROADMAP",
+                        group: "background"
+                    }, {
+                        source: "google",
+                        name: "SATELLITE",
+                        group: "background",
+                        visibility: false
+                    }, {
+                        source: "google",
+                        name: "HYBRID",
+                        group: "background",
+                        visibility: false
+                    }, {
+                        source: "google",
+                        name: "TERRAIN",
+                        group: "background",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        name: "usgs:nhdwaterbody"
+                    }, {
+                        source: "local",
+                        name: "usgs:nhdarea"
+                    }, {
+                        source: "local",
+                        name: "usgs:nhdline"
+                    }, {
+                        source: "local",
+                        name: "usgs:nhdflowline"
+                    }, {
+                        source: "local",
+                        name: "usgs:nhdpoint"
+                    }]
+                }
             });
         </script>
     </head>

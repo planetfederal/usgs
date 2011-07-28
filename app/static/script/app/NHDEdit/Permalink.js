@@ -1,3 +1,4 @@
+/*
 Ext.ns("NHDEdit.Control");
 NHDEdit.Control.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
 
@@ -20,3 +21,4 @@ NHDEdit.Control.Permalink = OpenLayers.Class(OpenLayers.Control.Permalink, {
     CLASS_NAME: "NHDEdit.Control.Permalink"
 
 });
+*/
