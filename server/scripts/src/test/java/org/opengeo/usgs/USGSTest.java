@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geotools.data.DataAccess;
 import org.geotools.data.FeatureStore;
@@ -36,8 +37,12 @@ public class USGSTest extends USGSTestSupport {
         assertEquals("namespaces count", 1, cat.getNamespaces().size());
         List<LayerInfo> layers = cat.getLayers();
         assertEquals(5,layers.size());        
+        List<DataStoreInfo> dataStores = cat.getDataStores();
+        for (DataStoreInfo dsi: dataStores) {
+            System.out.println(dsi.getDataStore(null).getNames());
+        }
         
-        checkFeatures(dataStore, "NHDArea", 49);
+        checkFeatures(dataStore, "NHDArea", 5);
         deleteFeatures(dataStore, "NHDArea");
     }
     
@@ -47,7 +52,7 @@ public class USGSTest extends USGSTestSupport {
      * before each test case.
      */
     public void testSanity2() throws Exception {
-        checkFeatures(dataStore, "NHDArea", 49);
+        checkFeatures(dataStore, "NHDArea", 5);
         deleteFeatures(dataStore, "NHDArea");        
         dataStore.dispose();
     }

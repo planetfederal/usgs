@@ -35,7 +35,7 @@ exports.afterTransaction = function(details, request) {
             message: err.message
         };
     }
-    var features = details.PreInsert || [];
+    var features = details.PostInsert || [];
     features = features.concat(details.PostUpdate || []);
     
     var featureInfo;

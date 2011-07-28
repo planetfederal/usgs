@@ -74,6 +74,7 @@
         <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="0" dir="${server}/geoserver"/>
         <!-- finally, link the minimal directory so the build doesn't fail without a specific configId and configDirectory -->
         <symlink link="${server}/geoserver/src/web/app/minimal" resource="${server}/geoserver/data/minimal" overwrite="true"/>
+
     </target>
     
     <target name="buildjs">
@@ -168,6 +169,12 @@
 
     <target name="clean" description="remove previous build and all dependencies">
         <delete dir="${build}"/>
+    </target>
+  
+    <target name="init-tests" description="download local testing data">
+        <echo>Downloading SQL Test Data</echo>
+        <get src="http://files.opengeo.org/usgs/usgs_test.dump"
+             dest="data"/>
     </target>
 
 </project>
