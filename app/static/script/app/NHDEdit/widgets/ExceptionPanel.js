@@ -49,7 +49,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     templates: {
-        "intersects": new Ext.XTemplate(
+        "MustIntersect": new Ext.XTemplate(
             ['<p>{subjectFType:this.getSubject} features must ', 
             'intersect a feature from one of the following layers:</p><ul>',
             '<tpl for="objects"><li>{layer}</li></tpl></ul>'].join(""),
