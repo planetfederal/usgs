@@ -4,17 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.geoserver.data.test.LiveDbmsData;
-import org.geoserver.data.util.IOUtils;
 
 /**
  * We are very much abusing the original intension of this class. Instead of
@@ -52,35 +48,40 @@ public class USGSTestData extends LiveDbmsData {
         p.load(new FileInputStream(fixture));
         String host = p.getProperty("host","localhost");
         String port = p.getProperty("port","5432");
-        String psql = p.getProperty("psql","psql");
+        String pg_restore = p.getProperty("pg_restore","pg_restore");
         String user = p.getProperty("user","opengeo");
         String database = p.getProperty("database","usgs_test");
         String password = p.getProperty("passwd"); 
         
-        // have to extract script temporarily
-        File scriptSource = new File("../../data/test_nhd.sql.zip");
-        ZipFile zip = new ZipFile(scriptSource);
-        ZipEntry ze = zip.getEntry("test_nhd.sql");
-        InputStream inputStream = zip.getInputStream(ze);
-        IOUtils.copy(inputStream, sqlScript);
+        sqlScript = new File("../../data/usgs_test.dump");
+        if (!sqlScript.exists()) {
+            throw new IOException("run 'ant init-tests' to download local fixture data");
+        }
         
         System.out.println("loading fixture data from SQL");
+        ProcessBuilder pb = new ProcessBuilder(pg_restore,"--help");
+        Process start = pb.start();
+        int retval = start.waitFor();
+        if (retval != 0) {
+            throw new IOException("could not locate pg_restore executable, please specify in " + fixture.getAbsolutePath() + " as pg_restore");
+        }
         // this will lock if any connections remain open on the database
         String[] args = {
-            psql,
+            pg_restore,
+            "-c",
             "-h",host,
             "-p",port,
             "-U",user,
-            "-f",sqlScript.getAbsolutePath(),
-            database
+            "-d",database,
+            sqlScript.getAbsolutePath()
         };
-        ProcessBuilder pb = new ProcessBuilder(args);
+        pb = new ProcessBuilder(args);
         if (password != null) {
             pb.environment().put("PGPASSWORD", password); 
         }
         // read output in separate thread and build a list of lines
         pb.redirectErrorStream(true);
-        Process start = pb.start();
+        start = pb.start();
         final List<String> output = new ArrayList<String>();
         final BufferedReader br = new BufferedReader(new InputStreamReader(start.getInputStream()));
         new Thread() {
@@ -103,8 +104,8 @@ public class USGSTestData extends LiveDbmsData {
             
         }.start();
         // wait, cleanup and dump if errors
-        int retval = start.waitFor();
-        sqlScript.delete();
+        retval = start.waitFor();
+        //sqlScript.delete();
         if (retval != 0) {
             for (String line: output) {
                 System.err.println(line);
