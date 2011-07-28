@@ -33,8 +33,19 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     vendorId: 'usgs',
 
-    isUnrecoverable: function(processId) {
-        return (processId === null || this.writers[processId] === undefined);
+    
+    /** private: method[getWriter]
+     *  :arg processId:
+     *  :return: ``Object`` the writer that creates additional form components
+     *      and handlers to recover from the exception, or null if no recovery
+     *      strategy is implemented
+     */
+    getWriter: function(processId) {
+        var writer = null;
+        if (processId) {
+            writer = this.writers[processId] || this.writers[processId.split(":")[0]];
+        }
+        return writer;
     },
 
     templates: {
@@ -49,7 +60,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     writers: {
-        "queue": function(processId) {
+        "js": function(processId) {
             return {
                 xtype: "checkbox",
                 fieldLabel: "Queue exception",
@@ -88,7 +99,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         },
         "js:PipelineVerticalRelationship": function(processId) {
             var result = [];
-            result.push(this.writers.queue.apply(this, arguments));
+            result.push(this.writers.js.apply(this, arguments));
             result.push({
                 xtype: "combo",
                 store: ["over", "under"],
@@ -139,7 +150,10 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             fieldLabel: "Message",
             text: text
         });
-        if (this.isUnrecoverable(locator) === true) {
+        var writer = this.getWriter(locator);
+        if (writer) {
+            this.add(writer.call(this, locator));
+        } else {
             this.add({
                 xtype: "displayfield", 
                 fieldLabel: "Locator", 
@@ -152,8 +166,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 name: "exceptionCode", 
                 value: code
             });
-        } else {
-            this.add(this.writers[locator].apply(this, [locator]));
         }
         this.doLayout();
     },
