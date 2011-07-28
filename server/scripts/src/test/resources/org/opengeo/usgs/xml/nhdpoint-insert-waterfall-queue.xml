@@ -14,6 +14,6 @@
     </wfs:Insert>
     <!-- this tells the service to queue the exception -->
     <wfs:Native vendorId="usgs" safeToIgnore="true">
-        {"js:intersects": {"queue": true}}
+        {"js:Intersects": {"queue": true}}
     </wfs:Native>
 </wfs:Transaction>
