@@ -29,10 +29,10 @@ public class NHDPointTest extends USGSScriptTestSupport {
             assertNotNull(dom);
 
             String locator = xpath.evaluate("//ows:Exception/@locator", dom);
-            assertEquals(file, "js:Intersects", locator);
+            assertEquals(file, "js:MustIntersect", locator);
             
             JSONObject result = extractJSONException(dom);
-            assertEquals(file, "Intersects", result.get("name"));
+            assertEquals(file, "MustIntersect", result.get("name"));
             assertEquals(file, "nhdpoint", result.get("subjectLayer"));
         }
 
