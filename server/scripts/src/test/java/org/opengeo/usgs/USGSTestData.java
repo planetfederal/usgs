@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.geoserver.data.test.LiveDbmsData;
+import org.geoserver.data.util.IOUtils;
 
 /**
  * We are very much abusing the original intension of this class. Instead of
@@ -22,11 +25,35 @@ import org.geoserver.data.test.LiveDbmsData;
 public class USGSTestData extends LiveDbmsData {
     
     private boolean runDBSetup = true;
+    
+    private static File testDataDir;
+    
+    // Cobble together a minimal test data directory using production config
+    static {
+        File sourceDir = new File("../../data");
+        File sourceWorkspaces = new File(sourceDir, "workspaces");
+        File sourceScripts = new File(sourceDir, "workspaces");
+        try {
+            testDataDir = IOUtils.createRandomDirectory("./target", "usgs", "data");
+            File destWorkspaces = new File(testDataDir, "workspaces");
+            File destScripts = new File(testDataDir, "scripts");
+            IOUtils.deepCopy(sourceWorkspaces, destWorkspaces);
+            IOUtils.deepCopy(sourceScripts, destScripts);
+            // copy datastore template - values to be replaced by usgs.properties file
+            URL resource = USGSTestData.class.getResource("data/datastore.xml");
+            File template = new File(resource.getFile());
+            FileUtils.copyFileToDirectory(
+                    template, new File(destWorkspaces, "usgs/usgs"));
+        } catch (IOException e) {
+            throw new RuntimeException("Trouble creating test data dir", e);
+        }
+        
+    }
 
     public USGSTestData() {
         // the usgs-script.sql is bogus just to trick super class
-        super(new File(USGSTestData.class.getResource("data").getFile()), "usgs", new File("usgs-script.sql"));
-        filteredPaths = new ArrayList<String>(Arrays.asList("workspaces/usgs/nhd/datastore.xml"));
+        super(testDataDir, "usgs", new File("usgs-script.sql"));
+        filteredPaths = new ArrayList<String>(Arrays.asList("workspaces/usgs/usgs/datastore.xml"));
     }
 
     protected void setRunDBSetup(boolean runDBSetup) {
