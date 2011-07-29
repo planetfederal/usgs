@@ -73,7 +73,14 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             store: this.featureStore,
             schema: this.schema,
             loadMask: true,
-            includeFields: ['DuuID', 'Meta_ProcessID', 'ProcessDescription', 'ProcessDate'],
+            fieldVisibility: {
+                'ProcessDate': true,
+                'ProcessDescription': true
+            },
+            propertyNames: {
+                'ProcessDate': 'Date',
+                'ProcessDescription': 'Summary'
+            },
             height: 300,
             bbar: ["->", {text: "Open", iconCls: "gxp-icon-open", handler: this.openMetadata, scope: this}]
         });
