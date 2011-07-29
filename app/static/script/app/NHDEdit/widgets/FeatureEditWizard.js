@@ -440,14 +440,18 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     },
     
     preDeleteFeature: function() {
-        this.attributeForm.hide();
-        this.metadataForm.deleteLabel.show();
-        this.metadataForm.show();
-        this.nextButton.hide();
-        this.saveButton.hide();
-        this.deleteButton.hide();
-        this.previousButton.hide();
-        this.postDeleteButton.show();
+        if (this.feature.state == OpenLayers.State.INSERT) {
+            this.close();
+        } else {
+            this.attributeForm.hide();
+            this.metadataForm.deleteLabel.show();
+            this.metadataForm.show();
+            this.nextButton.hide();
+            this.saveButton.hide();
+            this.deleteButton.hide();
+            this.previousButton.hide();
+            this.postDeleteButton.show();
+        }
     },
 
     deleteFeature: function() {
