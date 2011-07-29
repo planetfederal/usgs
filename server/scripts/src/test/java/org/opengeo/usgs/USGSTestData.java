@@ -43,28 +43,40 @@ public class USGSTestData extends LiveDbmsData {
     }
 
     private void setupDB() throws Exception {
-        // load properties and assign defaults
-        Properties p = new Properties();
-        p.load(new FileInputStream(fixture));
-        String host = p.getProperty("host","localhost");
-        String port = p.getProperty("port","5432");
-        String pg_restore = p.getProperty("pg_restore","pg_restore");
-        String user = p.getProperty("user","opengeo");
-        String database = p.getProperty("database","usgs_test");
-        String password = p.getProperty("passwd"); 
-        
         sqlScript = new File("../../data/usgs_test.dump");
         if (!sqlScript.exists()) {
             throw new IOException("run 'ant init-tests' to download local fixture data");
         }
         
-        System.out.println("loading fixture data from SQL");
+        Properties props = new Properties();
+        props.load(new FileInputStream(fixture));
+        
+        String pg_restore = props.getProperty("pg_restore","pg_restore");
         ProcessBuilder pb = new ProcessBuilder(pg_restore,"--help");
         Process start = pb.start();
         int retval = start.waitFor();
         if (retval != 0) {
             throw new IOException("could not locate pg_restore executable, please specify in " + fixture.getAbsolutePath() + " as pg_restore");
         }
+        
+        System.err.println("loading fixture data from SQL");
+        int retVal = runRestore(props,false);
+        if (retVal != 0) {
+            // try again - initial restore to empty database will yield warnings
+            // and return code will not be 0
+            retVal = runRestore(props,true);
+        }
+        System.err.println("success!");
+    }
+
+    private int runRestore(Properties props,boolean failOnError) throws Exception {        
+        // load properties and assign defaults
+        String host = props.getProperty("host","localhost");
+        String port = props.getProperty("port","5432");
+        String pg_restore = props.getProperty("pg_restore","pg_restore");
+        String user = props.getProperty("user","opengeo");
+        String database = props.getProperty("database","usgs_test");
+        String password = props.getProperty("passwd"); 
         // this will lock if any connections remain open on the database
         String[] args = {
             pg_restore,
@@ -75,13 +87,13 @@ public class USGSTestData extends LiveDbmsData {
             "-d",database,
             sqlScript.getAbsolutePath()
         };
-        pb = new ProcessBuilder(args);
+        ProcessBuilder pb = new ProcessBuilder(args);
         if (password != null) {
             pb.environment().put("PGPASSWORD", password); 
         }
         // read output in separate thread and build a list of lines
         pb.redirectErrorStream(true);
-        start = pb.start();
+        Process start = pb.start();
         final List<String> output = new ArrayList<String>();
         final BufferedReader br = new BufferedReader(new InputStreamReader(start.getInputStream()));
         new Thread() {
@@ -104,15 +116,14 @@ public class USGSTestData extends LiveDbmsData {
             
         }.start();
         // wait, cleanup and dump if errors
-        retval = start.waitFor();
-        //sqlScript.delete();
-        if (retval != 0) {
+        int retVal = start.waitFor();
+        if (retVal != 0 && failOnError) {
             for (String line: output) {
                 System.err.println(line);
             }
             throw new IOException("Error running load script, check messages before this one");
         }
-        System.out.println("success!");
+        return retVal;
     }
     
 }
