@@ -26,7 +26,7 @@
                 config.map.zoom = urlConfig.z;
             }
             if (urlConfig.c != null) {
-                config.map.center = urlConfig.split(",");
+                config.map.center = urlConfig.c.split(",");
             }
             NHDEdit.metadataId = urlConfig.m;
             callback.call(this, config);
