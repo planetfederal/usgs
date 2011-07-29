@@ -3,12 +3,13 @@ package org.opengeo.usgs;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
-import org.geotools.data.DataAccess;
+import org.geotools.data.FeatureSource;
 import org.geotools.data.FeatureStore;
-import org.geotools.feature.NameImpl;
 import org.geotools.filter.FilterFactoryImpl;
 import org.opengis.feature.Feature;
 import org.opengis.feature.type.FeatureType;
@@ -16,20 +17,6 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
 
 public class USGSTest extends USGSTestSupport {
-
-    DataAccess<? extends FeatureType, ? extends Feature> dataStore;
-    
-    @Override
-    protected void setUpInternal() throws Exception {
-        super.setUpInternal();
-        dataStore = getCatalog().getDataStoreByName("usgs","nhd").getDataStore(null);
-    }
-
-    @Override
-    protected void tearDownInternal() throws Exception {
-        super.tearDownInternal();
-        dataStore.dispose();
-    }
 
     public void testSanity() throws Exception {
         Catalog cat = getCatalog();
@@ -42,8 +29,8 @@ public class USGSTest extends USGSTestSupport {
             System.out.println(dsi.getDataStore(null).getNames());
         }
         
-        checkFeatures(dataStore, "NHDArea", 5);
-        deleteFeatures(dataStore, "NHDArea");
+        checkFeatures(new QName("nhdarea"), 5);
+        deleteFeatures(new QName("nhdarea"));
     }
     
     /*
@@ -52,23 +39,21 @@ public class USGSTest extends USGSTestSupport {
      * before each test case.
      */
     public void testSanity2() throws Exception {
-        checkFeatures(dataStore, "NHDArea", 5);
-        deleteFeatures(dataStore, "NHDArea");        
-        dataStore.dispose();
+        checkFeatures(new QName("nhdarea"), 5);
+        deleteFeatures(new QName("nhdarea"));
     }
     
-    private void deleteFeatures(DataAccess<? extends FeatureType, ? extends Feature> ds,String name) throws IOException {
-        DataAccess<? extends FeatureType, ? extends Feature> da = ds.getFeatureSource(new NameImpl(name)).getDataStore();
-        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) da.getFeatureSource(new NameImpl(name));
+    private void deleteFeatures(QName name) throws IOException {
+        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) getFeatureSource(name);
+        assertNotNull(fs);
         FilterFactory ff = new FilterFactoryImpl();
         Filter g = ff.greater(ff.property("ComID"), ff.literal(0));
-        fs.removeFeatures(g);        
-        checkFeatures(ds, name, 0);
+        fs.removeFeatures(g);
+        checkFeatures(name, 0);
     }
     
-    private void checkFeatures(DataAccess<? extends FeatureType, ? extends Feature> ds,String name,int count) throws IOException {
-        DataAccess<? extends FeatureType, ? extends Feature> da = ds.getFeatureSource(new NameImpl(name)).getDataStore();
-        FeatureStore<?, ?> fs = (FeatureStore<?, ?>) da.getFeatureSource(new NameImpl(name));
+    private void checkFeatures(QName name, int count) throws IOException {
+        FeatureSource<? extends FeatureType, ? extends Feature> fs = getFeatureSource(name);
         assertNotNull(fs);
         assertEquals(count, fs.getFeatures().size());
     }
