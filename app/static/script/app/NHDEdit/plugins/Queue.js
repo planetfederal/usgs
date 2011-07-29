@@ -110,7 +110,11 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             viewConfig: {forceFit: true},
             height: 300
         });
-        return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, this.grid);
+        return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, {
+            xtype: 'container', 
+            layout: 'fit', 
+            items: [this.grid]
+        });
     },
 
     /** api: method[addActions]
