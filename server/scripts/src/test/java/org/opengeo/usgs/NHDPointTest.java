@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
 import org.w3c.dom.Document;
 
-public class NHDPointTest extends USGSScriptTestSupport {
+public class NHDPointTest extends USGSTestSupport {
 
     public NHDPointTest() {
         // load test pg data
