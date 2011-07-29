@@ -107,6 +107,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             },
             schema: this.schema,
             loadMask: true,
+            viewConfig: {forceFit: true},
             height: 300
         });
         return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, this.grid);
