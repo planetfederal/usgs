@@ -81,4 +81,23 @@ public class NHDPointTest extends USGSScriptTestSupport {
         assertEquals("correct metadataid", "nhdmetadata.15", id);
     }
 
+    public void testInsertsPass() throws Exception {
+        
+        // transactions that pass MustIntersect
+        List<String> files = (List<String>) Arrays.asList(
+                "xml/nhdpoint-insert-waterfall-pass.xml");
+        
+        for (String file : files) {
+            Document dom = postRequest(file);
+            assertNotNull(dom);
+            
+            String inserted = xpath.evaluate("//wfs:totalInserted/text()", dom);
+            assertEquals(file, "1", inserted);
+            
+        }
+
+        
+    }
+    
+
 }
