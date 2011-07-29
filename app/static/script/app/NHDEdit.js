@@ -22,10 +22,12 @@
         },
         loadConfig: function(config, callback) {
             var urlConfig = getUrlConfig();
-            Ext.apply(config.map, {
-                zoom: urlConfig.z,
-                center: urlConfig.c ? urlConfig.c.split(",") : undefined
-            });
+            if (urlConfig.z != null) {
+                config.map.zoom = urlConfig.z;
+            }
+            if (urlConfig.c != null) {
+                config.map.center = urlConfig.split(",");
+            }
             NHDEdit.metadataId = urlConfig.m;
             callback.call(this, config);
         }
