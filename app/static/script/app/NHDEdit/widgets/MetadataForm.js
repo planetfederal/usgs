@@ -158,6 +158,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             this.featureStore.addListener('load', function(store, records, options) {
                 delete NHDEdit.metadataId;
                 NHDEdit.metadataRecord = records[0];
+                this.fireEvent('metadataopened', this, records[0]);
                 this.featureStore.setOgcFilter(null);
                 this.featureStore.addListener('load', this.createGrid, this, {single: true});
                 this.featureStore.load();
