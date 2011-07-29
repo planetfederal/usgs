@@ -30,7 +30,7 @@ public class USGSTestData extends LiveDbmsData {
     
     // Cobble together a minimal test data directory using production config
     static {
-        File sourceDir = new File("../../data");
+        File sourceDir = new File("data");
         File sourceWorkspaces = new File(sourceDir, "workspaces");
         File sourceScripts = new File(sourceDir, "workspaces");
         try {
@@ -70,7 +70,7 @@ public class USGSTestData extends LiveDbmsData {
     }
 
     private void setupDB() throws Exception {
-        sqlScript = new File("../../data/usgs_test.dump");
+        sqlScript = new File("data/usgs_test.dump");
         if (!sqlScript.exists()) {
             throw new IOException("run 'ant init-tests' to download local fixture data");
         }
