@@ -183,7 +183,7 @@
                     maxResolution: 156543.0339,
                     maxExtent: [-20037508, -20037508, 20037508, 20037508],
                     center: [-11746265.687635, 4694206.416048],
-                    zoom: 6,
+                    zoom: 7,
                     tbar: {
                         id: "maptoolbar",
                         items: ['-', {xtype: 'container', id: 'search'}, '->']
@@ -197,25 +197,15 @@
                     layers: [{
                         source: "osm",
                         name: "mapnik",
-                        group: "background",
-                        visibility: false
-                    }, {
-                        source: "google",
-                        name: "ROADMAP",
                         group: "background"
                     }, {
                         source: "google",
-                        name: "SATELLITE",
-                        group: "background",
-                        visibility: false
-                    }, {
-                        source: "google",
-                        name: "HYBRID",
-                        group: "background",
-                        visibility: false
-                    }, {
-                        source: "google",
                         name: "TERRAIN",
+                        group: "background",
+                        visibility: false
+                    }, {
+                        source: "google",
+                        name: "SATELLITE",
                         group: "background",
                         visibility: false
                     }, {
