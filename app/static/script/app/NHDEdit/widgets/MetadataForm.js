@@ -77,6 +77,12 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             store: this.featureStore,
             schema: this.schema,
             loadMask: true,
+            sm: new Ext.grid.RowSelectionModel({singleSelect: true,
+                listeners: {
+                    'rowselect': this.openMetadata,
+                    scope: this
+                }
+            }),
             fieldVisibility: {
                 'ProcessDate': true,
                 'ProcessDescription': true
@@ -86,7 +92,15 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
                 'ProcessDescription': 'Summary'
             },
             height: 300,
-            bbar: ["->", {text: "Open", iconCls: "gxp-icon-open", handler: this.openMetadata, scope: this}]
+            bbar: ["->", {
+                text: "Cancel", 
+                handler: function() { this.openWindow.close(); }, 
+                scope: this
+            }, {
+                text: "Open", 
+                handler: this.openMetadata, 
+                scope: this
+            }]
         });
     },
 
@@ -105,7 +119,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     openEntry: function() {
         if (this.openWindow === null) {
             this.openWindow = new Ext.Window({
-                title: "Open", 
+                title: "Metadata Records", 
                 layout: "fit",
                 closeAction: "hide",
                 items: [this.grid]
