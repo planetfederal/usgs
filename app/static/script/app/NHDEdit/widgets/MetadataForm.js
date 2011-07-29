@@ -35,6 +35,10 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     initComponent : function() {
         this.schema = new GeoExt.data.AttributeStore({
+            sortInfo: {
+                field: 'name',
+                direction: 'ASC'
+            },
             url: this.url,
             baseParams: {
                 SERVICE: "WFS",
