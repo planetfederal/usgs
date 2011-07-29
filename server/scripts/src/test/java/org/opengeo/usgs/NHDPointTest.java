@@ -6,6 +6,9 @@ package org.opengeo.usgs;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
+import org.geotools.data.simple.SimpleFeatureSource;
 import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 
@@ -56,7 +59,9 @@ public class NHDPointTest extends USGSScriptTestSupport {
     }
     
     public void testInsertsQueue() throws Exception {
-        assertEquals("no exceptions initially", 0, countFeatures("NHDExceptions"));
+        SimpleFeatureSource exceptions = getFeatureSource(new QName("nhdexceptions"));
+
+        assertEquals("no exceptions initially", 0, exceptions.getFeatures().size());
 
         Document dom = postRequest("xml/nhdpoint-insert-waterfall-queue.xml");
         assertNotNull(dom);
@@ -64,7 +69,8 @@ public class NHDPointTest extends USGSScriptTestSupport {
         String handle = xpath.evaluate("//wfs:InsertResults/wfs:Feature/@handle", dom);
         assertEquals("nhdmetadata.15", handle);
 
-        assertEquals("one exception", 1, countFeatures("NHDExceptions"));
+        
+        assertEquals("one exception", 1, exceptions.getFeatures().size());
     }
 
 }
