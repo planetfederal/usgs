@@ -74,12 +74,12 @@ alter table "WBD_HU16" add constraint "enforce_srid_Shape" check (SRID("Shape")=
 
 CREATE TABLE "NHDExceptions" (
     exceptionid integer PRIMARY KEY,
-    metadataid char(40),
-    namespace char(100),
-    featuretype char(40),
-    featureid char(40),
-    processid char(40),
-    exceptionmessage char(4000)
+    metadataid varchar(255),
+    namespace varchar(255),
+    featuretype varchar(255),
+    featureid varchar(255),
+    processid varchar(255),
+    exceptionmessage varchar
 );
 
 select populate_geometry_columns();
