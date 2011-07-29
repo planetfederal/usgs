@@ -77,12 +77,10 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             store: this.featureStore,
             schema: this.schema,
             loadMask: true,
-            sm: new Ext.grid.RowSelectionModel({singleSelect: true,
-                listeners: {
-                    'rowselect': this.openMetadata,
-                    scope: this
-                }
-            }),
+            listeners: {
+                'dblclick': this.openMetadata,
+                scope: this
+            },
             fieldVisibility: {
                 'ProcessDate': true,
                 'ProcessDescription': true
