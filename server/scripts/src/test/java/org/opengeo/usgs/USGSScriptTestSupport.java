@@ -14,11 +14,8 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.FileUtils;
 import org.geoserver.data.test.LiveData;
 import org.geoserver.data.util.IOUtils;
-import org.geotools.data.DataAccess;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.opengis.feature.Feature;
-import org.opengis.feature.type.FeatureType;
 import org.springframework.util.xml.SimpleNamespaceContext;
 import org.w3c.dom.Document;
 
@@ -29,20 +26,6 @@ import org.w3c.dom.Document;
 public class USGSScriptTestSupport extends USGSTestSupport {
     
     protected XPath xpath;
-
-    protected DataAccess<? extends FeatureType, ? extends Feature> dataStore;
-    
-    @Override
-    protected void setUpInternal() throws Exception {
-        super.setUpInternal();
-        dataStore = getCatalog().getDataStoreByName("usgs", "nhd").getDataStore(null);
-    }
-
-    @Override
-    protected void tearDownInternal() throws Exception {
-        super.tearDownInternal();
-        dataStore.dispose();
-    }
 
     @Override
     protected void oneTimeSetUp() throws Exception {
