@@ -61,9 +61,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.on('show', function() {
             // restore previous record
             if (NHDEdit.metadataRecord) {
-                this.getForm().items.each(function(field) {
-                    field.setValue(NHDEdit.metadataRecord.get(field.name));
-                });
+                this.setFieldValues(NHDEdit.metadataRecord);
             }
         }, this);
         this.addEvents(
@@ -101,6 +99,22 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }]
         });
     },
+    
+    setFieldValues: function(record) {
+        var processDescription = record.fields.find(function(f) {
+            return f.name.toLowerCase() == "processdescription"; 
+        }).name;
+        var copy = record.get(processDescription) != null;
+        this.getForm().items.each(function(field) {
+            var value = record.get(field.name);
+            field.setValue(value);
+            if (copy === true) {
+                field.on("change", function() {
+                    NHDEdit.setMetadataRecord(null);
+                });
+            }
+        });
+    },
 
     saveEntry: function() {
         var feature = new OpenLayers.Feature.Vector(null, {});
@@ -128,9 +142,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     openMetadata: function() {
         var record = this.grid.getSelectionModel().getSelected();
-        this.getForm().items.each(function(field) {
-            field.setValue(record.get(field.name));
-        });
+        this.setFieldValues(record);
         this.fireEvent('metadataopened', this, record);
         this.openWindow.hide();
     },

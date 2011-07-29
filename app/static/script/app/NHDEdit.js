@@ -35,8 +35,12 @@
     NHDEdit.setMetadataRecord = function(record) {
         NHDEdit.metadataRecord = record;
         var urlConfig = getUrlConfig();
-        urlConfig.m = NHDEdit.metadataRecord.get("feature").fid;
-        NHDEdit.metadataId = urlConfig.m;
+        if (record) {
+            urlConfig.m = record.get("feature").fid;
+            NHDEdit.metadataId = urlConfig.m;
+        } else {
+            delete urlConfig.m;
+        }
         window.location.hash = Ext.urlEncode(urlConfig);
     };
 })();
