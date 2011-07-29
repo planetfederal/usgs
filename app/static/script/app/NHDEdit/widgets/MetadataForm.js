@@ -198,7 +198,6 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             fieldCfg.anchor = "100%";
             if (name.toLowerCase() === "processdescription") {
                 fieldCfg.xtype = "textarea";
-                fieldCfg.grow = true;
                 fieldCfg.hideLabel = true;
                 fieldCfg.allowBlank = false;
                 masterFieldset.add({xtype: 'label', text: "Commit message:"});
