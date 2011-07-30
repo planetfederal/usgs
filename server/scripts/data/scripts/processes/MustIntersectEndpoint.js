@@ -48,11 +48,14 @@ exports.process = new Process({
         var intersects = false;
         cursor.forEach(function(feature) {
             var target = feature.geometry;
-            if (geometry.distance(target.startPoint) <= TOLERANCE || geometry.distance(target.endPoint) <= TOLERANCE) {
-                // hit endpoint
-                intersects = true;
-                return false;
-            }
+            target.endPoints.forEach(function(point) {
+                if (geometry.distance(point) <= TOLERANCE) {
+                    // hit endpoint
+                    intersects = true;
+                }
+                return !intersects;
+            });
+            return !intersects;
         });
         // in case we stopped early
         cursor.close();
