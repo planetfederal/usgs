@@ -179,20 +179,15 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     getMessageObject: function() {
-        var result = null;
-        Ext.each(this.exceptionReport.exceptions, function(exc) {
-            result = Ext.util.JSON.decode(exc.texts[0]);
-        });
-        return result;
+        // get the first exception
+        var exc = this.exceptionReport.exceptions[0];
+        return Ext.util.JSON.decode(exc.texts[0]);
     },
 
     getProperty: function(property) {
-        var result = null;
-        // we only expect one, so overwrite if multiple
-        Ext.each(this.exceptionReport.exceptions, function(exc) {
-            result = exc[property];
-        });
-        return result;
+        // get the first exception
+        var exc = this.exceptionReport.exceptions[0];
+        return exc[property];
     }
 
 });
