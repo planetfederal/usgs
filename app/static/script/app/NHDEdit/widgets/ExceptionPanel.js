@@ -178,10 +178,23 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         this.doLayout();
     },
 
+    /** private: method[getMessageObject]
+     *  :returns: ``Object`` The first exception message decoded.  Returns 
+     *      undefined if the message is not a JSON string.
+     * 
+     *  Try to decode the first exception text as a JSON string.  If the first
+     *  message is not valid JSON, undefined will be returned.
+     */
     getMessageObject: function() {
         // get the first exception
         var exc = this.exceptionReport.exceptions[0];
-        return Ext.util.JSON.decode(exc.texts[0]);
+        var obj;
+        try {
+            obj = Ext.util.JSON.decode(exc.texts[0]);
+        } catch (err) {
+            // pass
+        }
+        return obj;
     },
 
     getProperty: function(property) {
