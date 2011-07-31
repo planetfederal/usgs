@@ -1,8 +1,5 @@
 package org.opengeo.usgs;
 
-//import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
-
-
 import java.util.Arrays;
 import java.util.List;
 

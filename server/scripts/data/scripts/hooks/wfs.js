@@ -107,7 +107,6 @@ function satisfiesRule(geometry, rule) {
             break;
         }
     }
-    LOGGER.info("rule satisfied: " + satisfies + " " + JSON.stringify(rule));
     return satisfies;
 }
 
@@ -127,8 +126,8 @@ function getQueuedExceptions(featureInfo, nativ) {
             if (satisfies == false) {
                 // prepare the exception record
                 exceptions.push({
-                    namespace: usgs.NAMESPACE_URI, // "http://www.usgs.gov/"
-                    featuretype: featureType, // "nhdpoint"
+                    namespace: usgs.NAMESPACE_URI,
+                    featuretype: featureType,
                     featureid: feature.id, // TODO: https://github.com/opengeo/usgs/issues/54
                     processid: "js:" + rule.name,
                     exceptionmessage: JSON.stringify(rule)
