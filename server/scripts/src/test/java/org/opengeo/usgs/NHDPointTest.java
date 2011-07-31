@@ -24,7 +24,7 @@ public class NHDPointTest extends USGSTestSupport {
     
     public void testInsertsFail() throws Exception {
         
-        // nhdpoint intersects rules
+        // nhdpoint MustIntersect rules
         List<String> files = (List<String>) Arrays.asList(
                 "xml/nhdpoint-insert-waterfall-fail.xml",
                 "xml/nhdpoint-insert-rapid-fail.xml",
@@ -34,6 +34,8 @@ public class NHDPointTest extends USGSTestSupport {
             Document dom = postRequest(file);
             assertNotNull(dom);
 
+            assertEquals("ExceptionReport", dom.getDocumentElement().getLocalName());
+
             String locator = xpath.evaluate("//ows:Exception/@locator", dom);
             assertEquals(file, "js:MustIntersect", locator);
             
@@ -42,13 +44,15 @@ public class NHDPointTest extends USGSTestSupport {
             assertEquals(file, "nhdpoint", result.get("subjectLayer"));
         }
 
-        // nhdpoint intersectsEndpoint rules
+        // nhdpoint MustIntersectEndpoint rules
         files = (List<String>) Arrays.asList(
                 "xml/nhdpoint-insert-sinkrise-fail.xml");
         
         for (String file : files) {
             Document dom = postRequest(file);
             assertNotNull(dom);
+            
+            assertEquals("ExceptionReport", dom.getDocumentElement().getLocalName());
 
             String locator = xpath.evaluate("//ows:Exception/@locator", dom);
             assertEquals(file, "js:MustIntersectEndpoint", locator);
@@ -85,6 +89,7 @@ public class NHDPointTest extends USGSTestSupport {
         
         // transactions that pass MustIntersect
         List<String> files = (List<String>) Arrays.asList(
+                "xml/nhdpoint-insert-sinkrise-pass.xml",
                 "xml/nhdpoint-insert-waterfall-pass.xml");
         
         for (String file : files) {

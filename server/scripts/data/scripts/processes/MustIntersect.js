@@ -5,7 +5,7 @@ var catalog = require("geoserver/catalog");
 var TOLERANCE = require("../usgs").TOLERANCE;
 
 exports.process = new Process({
-    title: "Intersection Test",
+    title: "Must Intersect",
     description: "Determines whether a given geometry intersect target features.",
     inputs: {
         geometry: {
@@ -50,6 +50,7 @@ exports.process = new Process({
             filter = filter.and(inputs.filter);
         }
         var count = layer.getCount(filter);
+        LOGGER.info("MustIntersect: " + count + " " + filter.cql);
         return {
             result: count > 0,
             count: count

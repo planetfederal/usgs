@@ -107,6 +107,7 @@ function satisfiesRule(geometry, rule) {
             break;
         }
     }
+    LOGGER.info("rule satisfied: " + satisfies + " " + JSON.stringify(rule));
     return satisfies;
 }
 

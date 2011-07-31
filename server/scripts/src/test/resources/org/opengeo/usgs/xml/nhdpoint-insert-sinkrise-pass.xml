@@ -3,8 +3,8 @@
         <feature:nhdpoint xmlns:feature="http://www.usgs.gov/">
             <feature:Shape>
                 <gml:Point xmlns:gml="http://www.opengis.net/gml" srsName="EPSG:900913">
-                    <!-- this does not intersect a stream/river endpoint -->
-                    <gml:pos>-11715370.309278557 4930885.5077818</gml:pos>
+                    <!-- this intersects a stream/river endpoint -->
+                    <gml:pos>-11715386.406184725 4930902.975601206</gml:pos>
                 </gml:Point>
             </feature:Shape>
             <!-- this is a sink/rise -->
