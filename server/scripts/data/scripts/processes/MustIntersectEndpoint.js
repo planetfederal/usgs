@@ -5,7 +5,7 @@ var catalog = require("geoserver/catalog");
 var TOLERANCE = require("../usgs").TOLERANCE;
 
 exports.process = new Process({
-    title: "Endpoint Intersection Test",
+    title: "Must Intersect Endpoint",
     description: "Determines whether a given geometry intersects an endpoint of target features.",
     inputs: {
         geometry: {
@@ -59,6 +59,7 @@ exports.process = new Process({
         });
         // in case we stopped early
         cursor.close();
+        LOGGER.info("MustIntersectEndpoint: " + intersects + " " + filter.cql);
         return {
             result: intersects
         };
