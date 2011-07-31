@@ -128,7 +128,7 @@ function getQueuedExceptions(featureInfo, nativ) {
                 exceptions.push({
                     namespace: usgs.NAMESPACE_URI,
                     featuretype: featureType,
-                    featureid: feature.id, // TODO: https://github.com/opengeo/usgs/issues/54
+                    featureid: feature.id,
                     processid: "js:" + rule.name,
                     exceptionmessage: JSON.stringify(rule)
                 });
