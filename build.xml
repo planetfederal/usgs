@@ -71,7 +71,7 @@
         -->
         <symlink link="${server}/geoserver/src/community/geoscript-js" resource="${server}/geoserver-geoscript-js" overwrite="true"/>
         <!-- patch pom.xml to include geoscript-js extension -->
-        <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="0" dir="${server}/geoserver"/>
+        <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="1" dir="${server}/geoserver" failonerror="true"/>
         <!-- finally, link the minimal directory so the build doesn't fail without a specific configId and configDirectory -->
         <symlink link="${server}/geoserver/src/web/app/minimal" resource="${server}/geoserver/data/minimal" overwrite="true"/>
 
