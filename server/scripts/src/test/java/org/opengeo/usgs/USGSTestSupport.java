@@ -169,4 +169,30 @@ public abstract class USGSTestSupport extends GeoServerAbstractTestSupport {
         }
         return (JSONObject) new JSONParser().parse(result);
     }
+
+    /**
+     * Make assertions to confirm that a transaction violates a specific rule.
+     * @param path relative path of transaction XML
+     * @param code the rule code that should be violated
+     * @param process the corresponding process id for the rule
+     * @throws Exception
+     */
+    protected void assertViolatesRule(String path, String code, String process) throws Exception {
+        Document dom = postRequest(path);
+        assertNotNull(dom);
+        print(dom);
+
+        assertEquals("ExceptionReport", dom.getDocumentElement().getLocalName());
+
+        String locator = xpath.evaluate("//ows:Exception/@locator", dom);
+        assertEquals(path, process, locator);
+
+        assertEquals(path, code, xpath.evaluate("//ows:Exception/@exceptionCode", dom));
+
+        JSONObject result = extractJSONException(dom);
+        assertEquals(path, process, result.get("process"));
+        assertEquals(path, code, result.get("code"));
+    }
+    
+
 }

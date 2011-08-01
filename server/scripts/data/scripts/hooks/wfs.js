@@ -54,7 +54,6 @@ exports.afterTransaction = function(details, request) {
             layer.add(record);
             LOGGER.info("exception queued: " + record.exceptionmessage);
         }
-        layer.update();
     }
 };
 
@@ -68,11 +67,12 @@ function getFirstException(featureInfo, nativ) {
     for (var i=0, ii=rules.length; i<ii; ++i) {
         rule = rules[i];
         // ignore queued rules
-        if (!(nativ["js:" + rule.name] || {}).queue) {
+        if (!(nativ[rule.code] || {}).queue) {
             satisfies = satisfiesRule(geometry, rule);
             if (satisfies == false) {
                 exception = {
-                    locator: "js:" + rule.name,
+                    code: rule.code,
+                    locator: rule.process,
                     message: JSON.stringify(rule)
                 };
                 // found first failure, no need to continue
@@ -85,7 +85,8 @@ function getFirstException(featureInfo, nativ) {
 
 function satisfiesRule(geometry, rule) {
     var satisfies = false;
-    var process = require("processes/" + rule.name).process;
+    var locator = "processes/" + rule.process.split(":").pop();
+    var process = require(locator).process;
     var object, ftypes, filter, outputs;
     for (var i=0, ii=rule.objects.length; i<ii; ++i) {
         object = rule.objects[i];
@@ -121,7 +122,7 @@ function getQueuedExceptions(featureInfo, nativ) {
     for (var i=0, ii=rules.length; i<ii; ++i) {
         rule = rules[i];
         // only test queued rules
-        if ((nativ["js:" + rule.name] || {}).queue) {
+        if ((nativ[rule.code] || {}).queue) {
             satisfies = satisfiesRule(geometry, rule);
             if (satisfies == false) {
                 // prepare the exception record
@@ -129,7 +130,7 @@ function getQueuedExceptions(featureInfo, nativ) {
                     namespace: usgs.NAMESPACE_URI,
                     featuretype: featureType,
                     featureid: feature.id,
-                    processid: "js:" + rule.name,
+                    processid: rule.process,
                     exceptionmessage: JSON.stringify(rule)
                 });
             }

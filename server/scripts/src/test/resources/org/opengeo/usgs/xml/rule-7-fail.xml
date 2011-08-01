@@ -12,8 +12,9 @@
                     </gml:curveMember>
                 </gml:MultiCurve>
             </feature:Shape>
-            <feature:FType>428</feature:FType>
-            <feature:FCode>42805</feature:FCode>
+            <!--  this is a stream/river  -->
+            <feature:FType>460</feature:FType>
+            <feature:FCode>46000</feature:FCode>
         </feature:nhdflowline>
     </wfs:Insert>
 </wfs:Transaction>
