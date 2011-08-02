@@ -50,7 +50,7 @@ exports.process = new Process({
             filter = filter.and(inputs.filter);
         }
         var count = layer.getCount(filter);
-        LOGGER.info("MustIntersect: " + count + " " + filter.cql);
+        LOGGER.info("MustIntersect " + inputs.featureType + ": " + count + " " + filter);
         return {
             result: count > 0,
             count: count

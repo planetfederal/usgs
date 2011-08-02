@@ -59,7 +59,7 @@ exports.process = new Process({
         });
         // in case we stopped early
         cursor.close();
-        LOGGER.info("MustIntersectEndpoint: " + intersects + " " + filter.cql);
+        LOGGER.info("MustIntersectEndpoint " + inputs.featureType + ": " + intersects + " " + filter);
         return {
             result: intersects
         };

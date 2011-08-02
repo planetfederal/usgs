@@ -71,7 +71,7 @@ exports.process = new Process({
                 }
             }
         });
-        LOGGER.info("PipelineMustHaveVerticalRelationship: [" + fids + "] " + filter.cql);
+        LOGGER.info("PipelineMustHaveVerticalRelationship " + inputs.featureType + ": [" + fids + "] " + filter);
         return {
             result: fids.length === 0,
             fids: fids.join(",")

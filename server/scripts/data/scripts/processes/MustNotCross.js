@@ -63,7 +63,7 @@ exports.process = new Process({
                 fids.push(feature.id);
             });
         }
-        LOGGER.info("MustNotCross: " + count + " " + filter.cql);
+        LOGGER.info("MustNotCross " + inputs.featureType + ": " + count + " " + filter);
         return {
             result: count == 0,
             fids: fids.join(",")
