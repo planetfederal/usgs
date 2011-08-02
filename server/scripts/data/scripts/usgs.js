@@ -35,5 +35,5 @@ exports.getRules = function(featureInfo) {
 };
 
 exports.getFix = function(rule) {
-    return require("./usgs/fixes/fix" + rule.code).fix;
+    return require("./usgs/fixes/fix-" + rule.code).fix;
 }
