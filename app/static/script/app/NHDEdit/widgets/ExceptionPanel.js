@@ -54,7 +54,8 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             'intersect a feature from one of the following layers: ',
             '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
-            '{[xindex < xcount ? ", " : ""]}</tpl>.'].join(""),
+            '{[xindex < xcount ? ", " : ""]}</tpl>.<tpl if="values.autoCorrectable">',
+            ' This exception can be autocorrected.</tpl>'].join(""),
             {
                 getFType: function(value) {
                     return NHDEdit.fTypeDict[value];
@@ -67,7 +68,21 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             'from one of the following layers: ',
             '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
-            '{[xindex < xcount ? ", " : ""]}</tpl>.'].join(""),
+            '{[xindex < xcount ? ", " : ""]}</tpl>.<tpl if="values.autoCorrectable">',
+            ' This exception can be autocorrected.</tpl>'].join(""),
+            {
+                getFType: function(value) {
+                    return NHDEdit.fTypeDict[value];
+                }
+            }
+        ),
+        "js:MustNotCross": new Ext.XTemplate(
+            ['<p>{subjectFType:this.getFType} features must not intersect ',
+            'a feature from one of the following layers: ',
+            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
+            '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
+            '{[xindex < xcount ? ", " : ""]}</tpl>.<tpl if="values.autoCorrectable">',
+            ' This exception can be autocorrected.</tpl>'].join(""),
             {
                 getFType: function(value) {
                     return NHDEdit.fTypeDict[value];
