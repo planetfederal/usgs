@@ -52,12 +52,12 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         }
         return writer;
     },
-
+    
     templates: {
         "js:MustIntersect": new Ext.XTemplate(
             ['{subjectFType:this.getFType} {subjectLayer} features must ', 
             'intersect a feature from one of the following layers: ',
-            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
+            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
             '{[xindex < xcount ? ", " : ""]}</tpl>.<tpl if="values.autoCorrectable">',
             ' This exception can be autocorrected.</tpl>'].join(""),
@@ -71,7 +71,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             ['{subjectFType:this.getFType} {subjectLayer} features must ', 
             'intersect an endpoint (the first or last point) of a feature ',
             'from one of the following layers: ',
-            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
+            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
             '{[xindex < xcount ? ", " : ""]}</tpl>.<tpl if="values.autoCorrectable">',
             ' This exception can be autocorrected.</tpl>'].join(""),
@@ -82,9 +82,9 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             }
         ),
         "js:MustNotCross": new Ext.XTemplate(
-            ['{subjectFType:this.getFType} {subjectLayer} features must not intersect ',
-            'a feature from one of the following layers: ',
-            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
+            ['{subjectFType:this.getFType} {subjectLayer} features must not cross ',
+            'any features from any of the following layers: ',
+            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
             '{[xindex < xcount ? ", " : ""]}</tpl>.<tpl if="values.autoCorrectable">',
             ' This exception can be autocorrected.</tpl>'].join(""),
@@ -208,9 +208,9 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             if (messageObj) {
                 autoCorrectable = messageObj.autoCorrectable;
                 text = "<p>" + tpl.applyTemplate(messageObj) +
-                    "</p><p>Go back to the previous step and keep editing " +
-                    "attributes, or modify the geometry, or provide " +
-                    "additional information below.</p>";
+                    "</p><p>Return to the previous step to keep editing " +
+                    "attributes, modify the geometry, or provide additional " + 
+                    "information below.</p>";
             }
         }
         if (!text) {
@@ -221,6 +221,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             title: "Exception",
             items: [{
                 xtype: "box",
+                cls: "app-exception-text",
                 html: text
             }]
         });
