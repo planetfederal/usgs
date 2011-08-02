@@ -135,7 +135,14 @@
                         width: 300,
                         height: 400
                     },
-                    actionTarget: {target: "map.tbar", index: 7}
+                    actionTarget: {target: "tree.tbar"}
+                }, {
+                    ptype: "gxp_googlegeocoder",
+                    outputTarget: "search",
+                    outputConfig: {
+                        emptyText: "Search for a location ...",
+                        listEmptyText: "- no matches -"
+                    }
                 }, {
                     ptype: "app_queue",
                     url: "/geoserver/wfs?",
@@ -146,14 +153,7 @@
                         width: 400,
                         height: 200
                     },
-                    actionTarget: {target: "map.tbar", index: 8}
-                }, {
-                    ptype: "gxp_googlegeocoder",
-                    outputTarget: "search",
-                    outputConfig: {
-                        emptyText: "Search for a location ...",
-                        listEmptyText: "- no matches -"
-                    }
+                    actionTarget: {target: "map.tbar", index: 11}
                 }, {
                     ptype: "app_preferences",
                     featureManager: "nhd-manager",
