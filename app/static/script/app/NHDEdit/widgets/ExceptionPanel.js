@@ -33,6 +33,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     vendorId: 'usgs',
 
+    /** private: property[autoCorrectValue]
+     *  ``Boolean|Object`` the value to set on the NativeElement when the
+     *  Autocorrect checkbox is checked.
+     */
+    autoCorrectValue: null,
     
     /** private: method[getWriter]
      *  :arg processId: ``String`` the locator
@@ -50,7 +55,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     templates: {
         "js:MustIntersect": new Ext.XTemplate(
-            ['<p>{subjectFType:this.getFType} features must ', 
+            ['{subjectFType:this.getFType} {subjectLayer} features must ', 
             'intersect a feature from one of the following layers: ',
             '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
@@ -63,7 +68,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             }
         ),
         "js:MustIntersectEndpoint": new Ext.XTemplate(
-            ['<p>{subjectFType:this.getFType} features must ', 
+            ['{subjectFType:this.getFType} {subjectLayer} features must ', 
             'intersect an endpoint (the first or last point) of a feature ',
             'from one of the following layers: ',
             '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
@@ -77,7 +82,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             }
         ),
         "js:MustNotCross": new Ext.XTemplate(
-            ['<p>{subjectFType:this.getFType} features must not intersect ',
+            ['{subjectFType:this.getFType} {subjectLayer} features must not intersect ',
             'a feature from one of the following layers: ',
             '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
             '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
@@ -88,6 +93,10 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                     return NHDEdit.fTypeDict[value];
                 }
             }
+        ),
+        "js:PipelineMustHaveVerticalRelationship": new Ext.XTemplate(
+            ['Pipeline {layer} features must have a vertical relationship. ',
+            '<tpl if="values.autoCorrectable">This exception can be autocorrected.</tpl>'].join("")
         )
     },
 
@@ -99,15 +108,12 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 value: false,
                 name: "autoCorrect",
                 listeners: {
-                    check: function(checkbox, checked) {
-                        if (!NHDEdit.preferences) {
-                            NHDEdit.preferences = {};
-                        }
-                        NHDEdit.preferences[options.code] =
-                            Ext.apply(NHDEdit.preferences[options.code] || {}, {
-                                autoCorrect: checked
-                            });
-                    }
+                    "check": function(checkbox, checked) {
+                        this.setPreference(options.code, {
+                            autoCorrect: checked ? this.autoCorrectValue || true : false
+                        });
+                    },
+                    scope: this
                 }
             } : {
                 xtype: "checkbox",
@@ -121,9 +127,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                                 item.setDisabled(checked);
                             }
                         });
-                        var beforeWriteQueue;
-                        if (checked === true) {
-                            beforeWriteQueue = function(store, action, rs, options) {
+                        if (this._beforeWriteQueue){
+                            this.store.removeListener("beforewrite", this._beforeWriteQueue, this);
+                        }
+                            if (checked === true) {
+                            this._beforeWriteQueue = function(store, action, rs, options) {
                                 var nativeElements = options.params.nativeElements;
                                 var obj = {};
                                 if (nativeElements && nativeElements.length === 1) {
@@ -136,28 +144,38 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                                     value: Ext.util.JSON.encode(obj)
                                 }];
                             };
-                            this.store.addListener('beforewrite', beforeWriteQueue, this, {single: true});
-                        } else {
-                            this.store.removeListener("beforewrite", beforeWriteQueue, this);
+                            this.store.addListener('beforewrite', this._beforeWriteQueue, this, {single: true});
                         }
                     },
                     scope: this
                 }
             };
         },
-        "js:PipelineVerticalRelationship": function(processId, autoCorrectable) {
+        // code 6
+        "js:PipelineMustHaveVerticalRelationship": function(processId, options) {
             var result = [];
             result.push(this.writers.js.apply(this, arguments));
             result.push({
                 xtype: "combo",
                 store: ["over", "under"],
-                fieldLabel: "Specify the vertical relationship",
+                fieldLabel: "Vertical relationship",
                 triggerAction: "all",
                 mode: 'local',
+                width: 60,
                 listeners: {
                     "select": function(combo, record, index) {
                         var value = combo.getValue();
-                        var beforeWrite = function(store, action, rs, options) {
+                        this.autoCorrectValue = {
+                            relationship: value
+                        };
+                        var pref = this.getPreference(options.code);
+                        this.setPreference(options.code, {
+                            autoCorrect: pref.autoCorrect ? this.autoCorrectValue : false
+                        });
+                        if (this._beforeWrite6) {
+                            this.store.removeListener('beforewrite', this._beforeWrite6);
+                        }
+                        this._beforeWrite6 = function(store, action, rs, options) {
                             var nativeElements = options.params.nativeElements;
                             var obj = {};
                             if (nativeElements && nativeElements.length === 1) {
@@ -170,7 +188,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                                 value: Ext.util.JSON.encode(obj)
                             }];
                         };
-                        this.store.addListener('beforewrite', beforeWrite, this, {single: true});
+                        this.store.addListener('beforewrite', this._beforeWrite6, this, {single: true});
                     },
                     scope: this
                 }
@@ -189,8 +207,8 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             var messageObj = this.getMessageObject();
             if (messageObj) {
                 autoCorrectable = messageObj.autoCorrectable;
-                text = tpl.applyTemplate(messageObj) +
-                    "<p>Go back to the previous step and keep editing " +
+                text = "<p>" + tpl.applyTemplate(messageObj) +
+                    "</p><p>Go back to the previous step and keep editing " +
                     "attributes, or modify the geometry, or provide " +
                     "additional information below.</p>";
             }
@@ -258,6 +276,26 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         // get the first exception
         var exc = this.exceptionReport.exceptions[0];
         return exc[property];
+    },
+    
+    /** private: method[getPreference]
+     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
+     *  :returns: ``Objext`` the object from the preferences
+     */
+    getPreference: function(code) {
+        return (NHDEdit.preferences || {})[code] || {};
+    },
+    
+    /** private: method[setPreference]
+     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
+     *  :arg object: ``Object`` object to set for the preference
+     */
+    setPreference: function(code, object) {
+        if (!NHDEdit.preferences) {
+            NHDEdit.preferences = {};
+        }
+        NHDEdit.preferences[code] =
+            Ext.apply(NHDEdit.preferences[code] || {}, object);
     }
 
 });
