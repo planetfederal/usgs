@@ -136,6 +136,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         
         this.saveButton = new Ext.Button({
             text: this.saveButtonText,
+            iconCls: "save",
             tooltip: this.saveButtonTooltip,
             hidden: !NHDEdit.metadataRecord,
             disabled: true,
@@ -151,6 +152,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
 
         this.cancelButton = new Ext.Button({
             text: "Cancel",
+            iconCls: "cancel",
             handler: function() {
                 this.close();
             },
@@ -159,6 +161,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         
         this.previousButton = new Ext.Button({
             text: "Previous",
+            iconCls: "gxp-icon-zoom-previous",
             hidden: true,
             handler: function() {
                 this.metadataForm.hide();
@@ -178,6 +181,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         });
         this.nextButton = new Ext.Button({
             text: "Next",
+            iconCls: "gxp-icon-zoom-next",
             disabled: true,
             handler: function() {
                 this.attributeForm.hide();
