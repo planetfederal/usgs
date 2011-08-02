@@ -59,4 +59,20 @@ public class NHDFlowlineTest extends USGSTestSupport {
         assertEquals("above", "nhdflowline.374", feature.getAttribute("Above_Permanent_Identifier"));
         assertEquals("below", "nhdflowline.100", feature.getAttribute("Below_Permanent_Identifier"));
     }
+    
+    public void testInsertFlowlineAutoCorrect() throws Exception {
+        
+        SimpleFeatureSource flowlines = getFeatureSource(new QName("nhdflowline"));
+        int count = flowlines.getFeatures().size();
+
+        Document dom = postRequest("xml/rule-7-correct.xml");
+        assertNotNull(dom);
+
+        String inserted = xpath.evaluate("//wfs:totalInserted/text()", dom);
+        assertEquals("pipeline inserted", "1", inserted);
+        
+        assertEquals("five features more", count + 5, flowlines.getFeatures().size());
+        
+    }
+
 }
