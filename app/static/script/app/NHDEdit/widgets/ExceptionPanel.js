@@ -135,19 +135,20 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
-        var code = this.getProperty("code");
-        var locator = this.getProperty("locator");
-        var messageObj = this.getMessageObject();
-        var text;
-        if (messageObj && messageObj.name) {
-            var tpl = this.templates[messageObj.name];
-            if (tpl) {
+        var code = this.getProperty("code"),
+            locator = this.getProperty("locator"),
+            tpl = this.templates[locator],
+            text;
+        if (tpl) {
+            var messageObj = this.getMessageObject();
+            if (messageObj) {
                 text = tpl.applyTemplate(messageObj) +
                     "<p>Go back to the previous step and keep editing " +
                     "attributes, or modify the geometry, or provide " +
                     "additional information below.</p>";
             }
-        } else {
+        }
+        if (!text) {
             text = gxp.util.getOGCExceptionText(this.exceptionReport);
         }
         this.add({
