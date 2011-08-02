@@ -24,9 +24,12 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     /** api: ptype = app_preferences */
     ptype: "app_preferences",
 
-    featureManager: null,
+    /** i18n */
+    buttonText: "Preferences",
+    tooltipText: "Change editing preferences",
 
     vendorId: "usgs",
+    featureManager: null,
 
     /** private: method[init]
      */
@@ -96,7 +99,9 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
             {
                 handler: this.addOutput,
                 scope: this,
-                text: "Preferences"
+                text: this.buttonText,
+                tooltip: this.tooltipText,
+                iconCls: "process"
             }
         ]);
     }

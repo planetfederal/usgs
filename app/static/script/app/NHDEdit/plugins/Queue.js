@@ -26,6 +26,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
 
     /** i18n */
     tooltip: "Show the exception queue",
+    buttonText: "Exceptions",
 
     url: null,
 
@@ -122,6 +123,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     addActions: function() {
         return NHDEdit.plugins.Queue.superclass.addActions.call(this, [
             {
+                text: this.buttonText,
                 handler: this.addOutput,
                 iconCls: "gxp-icon-queue",
                 tooltip: this.tooltip,
