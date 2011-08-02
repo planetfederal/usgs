@@ -3,6 +3,7 @@ var where = require("geoscript/filter").where;
 var catalog = require("geoserver/catalog");
 
 exports.beforeCommit = function(details, request) {
+    LOGGER.info("beforeCommit");
     var nativ;
     try {
         nativ = parseNatives(details.natives);
@@ -26,6 +27,7 @@ exports.beforeCommit = function(details, request) {
 };
 
 exports.afterTransaction = function(details, request) {
+    LOGGER.info("afterTransaction");
     var nativ;
     try {
         nativ = parseNatives(details.natives);
@@ -60,15 +62,15 @@ exports.afterTransaction = function(details, request) {
 function getFirstException(featureInfo, nativ) {
     var exception;
     var feature = featureInfo.feature;
-    var geometry = feature.geometry;
 
     var rules = usgs.getRules(featureInfo);
-    var rule, satisfies;
+    var rule, hint, satisfies;
     for (var i=0, ii=rules.length; i<ii; ++i) {
         rule = rules[i];
-        // ignore queued rules
-        if (!(nativ[rule.code] || {}).queue) {
-            satisfies = satisfiesRule(geometry, rule);
+        hint = nativ[rule.code] || {};
+        // ignore queued and auto-correct rules
+        if (!hint.queue && !(hint.autoCorrect && rule.autoCorrectable)) {
+            satisfies = getProcessOutputs(featureInfo, rule).result;
             if (satisfies == false) {
                 exception = {
                     code: rule.code,
@@ -83,8 +85,9 @@ function getFirstException(featureInfo, nativ) {
     return exception;
 }
 
-function satisfiesRule(geometry, rule) {
-    var satisfies = false;
+function getProcessOutputs(featureInfo, rule, detail) {
+    var feature = featureInfo.feature;
+    var geometry = feature.geometry;
     var locator = "processes/" + rule.process.split(":").pop();
     var process = require(locator).process;
     var object, ftypes, filter, outputs;
@@ -100,39 +103,50 @@ function satisfiesRule(geometry, rule) {
             geometry: geometry,
             namespace: usgs.NAMESPACE_URI,
             featureType: object.layer,
-            filter: filter
+            filter: filter,
+            detail: detail
         });
-        satisfies = outputs.result;
-        if (satisfies == true) {
+        if (outputs.result == true) {
             // rule was satisfied, no need to continue
             break;
         }
     }
-    return satisfies;
+    return outputs;
 }
 
 function getQueuedExceptions(featureInfo, nativ) {
     var exceptions = [];
     var featureType = featureInfo.name;
     var feature = featureInfo.feature;
-    var geometry = feature.geometry;
 
     var rules = usgs.getRules(featureInfo);
-    var rule, satisfies;
+    var rule, hint, outputs;
     for (var i=0, ii=rules.length; i<ii; ++i) {
         rule = rules[i];
-        // only test queued rules
-        if ((nativ[rule.code] || {}).queue) {
-            satisfies = satisfiesRule(geometry, rule);
-            if (satisfies == false) {
-                // prepare the exception record
-                exceptions.push({
-                    namespace: usgs.NAMESPACE_URI,
-                    featuretype: featureType,
-                    featureid: feature.id,
-                    processid: rule.process,
-                    exceptionmessage: JSON.stringify(rule)
-                });
+        hint = nativ[rule.code] || {};
+        // only test queued or auto-correct rules
+        if (hint.queue || (hint.autoCorrect && rule.autoCorrectable)) {
+            outputs = getProcessOutputs(featureInfo, rule, !!hint.autoCorrect);
+            if (outputs.result == false) {
+                var fixed = false;
+                if (hint.autoCorrect) {
+                    try {
+                        var fix = usgs.getFix(rule);
+                        fixed = fix(featureInfo, hint.autoCorrect, outputs);
+                    } catch (err) {
+                        LOGGER.warning("fix failed: " + err.message);
+                    }
+                }
+                if (!fixed) {
+                    // prepare the exception record
+                    exceptions.push({
+                        namespace: usgs.NAMESPACE_URI,
+                        featuretype: featureType,
+                        featureid: feature.id,
+                        processid: rule.process,
+                        exceptionmessage: JSON.stringify(rule)
+                    });
+                }
             }
         }
     }

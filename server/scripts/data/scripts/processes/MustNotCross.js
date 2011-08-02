@@ -26,6 +26,11 @@ exports.process = new Process({
             type: "String",
             title: "Target Filter",
             description: "CQL used to filter features from the target feature type (optional)."
+        },
+        detail: {
+            type: "Boolean",
+            title: "Detail",
+            description: "Generate extra detail for the output."
         }
     },
     outputs: {
@@ -33,6 +38,11 @@ exports.process = new Process({
             type: "Boolean",
             title: "Result",
             description: "The input geometry does not cross any features in the target set."
+        },
+        fids: {
+            type: "String",
+            title: "Feature Ids",
+            description: "If the 'detail' input is true, a comma separated string of feature ids will be generated representing all features crossed by the input geometry."
         }
     },
     run: function(inputs) {
@@ -43,10 +53,20 @@ exports.process = new Process({
         if (inputs.filter) {
             filter = filter.and(inputs.filter);
         }
-        var count = layer.getCount(filter);
+        var count = 0
+        var fids = [];
+        if (!inputs.detail) {
+            count = layer.getCount(filter);
+        } else {
+            layer.query(filter).forEach(function(feature) {
+                ++count;
+                fids.push(feature.id);
+            });
+        }
         LOGGER.info("MustNotCross: " + count + " " + filter.cql);
         return {
-            result: count == 0
+            result: count == 0,
+            fids: fids.join(",")
         };
     }
 });

@@ -13,13 +13,19 @@ public class NHDFlowlineTest extends USGSTestSupport {
     public void testInsertsFail() throws Exception {
         
         // nhdflowline MustNotCross rules
-        List<String> files = (List<String>) Arrays.asList(
-                "xml/rule-6-fail.xml",
-                "xml/rule-7-fail.xml");
+        List<String> files = Arrays.asList("xml/rule-7-fail.xml");
         
         for (String file : files) {
             String code = file.split("-")[1];
             assertViolatesRule(file, code, "js:MustNotCross");
+        }
+
+        // nhdflowline PipelineMustHaveVerticalRelationship rules
+        files = Arrays.asList("xml/rule-6-fail.xml");
+        
+        for (String file : files) {
+            String code = file.split("-")[1];
+            assertViolatesRule(file, code, "js:PipelineMustHaveVerticalRelationship");
         }
 
     }

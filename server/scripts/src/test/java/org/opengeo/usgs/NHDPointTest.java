@@ -21,7 +21,7 @@ public class NHDPointTest extends USGSTestSupport {
     public void testInsertsFail() throws Exception {
         
         // nhdpoint MustIntersect rules
-        List<String> files = (List<String>) Arrays.asList(
+        List<String> files = Arrays.asList(
                 "xml/rule-1-fail.xml",
                 "xml/rule-2-fail.xml",
                 "xml/rule-3-fail.xml");
@@ -32,7 +32,7 @@ public class NHDPointTest extends USGSTestSupport {
         }
 
         // nhdpoint MustIntersectEndpoint rules
-        files = (List<String>) Arrays.asList(
+        files = Arrays.asList(
                 "xml/rule-5-fail.xml");
         
         for (String file : files) {
@@ -78,7 +78,7 @@ public class NHDPointTest extends USGSTestSupport {
     public void testInsertsPass() throws Exception {
         
         // transactions that pass MustIntersect
-        List<String> files = (List<String>) Arrays.asList(
+        List<String> files = Arrays.asList(
                 "xml/rule-2-pass.xml",
                 "xml/rule-5-pass.xml");
         

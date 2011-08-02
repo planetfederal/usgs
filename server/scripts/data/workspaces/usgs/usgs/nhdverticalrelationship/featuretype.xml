@@ -1,0 +1,30 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-285d23be:13187b91e60:-7fec</id>
+  <name>nhdverticalrelationship</name>
+  <nativeName>NHDVerticalRelationship</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--11814b35:13067cdfb15:-7fff</id>
+  </namespace>
+  <title>NHD Vertical Relationship</title>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--1bc55906:130729d4f6a:-8000</id>
+  </store>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+</featureType>
