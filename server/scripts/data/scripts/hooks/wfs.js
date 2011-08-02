@@ -1,5 +1,6 @@
 var usgs = require("../usgs");
 var where = require("geoscript/filter").where;
+var fids = require("geoscript/filter").fids;
 var catalog = require("geoserver/catalog");
 
 exports.beforeCommit = function(details, request) {
@@ -87,17 +88,27 @@ function getFirstException(featureInfo, nativ) {
 
 function getProcessOutputs(featureInfo, rule, detail) {
     var feature = featureInfo.feature;
+    var featureType = featureInfo.name;
     var geometry = feature.geometry;
     var locator = "processes/" + rule.process.split(":").pop();
     var process = require(locator).process;
-    var object, ftypes, filter, outputs;
+    var object, ftypes, selfless, filter, outputs;
     for (var i=0, ii=rule.objects.length; i<ii; ++i) {
         object = rule.objects[i];
+        if (object.layer == featureType && feature.id) {
+            // make sure to exclude the feature itself it is is already on the layer
+            selfless = fids([feature.id]).not;
+        } else {
+            selfless = undefined;
+        }
         ftypes = object.ftypes;
         if (ftypes) {
-            filter = where.apply(null, ["FType IN"].concat(ftypes));
+            filter = where(["FType IN"].concat(ftypes));
+            if (selfless) {
+                filter = filter.and(selfless);
+            }
         } else {
-            filter = undefined;
+            filter = selfless;
         }
         outputs = process.run({
             geometry: geometry,
