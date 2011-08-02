@@ -35,7 +35,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     
     /** private: method[getWriter]
-     *  :arg processId:
+     *  :arg processId: ``String`` the locator
      *  :return: ``Object`` the writer that creates additional form components
      *      and handlers to recover from the exception, or null if no recovery
      *      strategy is implemented
@@ -92,8 +92,24 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     writers: {
-        "js": function(processId) {
-            return {
+        "js": function(processId, options) {
+            return options.autoCorrectable ? {
+                xtype: "checkbox",
+                fieldLabel: "Autocorrect",
+                value: false,
+                name: "autoCorrect",
+                listeners: {
+                    check: function(checkbox, checked) {
+                        if (!NHDEdit.preferences) {
+                            NHDEdit.preferences = {};
+                        }
+                        NHDEdit.preferences[options.code] =
+                            Ext.apply(NHDEdit.preferences[options.code] || {}, {
+                                autoCorrect: checked
+                            });
+                    }
+                }
+            } : {
                 xtype: "checkbox",
                 fieldLabel: "Queue exception",
                 value: false,
@@ -129,7 +145,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 }
             };
         },
-        "js:PipelineVerticalRelationship": function(processId) {
+        "js:PipelineVerticalRelationship": function(processId, autoCorrectable) {
             var result = [];
             result.push(this.writers.js.apply(this, arguments));
             result.push({
@@ -168,10 +184,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         var code = this.getProperty("code"),
             locator = this.getProperty("locator"),
             tpl = this.templates[locator],
-            text;
+            text, autoCorrectable;
         if (tpl) {
             var messageObj = this.getMessageObject();
             if (messageObj) {
+                autoCorrectable = messageObj.autoCorrectable;
                 text = tpl.applyTemplate(messageObj) +
                     "<p>Go back to the previous step and keep editing " +
                     "attributes, or modify the geometry, or provide " +
@@ -191,7 +208,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         });
         var recoveryForm = this.getWriter(locator);
         if (recoveryForm) {
-            this.add(recoveryForm.call(this, locator));
+            var options = {
+                code: code,
+                autoCorrectable: autoCorrectable
+            };
+            this.add(recoveryForm.call(this, locator, options));
         } else {
             this.add({
                 xtype: "displayfield", 
