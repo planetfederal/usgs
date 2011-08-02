@@ -49,12 +49,14 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     templates: {
-        "MustIntersect": new Ext.XTemplate(
-            ['<p>{subjectFType:this.getSubject} features must ', 
-            'intersect a feature from one of the following layers:</p><ul>',
-            '<tpl for="objects"><li>{layer}</li></tpl></ul>'].join(""),
+        "js:MustIntersect": new Ext.XTemplate(
+            ['<p>{subjectFType:this.getFType} features must ', 
+            'intersect a feature from one of the following layers: ',
+            '<tpl for="objects">{layer}<tpl if="values.ftypes"> (FType: ',
+            '<tpl for="ftypes">{.:this.getFType}{[xindex < xcount ? ", " : ""]}</tpl>)</tpl>',
+            '{[xindex < xcount ? ", " : ""]}</tpl>.'].join(""),
             {
-                getSubject: function(value) {
+                getFType: function(value) {
                     return NHDEdit.fTypeDict[value];
                 }
             }
@@ -198,6 +200,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         return obj;
     },
 
+    /** private: method[getProperty]
+     *  :arg property: ``String`` an exception property name
+     *  :returns: ``Object`` The value of the passed property from the first
+     *      exception of the exception report
+     */
     getProperty: function(property) {
         // get the first exception
         var exc = this.exceptionReport.exceptions[0];
