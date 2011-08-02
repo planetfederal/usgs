@@ -6,9 +6,9 @@ var filter = require("geoscript/filter");
 var relationships = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdverticalrelationship");
 var flowlines = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdflowline");
 
-exports.fix = function(featureInfo, prefs, outputs) {
+exports.fix = function(featureInfo, outputs, autoCorrect) {
 
-    var over = (prefs.relationship == "over");
+    var over = (autoCorrect.relationship == "over");
     var feature = featureInfo.feature;
     
     // get all the features crossed by the pipeline

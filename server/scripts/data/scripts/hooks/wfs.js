@@ -132,7 +132,7 @@ function getQueuedExceptions(featureInfo, nativ) {
                 if (hint.autoCorrect) {
                     try {
                         var fix = usgs.getFix(rule);
-                        fixed = fix(featureInfo, hint.autoCorrect, outputs);
+                        fixed = fix(featureInfo, outputs, hint.autoCorrect);
                     } catch (err) {
                         LOGGER.warning("fix failed: " + err.message);
                     }
