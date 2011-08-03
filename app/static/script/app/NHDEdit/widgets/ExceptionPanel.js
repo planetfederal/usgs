@@ -94,7 +94,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 }
             }
         ),
-        "js:PipelineMustHaveVerticalRelationship": new Ext.XTemplate(
+        "js:MustHaveVerticalRelationship": new Ext.XTemplate(
             ['Pipeline {layer} features must have a vertical relationship. ',
             '<tpl if="values.autoCorrectable">This exception can be autocorrected.</tpl>'].join("")
         )
@@ -152,7 +152,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             };
         },
         // code 6
-        "js:PipelineMustHaveVerticalRelationship": function(processId, options) {
+        "js:MustHaveVerticalRelationship": function(processId, options) {
             var result = [];
             result.push(this.writers.js.apply(this, arguments));
             result.push({
