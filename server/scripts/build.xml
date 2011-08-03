@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<project name="scripts" default="init-tests" basedir=".">
+
+    <target name="init-tests" description="download local testing data">
+        <echo>Downloading SQL Test Data</echo>
+        <get src="http://files.opengeo.org/usgs/usgs_test.dump"
+             dest="${basedir}/data/usgs_test.dump"/>
+    </target>
+
+</project>

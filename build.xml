@@ -171,10 +171,4 @@
         <delete dir="${build}"/>
     </target>
   
-    <target name="init-tests" description="download local testing data">
-        <echo>Downloading SQL Test Data</echo>
-        <get src="http://files.opengeo.org/usgs/usgs_test.dump"
-             dest="server/scripts/data"/>
-    </target>
-
 </project>

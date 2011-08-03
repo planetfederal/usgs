@@ -84,6 +84,23 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>init-tests</id>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="${basedir}/build.xml" dir="${basedir}" target="init-tests"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <testResources>
             <testResource>
