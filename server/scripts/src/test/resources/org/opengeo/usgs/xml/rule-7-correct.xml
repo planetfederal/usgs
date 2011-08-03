@@ -6,16 +6,16 @@
                 <gml:MultiCurve xmlns:gml="http://www.opengis.net/gml" srsName="EPSG:900913">
                     <gml:curveMember>
                         <gml:LineString>
-                            <gml:posList>-11709896.765924076 4930084.347290551 -11709869.715689 4930128.1062888 -11709843.440461 4930214.0979456 -11709807.610604 4930328.753488 -11709809.999261 4930364.583345 -11709764.614776 4930436.243059</gml:posList>
+                            <!-- this crosses a lake/pond -->
+                            <gml:posList>-11709985.533300893 4930133.622246777 -11709909.727297 4930154.0829349 -11709835.678925999 4930201.2589133 -11709833.290268995 4930283.6675844 -11709807.612204999 4930329.6492343 -11709820.749818996 4930385.1855126 -11709787.905782998 4930434.1529839</gml:posList>
                         </gml:LineString>
                     </gml:curveMember>
                 </gml:MultiCurve>
             </feature:Shape>
+            <!-- this is a stream/river -->
             <feature:FType>460</feature:FType>
             <feature:FCode>46000</feature:FCode>
         </feature:nhdflowline>
     </wfs:Insert>
-    <wfs:Native vendorId="usgs" safeToIgnore="true">
-        {"7": {"autoCorrect": true}}
-    </wfs:Native>
+    <wfs:Native vendorId="usgs" safeToIgnore="true">{"7":{"autoCorrect":true}}</wfs:Native>
 </wfs:Transaction>
