@@ -32,15 +32,56 @@
             callback.call(this, config);
         }
     });
+    
+    /** private: property[preferences]
+     *  ``Object``
+     */
+    NHDEdit.preferences = {};
+    
+    /** private: property[metadataId]
+     *  ``String`` fid of the metadata record currently being used
+     */
+     
+    /** private: property[metadataRecord]
+     *  ``GeoExt.data.FeatureRecord`` metadata record currently being used
+     */
+    
     NHDEdit.setMetadataRecord = function(record) {
         NHDEdit.metadataRecord = record;
         var urlConfig = getUrlConfig();
         if (record) {
-            urlConfig.m = record.get("feature").fid;
+            urlConfig.m = record.getFeature().fid;
             NHDEdit.metadataId = urlConfig.m;
         } else {
             delete urlConfig.m;
         }
         window.location.hash = Ext.urlEncode(urlConfig);
     };
+    
+    /** private: method[getPreference]
+     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
+     *  :returns: ``Objext`` the object from the preferences
+     */
+    NHDEdit.getPreference = function(code) {
+        return NHDEdit.preferences[code] || {};
+    };
+    
+    /** private: method[setPreference]
+     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
+     *  :arg object: ``Object`` object to set for the preference
+     */
+    NHDEdit.setPreference = function(code, object) {
+        var urlConfig = getUrlConfig();
+        var pref = Ext.apply(NHDEdit.preferences[code] || {}, object);
+        NHDEdit.preferences[code] = pref;
+        var record = NHDEdit.metadataRecord;
+        if (record) {
+            var completenessReport = record.fields.find(function(f) {
+                return f.name.toLowerCase() == "completenessreport"; 
+            }).name;
+            //TODO the line below makes things break seriously
+            //record.set(completenessReport, Ext.encode(pref));
+        }
+    };
+
 })();

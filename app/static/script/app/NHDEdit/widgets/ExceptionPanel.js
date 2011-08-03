@@ -103,8 +103,8 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                         this.autoCorrectValue = {
                             relationship: value
                         };
-                        var pref = this.getPreference(code);
-                        this.setPreference(code, {
+                        var pref = NHDEdit.getPreference(code);
+                        NHDEdit.setPreference(code, {
                             autoCorrect: pref.autoCorrect ? this.autoCorrectValue : false
                         });
                         if (this._beforeWrite6) {
@@ -200,7 +200,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
             name: "autoCorrect",
             listeners: {
                 "check": function(checkbox, checked) {
-                    this.setPreference(code, {
+                    NHDEdit.setPreference(code, {
                         autoCorrect: checked ? this.autoCorrectValue || true : false
                     });
                 },
@@ -276,28 +276,8 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         // get the first exception
         var exc = this.exceptionReport.exceptions[0];
         return exc[property];
-    },
-    
-    /** private: method[getPreference]
-     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
-     *  :returns: ``Objext`` the object from the preferences
-     */
-    getPreference: function(code) {
-        return (NHDEdit.preferences || {})[code] || {};
-    },
-    
-    /** private: method[setPreference]
-     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
-     *  :arg object: ``Object`` object to set for the preference
-     */
-    setPreference: function(code, object) {
-        if (!NHDEdit.preferences) {
-            NHDEdit.preferences = {};
-        }
-        NHDEdit.preferences[code] =
-            Ext.apply(NHDEdit.preferences[code] || {}, object);
     }
-
+    
 });
 
 Ext.reg('app_exceptionpanel', NHDEdit.ExceptionPanel);
