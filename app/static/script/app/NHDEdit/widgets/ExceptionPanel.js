@@ -39,20 +39,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
      */
     autoCorrectValue: null,
     
-    /** private: method[getWriter]
-     *  :arg processId: ``String`` the locator
-     *  :return: ``Object`` the writer that creates additional form components
-     *      and handlers to recover from the exception, or null if no recovery
-     *      strategy is implemented
-     */
-    getWriter: function(processId) {
-        var writer = null;
-        if (processId) {
-            writer = this.writers[processId] || this.writers[processId.split(":")[0]];
-        }
-        return writer;
-    },
-    
     templates: {
         "js:MustIntersect": new Ext.XTemplate(
             ['{subjectFType:this.getFType} {subjectLayer} features must ', 
@@ -100,62 +86,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         )
     },
 
-    writers: {
-        "js": function(processId, options) {
-            return options.autoCorrectable ? {
-                xtype: "checkbox",
-                fieldLabel: "Autocorrect",
-                value: false,
-                name: "autoCorrect",
-                listeners: {
-                    "check": function(checkbox, checked) {
-                        this.setPreference(options.code, {
-                            autoCorrect: checked ? this.autoCorrectValue || true : false
-                        });
-                    },
-                    scope: this
-                }
-            } : {
-                xtype: "checkbox",
-                fieldLabel: "Queue exception",
-                value: false,
-                name: "queue",
-                listeners: {
-                    "check": function(checkbox, checked) {
-                        this.getForm().items.each(function(item) {
-                            if (item.name !== "queue") {
-                                item.setDisabled(checked);
-                            }
-                        });
-                        if (this._beforeWriteQueue){
-                            this.store.removeListener("beforewrite", this._beforeWriteQueue, this);
-                        }
-                            if (checked === true) {
-                            this._beforeWriteQueue = function(store, action, rs, options) {
-                                var nativeElements = options.params.nativeElements;
-                                var obj = {};
-                                if (nativeElements && nativeElements.length === 1) {
-                                    obj = Ext.util.JSON.decode(nativeElements[0].value);
-                                }
-                                obj[processId] = {queue: checked};
-                                options.params.nativeElements = [{
-                                    vendorId: this.vendorId,
-                                    safeToIgnore: true,
-                                    value: Ext.util.JSON.encode(obj)
-                                }];
-                            };
-                            this.store.addListener('beforewrite', this._beforeWriteQueue, this, {single: true});
-                        }
-                    },
-                    scope: this
-                }
-            };
-        },
-        // code 6
-        "js:MustHaveVerticalRelationship": function(processId, options) {
-            var result = [];
-            result.push(this.writers.js.apply(this, arguments));
-            result.push({
+    ruleSpecificItems: {
+        // specific handling for pipeline vertical relationship rule
+        "6": function() {
+            var code = "6";
+            return {
                 xtype: "combo",
                 store: ["over", "under"],
                 fieldLabel: "Vertical relationship",
@@ -163,13 +98,13 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 mode: 'local',
                 width: 60,
                 listeners: {
-                    "select": function(combo, record, index) {
+                    select: function(combo, record, index) {
                         var value = combo.getValue();
                         this.autoCorrectValue = {
                             relationship: value
                         };
-                        var pref = this.getPreference(options.code);
-                        this.setPreference(options.code, {
+                        var pref = this.getPreference("6");
+                        this.setPreference(code, {
                             autoCorrect: pref.autoCorrect ? this.autoCorrectValue : false
                         });
                         if (this._beforeWrite6) {
@@ -181,7 +116,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                             if (nativeElements && nativeElements.length === 1) {
                                 obj = Ext.util.JSON.decode(nativeElements[0].value);
                             }
-                            obj[processId] = {relationship: value};
+                            obj[code] = {autoCorrect: {relationship: value}};
                             options.params.nativeElements = [{
                                 vendorId: this.vendorId,
                                 safeToIgnore: true,
@@ -192,11 +127,10 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                     },
                     scope: this
                 }
-            });
-            return result;
+            };
         }
     },
-
+    
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
         var known = false,
@@ -220,13 +154,16 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                             "information below.</p>"
                     }]
                 });
-                var recoveryForm = this.getWriter(locator);
-                if (recoveryForm) {
-                    var options = {
-                        code: code,
-                        autoCorrectable: messageObj.autoCorrectable
-                    };
-                    this.add(recoveryForm.call(this, locator, options));
+                if (messageObj.autoCorrectable) {
+                    // add an auto-correct field
+                    this.add(this.createAutoCorrectField(code));
+                    // add any items for specific rules
+                    if (code in this.ruleSpecificItems) {
+                        this.add(this.ruleSpecificItems[code].call(this));
+                    }
+                } else {
+                    // allow user to queue exception
+                    this.add(this.createQueueField(code));
                 }
             }
         }
@@ -254,6 +191,62 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         
         this.doLayout();
     },
+
+    createAutoCorrectField: function(code) {
+        return {
+            xtype: "checkbox",
+            fieldLabel: "Autocorrect",
+            value: false,
+            name: "autoCorrect",
+            listeners: {
+                "check": function(checkbox, checked) {
+                    this.setPreference(code, {
+                        autoCorrect: checked ? this.autoCorrectValue || true : false
+                    });
+                },
+                scope: this
+            }            
+        }
+    },
+    
+    createQueueField: function(code) {
+        return {
+            xtype: "checkbox",
+            fieldLabel: "Queue exception",
+            value: false,
+            name: "queue",
+            listeners: {
+                check: function(checkbox, checked) {
+                    this.getForm().items.each(function(item) {
+                        if (item.name !== "queue") {
+                            item.setDisabled(checked);
+                        }
+                    });
+                    if (this._beforeWriteQueue){
+                        this.store.removeListener("beforewrite", this._beforeWriteQueue, this);
+                    }
+                    if (checked === true) {
+                        this._beforeWriteQueue = function(store, action, rs, options) {
+                            var nativeElements = options.params.nativeElements;
+                            var obj = {};
+                            if (nativeElements && nativeElements.length === 1) {
+                                obj = Ext.util.JSON.decode(nativeElements[0].value);
+                            }
+                            obj[code] = {queue: checked};
+                            options.params.nativeElements = [{
+                                vendorId: this.vendorId,
+                                safeToIgnore: true,
+                                value: Ext.util.JSON.encode(obj)
+                            }];
+                        };
+                        this.store.addListener("beforewrite", this._beforeWriteQueue, this, {single: true});
+                    }
+                },
+                scope: this
+            }
+        };
+    },
+
 
     /** private: method[getMessageObject]
      *  :returns: ``Object`` The first exception message decoded.  Returns 
