@@ -37,6 +37,12 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     schema: null,
 
     featureStore: null,
+    
+    /** api: config[nhdFeatureManager]
+     *  ``String`` id of the feature manager used for editing nhd feature types.
+     *  Default is "nhd-manager".
+     */
+    nhdFeatureManager: "nhd-manager",
 
     /** private: method[init]
      */
@@ -86,21 +92,23 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
                     iconCls: 'gxp-icon-zoomtofeature',
                     handler: function(grid, rowIndex, colIndex) {
                         var record = store.getAt(rowIndex);
-                        var feature = record.get("feature");
-                        var featureType = feature.attributes.featuretype;
-                        var featureNS = feature.attributes.namespace;
-                        var tpl = new Ext.Template("service=WFS&version=1.1.0&request=GetFeature&typename={featuretype}&featureNS={namespace}&featureid={featureid}");
-                        var url = OpenLayers.Util.urlAppend(this.url, tpl.applyTemplate(feature.attributes));
-                        OpenLayers.Request.GET({
-                            url: url,
-                            success: function(response) {
-                                var map = this.target.mapPanel.map;
-                                var format = new OpenLayers.Format.GML.v3({featureType: featureType, featureNS: featureNS});
-                                var features = format.read(response.responseXML || response.responseText);
-                                map.zoomToExtent(features[0].geometry.getBounds());
-                            }, 
-                            scope: this
+                        var layer = this.target.getLayerRecordFromMap({
+                            source: "local", name: "usgs:" + record.get("featuretype")
                         });
+                        if (layer) {
+                            var featureManager = this.target.tools[this.nhdFeatureManager];
+                            featureManager.showLayer(this.id);
+                            this.target.selectLayer();
+                            featureManager.on("layerchange", function() {
+                                featureManager.loadFeatures(new OpenLayers.Filter.FeatureId({
+                                    fids: [record.get("featureid")]
+                                }), function() {
+                                    this.target.mapPanel.map.zoomToExtent(featureManager.featureLayer.getDataExtent());
+                                }, this);
+                            }, this, {single: true});
+                            featureManager.setLayer(layer);
+                            this.target.selectLayer(layer);
+                        }
                     },
                     scope: me}]
                 });
