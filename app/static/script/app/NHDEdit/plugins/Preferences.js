@@ -41,23 +41,27 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
 
     onLayerChange: function(tool, layer, schema) {
         var store = tool.featureStore;
-        var beforeWrite = function(store, action, rs, options) {
-            if (NHDEdit.preferences) {
-                var nativeElements = options.params.nativeElements;
-                var obj = {};
-                if (nativeElements && nativeElements.length === 1) {
-                    obj = Ext.util.JSON.decode(nativeElements[0].value);
-                }
-                OpenLayers.Util.extend(obj, NHDEdit.preferences);
-                options.params.nativeElements = [{
-                    vendorId: this.vendorId,
-                    safeToIgnore: true,
-                    value: Ext.util.JSON.encode(obj)
-                }];
-            }
-        };
-        store.addListener('beforewrite', beforeWrite, this);
+        if (store) {
+            store.addListener('beforewrite', this.beforeStoreWrite, this);
+        }
     },
+    
+    beforeStoreWrite: function(store, action, rs, options) {
+        if (NHDEdit.preferences) {
+            var nativeElements = options.params.nativeElements;
+            var obj = {};
+            if (nativeElements && nativeElements.length === 1) {
+                obj = Ext.util.JSON.decode(nativeElements[0].value);
+            }
+            OpenLayers.Util.extend(obj, NHDEdit.preferences);
+            options.params.nativeElements = [{
+                vendorId: this.vendorId,
+                safeToIgnore: true,
+                value: Ext.util.JSON.encode(obj)
+            }];
+        }
+    },
+    
 
     apply: function() {
         if (!NHDEdit.preferences) {
