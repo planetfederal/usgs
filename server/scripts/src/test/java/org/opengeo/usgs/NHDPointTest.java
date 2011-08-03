@@ -69,7 +69,6 @@ public class NHDPointTest extends USGSTestSupport {
 
             String id = (String) feature.getAttribute("metadataid");
             assertNotNull(file, id);
-            id = id.trim();  // TODO update test dump to use varchar in NHDExceptions 
             assertEquals(file + " correct metadataid", "nhdmetadata.15", id);
         }
 
