@@ -87,7 +87,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
     ruleSpecificItems: {
-        // specific handling for pipeline vertical relationship rule
+        // specific handling for vertical relationship rule
         "6": function() {
             var code = "6";
             return {
@@ -103,7 +103,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                         this.autoCorrectValue = {
                             relationship: value
                         };
-                        var pref = this.getPreference("6");
+                        var pref = this.getPreference(code);
                         this.setPreference(code, {
                             autoCorrect: pref.autoCorrect ? this.autoCorrectValue : false
                         });
@@ -206,7 +206,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 },
                 scope: this
             }            
-        }
+        };
     },
     
     createQueueField: function(code) {

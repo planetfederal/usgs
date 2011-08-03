@@ -246,7 +246,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 "metadataopened": function(cmp, record) {
                     NHDEdit.setMetadataRecord(record);
                     var map = this.feature.layer.map;
-                    var id = record.get("feature").fid;
+                    var id = record.getFeature().fid;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
                         options.params.handle = id;
                     } , this);
