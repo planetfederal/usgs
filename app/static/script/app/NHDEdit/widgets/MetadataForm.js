@@ -70,7 +70,11 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     createGrid: function() {
-        Ext.getCmp("app-open-button").setDisabled(false);
+        //TODO this check is just a workaround - the solution is to create a
+        // new store for every popup - see https://github.com/opengeo/usgs/issues/84
+        if (this.findButton) {
+            this.findButton.setDisabled(false);            
+        }
         this.grid = new gxp.grid.FeatureGrid({
             store: this.featureStore,
             schema: this.schema,
@@ -217,7 +221,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.add(new Ext.Button({
             iconCls: "gxp-icon-search",
             disabled: true,
-            id: "app-open-button",
+            ref: "findButton",
             text: "Find",
             tooltip: "Find an existing metadata record",
             handler: this.openEntry,
