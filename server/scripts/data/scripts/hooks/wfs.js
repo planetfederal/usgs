@@ -1,25 +1,24 @@
 var usgs = require("../usgs");
-var where = require("geoscript/filter").where;
-var fids = require("geoscript/filter").fids;
 var catalog = require("geoserver/catalog");
+var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdexceptions");
 
 exports.beforeCommit = function(details, request) {
     LOGGER.info("beforeCommit");
-    var nativ;
+    var hints;
     try {
-        nativ = parseNatives(details.natives);
+        hints = parseNatives(details.natives);
     } catch (err) {
         return {
             locator: "beforeCommit",
             message: err.message
         };
     }
-    var features = details.PreInsert || [];
-    features = features.concat(details.PostUpdate || []);
+    var featureInfos = details.PreInsert || [];
+    featureInfos = featureInfos.concat(details.PostUpdate || []);
     
     var exception;
-    for (var i=0, ii=features.length; i<ii; ++i) {
-        exception = getFirstException(features[i], nativ);
+    for (var i=0, ii=featureInfos.length; i<ii; ++i) {
+        exception = usgs.getFirstException(featureInfos[i], hints);
         if (exception) {
             break;
         }
@@ -29,158 +28,53 @@ exports.beforeCommit = function(details, request) {
 
 exports.afterTransaction = function(details, request) {
     LOGGER.info("afterTransaction");
-    var nativ;
+    var hints;
     try {
-        nativ = parseNatives(details.natives);
+        hints = parseNatives(details.natives);
     } catch (err) {
         return {
             locator: "afterTransaction",
             message: err.message
         };
     }
-    var features = details.PostInsert || [];
-    features = features.concat(details.PostUpdate || []);
+    var featureInfos = details.PostInsert || [];
+    featureInfos = featureInfos.concat(details.PostUpdate || []);
     
     var featureInfo;
-    var exceptions = [];
-    for (var i=0, ii=features.length; i<ii; ++i) {
-        featureInfo = features[i];
-        exceptions = exceptions.concat(getQueuedExceptions(featureInfo, nativ));
+    var records = [];
+    for (var i=0, ii=featureInfos.length; i<ii; ++i) {
+        featureInfo = featureInfos[i];
+        records = records.concat(usgs.getQueuedExceptions(featureInfo, hints));
     }
-    var num = exceptions.length;
+    var num = records.length;
     if (num > 0) {
-        var layer = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdexceptions");
         var record;
         for (var i=0; i<num; ++i) {
-            record = exceptions[i];
+            record = records[i];
             record.metadataid = details.handle;
-            layer.add(record);
+            exceptions.add(record);
             LOGGER.info("exception queued: " + record.exceptionmessage);
         }
     }
 };
-
-function getFirstException(featureInfo, nativ) {
-    var exception;
-    var feature = featureInfo.feature;
-
-    var rules = usgs.getRules(featureInfo);
-    var rule, hint, satisfies;
-    for (var i=0, ii=rules.length; i<ii; ++i) {
-        rule = rules[i];
-        hint = nativ[rule.code] || {};
-        // ignore queued and auto-correct rules
-        if (!hint.queue && !(hint.autoCorrect && rule.autoCorrectable)) {
-            satisfies = getProcessOutputs(featureInfo, rule).result;
-            if (satisfies == false) {
-                exception = {
-                    code: rule.code,
-                    locator: rule.process,
-                    message: JSON.stringify(rule)
-                };
-                // found first failure, no need to continue
-                break;
-            }
-        }
-    }
-    return exception;
-}
-
-function getProcessOutputs(featureInfo, rule, detail) {
-    var feature = featureInfo.feature;
-    var featureType = featureInfo.name;
-    var geometry = feature.geometry;
-    var locator = "processes/" + rule.process.split(":").pop();
-    var process = require(locator).process;
-    var object, ftypes, selfless, filter, outputs;
-    for (var i=0, ii=rule.objects.length; i<ii; ++i) {
-        object = rule.objects[i];
-        if (object.layer == featureType && feature.id) {
-            // make sure to exclude the feature itself it is is already on the layer
-            selfless = fids([feature.id]).not;
-        } else {
-            selfless = undefined;
-        }
-        ftypes = object.ftypes;
-        if (ftypes) {
-            filter = where(["FType IN"].concat(ftypes));
-            if (selfless) {
-                filter = filter.and(selfless);
-            }
-        } else {
-            filter = selfless;
-        }
-        outputs = process.run({
-            geometry: geometry,
-            namespace: usgs.NAMESPACE_URI,
-            featureType: object.layer,
-            filter: filter,
-            detail: detail
-        });
-        if (outputs.result == true) {
-            // rule was satisfied, no need to continue
-            break;
-        }
-    }
-    return outputs;
-}
-
-function getQueuedExceptions(featureInfo, nativ) {
-    var exceptions = [];
-    var featureType = featureInfo.name;
-    var feature = featureInfo.feature;
-
-    var rules = usgs.getRules(featureInfo);
-    var rule, hint, outputs;
-    for (var i=0, ii=rules.length; i<ii; ++i) {
-        rule = rules[i];
-        hint = nativ[rule.code] || {};
-        // only test queued or auto-correct rules
-        if (hint.queue || (hint.autoCorrect && rule.autoCorrectable)) {
-            outputs = getProcessOutputs(featureInfo, rule, !!hint.autoCorrect);
-            if (outputs.result == false) {
-                var fixed = false;
-                if (hint.autoCorrect) {
-                    try {
-                        var fix = usgs.getFix(rule);
-                        fixed = fix(featureInfo, outputs, hint.autoCorrect);
-                    } catch (err) {
-                        LOGGER.warning("fix failed: " + err.message);
-                    }
-                }
-                if (!fixed) {
-                    // prepare the exception record
-                    exceptions.push({
-                        namespace: usgs.NAMESPACE_URI,
-                        featuretype: featureType,
-                        featureid: feature.id,
-                        processid: rule.process,
-                        exceptionmessage: JSON.stringify(rule)
-                    });
-                }
-            }
-        }
-    }
-    return exceptions;
-}
 
 /**
  * Parse content from first Native element with vendorId "usgs".  Content
  * is assumed to be a JSON string.
  */
 function parseNatives(natives) {
-    var nativ, obj = {};
+    var el, hints = {};
     for (var i=0, ii=natives.length; i<ii; ++i) {
-        nativ = natives[i];
-        if (nativ.vendorId === "usgs") {
+        el = natives[i];
+        if (el.vendorId === "usgs") {
             try {
-                obj = JSON.parse(nativ.value);
+                hints = JSON.parse(el.value);
             } catch (err) {
-                throw new Error("Trouble parsing <Native> element: " + nativ.value);
+                throw new Error("Trouble parsing <Native> element: " + el.value);
             }
             break;
         }
     }
-    return obj;
+    return hints;
 };
 
