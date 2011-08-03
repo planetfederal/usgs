@@ -49,3 +49,11 @@ body {
     font-size: 1.2em;
     padding-bottom: 5px;
 }
+
+/* exception queue grid */
+.app-exceptionqueue td.x-action-col-cell {
+    vertical-align: middle;
+}
+.app-exceptionqueue .x-grid3-cell-inner {
+    white-space: normal;
+}

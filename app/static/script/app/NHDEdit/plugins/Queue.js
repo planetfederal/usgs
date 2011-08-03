@@ -84,7 +84,20 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
         this.featureStore.load();
         var me = this;
         this.grid = new gxp.grid.FeatureGrid({
+            cls: "app-exceptionqueue",
             store: this.featureStore,
+            includeFields: ["exceptionmessage"],
+            propertyNames: {exceptionmessage: "Exception Message"},
+            customRenderers: {
+                exceptionmessage: function(output) {
+                    var data = Ext.decode(output);
+                    var tpl = NHDEdit.exceptionTemplates[data.process];
+                    if (tpl) {
+                        output = tpl.applyTemplate(data);
+                    }
+                    return output;
+                }
+            },
             getColumns: function(store) {
                 var columns = gxp.grid.FeatureGrid.prototype.getColumns.apply(this, arguments);
                 columns.unshift({xtype: 'actioncolumn', width: 30, items: [{
@@ -116,7 +129,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             },
             schema: this.schema,
             loadMask: true,
-            viewConfig: {forceFit: true},
+            autoExpandColumn: 1,
             height: 300
         });
         return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, {
