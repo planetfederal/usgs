@@ -11,8 +11,8 @@ var featureRules = [
     {code: "3", process: "js:MustIntersect", subjectLayer: "nhdpoint", subjectFType: 369, objects: [{layer: "nhdline", ftypes: [398]}, {layer: "nhdarea", ftypes: [398]}]},
     {code: "4", process: "js:MustIntersect", subjectLayer: "nhdpoint", subjectFType: 398, objects: [{layer: "nhdflowline", ftypes: [336, 460]}, {layer: "nhdarea", ftypes: [460]}]},
     {code: "5", process: "js:MustIntersectEndpoint", subjectLayer: "nhdpoint", subjectFType: 450, objects: [{layer: "nhdflowline", ftypes: [420, 460]}]},
-    {code: "6", process: "js:MustHaveVerticalRelationship", subjectLayer: "nhdflowline", subjectFType: 428, objects: [{layer: "nhdflowline"}], autoCorrectable: true},
-    {code: "7", process: "js:MustNotCross", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdwaterbody", ftypes: [390]}], autoCorrectable: true},
+    {code: "6", title: "Pipeline Vertical Relationship", process: "js:MustHaveVerticalRelationship", subjectLayer: "nhdflowline", subjectFType: 428, objects: [{layer: "nhdflowline"}], autoCorrectable: true},
+    {code: "7", title: "Stream or River Crossing Waterbody", process: "js:MustNotCross", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdwaterbody", ftypes: [390]}], autoCorrectable: true},
     {code: "8", process: "js:MustNotCross", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [460]}]},
     {code: "9", process: "js:MustIntersectEndpoint", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [460]}]},
 ];
