@@ -23,7 +23,7 @@ public class USGSTest extends USGSTestSupport {
         assertNotNull(cat);
         assertEquals("namespaces count", 1, cat.getNamespaces().size());
         List<LayerInfo> layers = cat.getLayers();
-        assertEquals(7, layers.size());
+        assertEquals(8, layers.size());
         List<DataStoreInfo> dataStores = cat.getDataStores();
         for (DataStoreInfo dsi: dataStores) {
             System.out.println(dsi.getDataStore(null).getNames());
