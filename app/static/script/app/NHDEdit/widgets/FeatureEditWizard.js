@@ -129,6 +129,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.postDeleteButton = new Ext.Button({
             text: this.deleteButtonText,
             tooltip: this.deleteButtonTooltip,
+            iconCls: "delete",
             hidden: true,
             handler: this.deleteFeature,
             scope: this
