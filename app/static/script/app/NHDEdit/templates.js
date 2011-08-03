@@ -41,8 +41,13 @@ NHDEdit.exceptionTemplates = {
         }
     ),
     "js:MustHaveVerticalRelationship": new Ext.XTemplate(
-        ['Pipeline {layer} features must have a vertical relationship. ',
-        '<tpl if="values.autoCorrectable">This exception can be autocorrected.</tpl>'].join("")
+        ['{subjectFType:this.getFType} {subjectLayer} features must have a vertical relationship. ',
+        '<tpl if="values.autoCorrectable">This exception can be autocorrected.</tpl>'].join(""), 
+        {
+            getFType: function(value) {
+                return NHDEdit.fTypeDict[value];
+            }
+        }
     ),
     "js:MustTouch": new Ext.XTemplate(
         ['{subjectFType:this.getFType} {subjectLayer} features must touch (intersect but not cross) ',

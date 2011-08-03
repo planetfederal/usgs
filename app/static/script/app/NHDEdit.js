@@ -58,21 +58,16 @@
         window.location.hash = Ext.urlEncode(urlConfig);
     };
     
-    /** private: method[getPreference]
-     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
-     *  :returns: ``Objext`` the object from the preferences
-     */
-    NHDEdit.getPreference = function(code) {
-        return NHDEdit.preferences[code] || {};
-    };
-    
     /** private: method[setPreference]
-     *  :arg code: ``String`` exception code in the NHDEdit.preferences object
+     *  :arg code: ``Object`` rule with an exception code
      *  :arg object: ``Object`` object to set for the preference
      */
-    NHDEdit.setPreference = function(code, object) {
-        var urlConfig = getUrlConfig();
-        var pref = Ext.apply(NHDEdit.preferences[code] || {}, object);
+    NHDEdit.setPreference = function(rule, object) {
+        var code = rule.code,
+            urlConfig = getUrlConfig();
+        var pref = Ext.apply(NHDEdit.preferences[code] || {
+            title: rule.title
+        }, object);
         NHDEdit.preferences[code] = pref;
         var record = NHDEdit.metadataRecord;
         if (record) {

@@ -33,16 +33,9 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     vendorId: 'usgs',
 
-    /** private: property[autoCorrectValue]
-     *  ``Boolean|Object`` the value to set on the NativeElement when the
-     *  Autocorrect checkbox is checked.
-     */
-    autoCorrectValue: null,
-    
     ruleSpecificItems: {
         // specific handling for vertical relationship rule
-        "6": function() {
-            var code = "6";
+        "6": function(rule) {
             return {
                 xtype: "combo",
                 store: ["over", "under"],
@@ -53,30 +46,9 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 listeners: {
                     select: function(combo, record, index) {
                         var value = combo.getValue();
-                        this.autoCorrectValue = {
-                            relationship: value
-                        };
-                        var pref = NHDEdit.getPreference(code);
-                        NHDEdit.setPreference(code, {
-                            autoCorrect: pref.autoCorrect ? this.autoCorrectValue : false
+                        NHDEdit.setPreference(rule, {
+                            autoCorrect: value ? {relationship: value} : false
                         });
-                        if (this._beforeWrite6) {
-                            this.store.removeListener('beforewrite', this._beforeWrite6);
-                        }
-                        this._beforeWrite6 = function(store, action, rs, options) {
-                            var nativeElements = options.params.nativeElements;
-                            var obj = {};
-                            if (nativeElements && nativeElements.length === 1) {
-                                obj = Ext.util.JSON.decode(nativeElements[0].value);
-                            }
-                            obj[code] = {autoCorrect: {relationship: value}};
-                            options.params.nativeElements = [{
-                                vendorId: this.vendorId,
-                                safeToIgnore: true,
-                                value: Ext.util.JSON.encode(obj)
-                            }];
-                        };
-                        this.store.addListener('beforewrite', this._beforeWrite6, this, {single: true});
                     },
                     scope: this
                 }
@@ -87,13 +59,12 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
         var known = false,
-            code = this.getProperty("code"),
             locator = this.getProperty("locator"),
             tpl = NHDEdit.exceptionTemplates[locator];
         if (tpl) {
             // this is a known exception type, we expect a parseable message
-            var messageObj = this.getMessageObject();
-            if (messageObj) {
+            var rule = this.getRule();
+            if (rule) {
                 known = true;
                 this.add({
                     xtype: "fieldset",
@@ -101,22 +72,18 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                     items: [{
                         xtype: "box",
                         cls: "app-exception-text",
-                        html: "<p>" + tpl.applyTemplate(messageObj) +
+                        html: "<p>" + tpl.applyTemplate(rule) +
                             "</p><p>Return to the previous step to keep editing " +
                             "attributes, modify the geometry, or provide additional " + 
                             "information below.</p>"
                     }]
                 });
-                if (messageObj.autoCorrectable) {
-                    // add an auto-correct field
-                    this.add(this.createAutoCorrectField(code));
-                    // add any items for specific rules
-                    if (code in this.ruleSpecificItems) {
-                        this.add(this.ruleSpecificItems[code].call(this));
-                    }
+                if (rule.autoCorrectable) {
+                    // add auto-correct items or a generic auto-correct field
+                    this.add(this.createAutoCorrectItems(rule));
                 } else {
                     // allow user to queue exception
-                    this.add(this.createQueueField(code));
+                    this.add(this.createQueueField(rule.code));
                 }
             }
         }
@@ -145,21 +112,28 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         this.doLayout();
     },
 
-    createAutoCorrectField: function(code) {
-        return {
-            xtype: "checkbox",
-            fieldLabel: "Autocorrect",
-            value: false,
-            name: "autoCorrect",
-            listeners: {
-                "check": function(checkbox, checked) {
-                    NHDEdit.setPreference(code, {
-                        autoCorrect: checked ? this.autoCorrectValue || true : false
-                    });
-                },
-                scope: this
-            }            
-        };
+    createAutoCorrectItems: function(rule) {
+        var code = rule.code, items;
+        // add any items for specific rules
+        if (code in this.ruleSpecificItems) {
+            items = this.ruleSpecificItems[code].call(this, rule);
+        } else {
+            items = {
+                xtype: "checkbox",
+                fieldLabel: "Autocorrect",
+                value: false,
+                name: "autoCorrect",
+                listeners: {
+                    "check": function(checkbox, checked) {
+                        NHDEdit.setPreference(rule, {
+                            autoCorrect: checked ? true : false
+                        });
+                    },
+                    scope: this
+                }            
+            };
+        }
+        return items;
     },
     
     createQueueField: function(code) {
@@ -201,14 +175,14 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     },
 
 
-    /** private: method[getMessageObject]
+    /** private: method[getRule]
      *  :returns: ``Object`` The first exception message decoded.  Returns 
      *      undefined if the message is not a JSON string.
      * 
      *  Try to decode the first exception text as a JSON string.  If the first
      *  message is not valid JSON, undefined will be returned.
      */
-    getMessageObject: function() {
+    getRule: function() {
         // get the first exception
         var exc = this.exceptionReport.exceptions[0];
         var obj;
