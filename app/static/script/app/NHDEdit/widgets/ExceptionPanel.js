@@ -199,53 +199,59 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
-        var code = this.getProperty("code"),
+        var known = false,
+            code = this.getProperty("code"),
             locator = this.getProperty("locator"),
-            tpl = this.templates[locator],
-            text, autoCorrectable;
+            tpl = this.templates[locator];
         if (tpl) {
+            // this is a known exception type, we expect a parseable message
             var messageObj = this.getMessageObject();
             if (messageObj) {
-                autoCorrectable = messageObj.autoCorrectable;
-                text = "<p>" + tpl.applyTemplate(messageObj) +
-                    "</p><p>Return to the previous step to keep editing " +
-                    "attributes, modify the geometry, or provide additional " + 
-                    "information below.</p>";
+                known = true;
+                this.add({
+                    xtype: "fieldset",
+                    title: "Exception",
+                    items: [{
+                        xtype: "box",
+                        cls: "app-exception-text",
+                        html: "<p>" + tpl.applyTemplate(messageObj) +
+                            "</p><p>Return to the previous step to keep editing " +
+                            "attributes, modify the geometry, or provide additional " + 
+                            "information below.</p>"
+                    }]
+                });
+                var recoveryForm = this.getWriter(locator);
+                if (recoveryForm) {
+                    var options = {
+                        code: code,
+                        autoCorrectable: messageObj.autoCorrectable
+                    };
+                    this.add(recoveryForm.call(this, locator, options));
+                }
             }
         }
-        if (!text) {
-            text = gxp.util.getOGCExceptionText(this.exceptionReport);
-        }
-        this.add({
-            xtype: "fieldset",
-            title: "Exception",
-            items: [{
-                xtype: "box",
-                cls: "app-exception-text",
-                html: text
-            }]
-        });
-        var recoveryForm = this.getWriter(locator);
-        if (recoveryForm) {
-            var options = {
-                code: code,
-                autoCorrectable: autoCorrectable
-            };
-            this.add(recoveryForm.call(this, locator, options));
-        } else {
+        if (!known) {
             this.add({
-                xtype: "displayfield", 
-                fieldLabel: "Locator", 
-                name: "locator", 
-                value: locator
-            });
-            this.add({
-                xtype: "displayfield", 
-                fieldLabel: "Exception code", 
-                name: "exceptionCode", 
-                value: code
+                xtype: "fieldset",
+                title: "Exception",
+                items: [{
+                    xtype: "displayfield", 
+                    fieldLabel: "Exception code", 
+                    name: "exceptionCode", 
+                    value: code
+                }, {
+                    xtype: "displayfield", 
+                    fieldLabel: "Locator", 
+                    name: "locator", 
+                    value: locator
+                }, {
+                    xtype: "box",
+                    cls: "app-exception-text",
+                    html: gxp.util.getOGCExceptionText(this.exceptionReport)
+                }]
             });
         }
+        
         this.doLayout();
     },
 
