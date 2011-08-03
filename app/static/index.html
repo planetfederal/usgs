@@ -101,6 +101,9 @@
                     ptype: "gxp_removelayer",
                     actionTarget: ["tree.tbar", "tree.contextMenu"]
                 }, {
+                    ptype: "gxp_layerproperties",
+                    actionTarget: ["tree.tbar", "tree.contextMenu"]
+                }, {
                     ptype: "gxp_zoomtoextent",
                     actionTarget: {target: "map.tbar", index: 0}
                 }, {
@@ -110,12 +113,16 @@
                     ptype: "gxp_navigationhistory",
                     actionTarget: {target: "map.tbar", index: 3}
                 }, {
+                    ptype: "gxp_wmsgetfeatureinfo",
+                    toggleGroup: "main",
+                    actionTarget: {target: "map.tbar", index: 5}
+                }, {
                     ptype: "gxp_featureeditor",
                     featureManager: "nhd-manager",
                     autoLoadFeatures: true,
                     snappingAgent: "flowline-snapping",
                     toggleGroup: "main",
-                    actionTarget: {target: "map.tbar", index: 5},
+                    actionTarget: {target: "map.tbar", index: 6},
                     tolerance: 6,
                     outputConfig: {
                         xtype: "app_featureeditwizard",
