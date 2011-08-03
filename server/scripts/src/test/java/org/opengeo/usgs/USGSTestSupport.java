@@ -1,6 +1,7 @@
 package org.opengeo.usgs;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,7 +137,9 @@ public abstract class USGSTestSupport extends GeoServerAbstractTestSupport {
      * @throws Exception if an error occurs
      */
     protected final Document postRequest(String resource) throws Exception {
-        File file = new File(getClass().getResource(resource).getFile());
+        URL resourceURL = getClass().getResource(resource);
+        assertNotNull(resourceURL);
+        File file = new File(resourceURL.getFile());
         String xml = FileUtils.readFileToString(file, "UTF-8");
         Document dom = postAsDOM("wfs", xml);
         assertNotNull(dom);

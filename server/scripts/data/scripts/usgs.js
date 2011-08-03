@@ -13,8 +13,8 @@ var featureRules = [
     {code: "5", process: "js:MustIntersectEndpoint", subjectLayer: "nhdpoint", subjectFType: 450, objects: [{layer: "nhdflowline", ftypes: [420, 460]}]},
     {code: "6", title: "Pipeline Vertical Relationship", process: "js:MustHaveVerticalRelationship", subjectLayer: "nhdflowline", subjectFType: 428, objects: [{layer: "nhdflowline"}], autoCorrectable: true},
     {code: "7", title: "Stream or River Crossing Waterbody", process: "js:MustNotCross", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdwaterbody", ftypes: [390]}], autoCorrectable: true},
-    {code: "8", process: "js:MustNotCross", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [460]}]},
-    {code: "9", process: "js:MustIntersectEndpoint", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [460]}]},
+    {code: "8", process: "js:MustTouch", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [428, 460]}, {layer: "nhdpoint", ftypes: [450]}]},
+    {code: "9", process: "js:MustIntersectEndpoint", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [460]}]}
 ];
 
 function lower(str) {

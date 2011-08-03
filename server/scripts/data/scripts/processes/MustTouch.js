@@ -5,13 +5,13 @@ var catalog = require("geoserver/catalog");
 var TOLERANCE = require("../usgs").TOLERANCE;
 
 exports.process = new Process({
-    title: "Must Intersect Endpoint",
-    description: "Determines whether a given geometry intersects an endpoint of target features.",
+    title: "Must Touch",
+    description: "Determines whether a given geometry touches (intersects and does not cross) target features.",
     inputs: {
         geometry: {
             type: "Geometry",
             title: "Input Geometry",
-            description: "Input geometry that must intersect at least one target feature geometry endpoint."
+            description: "Input geometry that must touch at least one target feature geometry."
         },
         featureType: {
             type: "String",
@@ -32,8 +32,8 @@ exports.process = new Process({
     outputs: {
         result: {
             type: "Boolean",
-            title: "Intersection Result",
-            description: "The input geometry intersects at least one endpoint of one feature in the target feature set."
+            title: "Result",
+            description: "The input geometry touches at least one feature in the target feature set (and does not cross any)."
         }
     },
     run: function(inputs) {
@@ -44,23 +44,19 @@ exports.process = new Process({
         if (inputs.filter) {
             filter = filter.and(inputs.filter);
         }
+        var touches = false;
         var cursor = layer.query(filter);
-        var intersects = false;
         cursor.forEach(function(target) {
-            target.geometry.endPoints.forEach(function(point) {
-                if (geometry.distance(point) <= TOLERANCE) {
-                    // hit endpoint
-                    intersects = true;
-                }
-                return !intersects;
-            });
-            return !intersects;
+            touches = true;
+            if (geometry.crosses(target.geometry)) {
+                touches = false;
+            }
+            return touches; // stop looking if crosses
         });
-        // in case we stopped early
         cursor.close();
-        LOGGER.info("MustIntersectEndpoint " + inputs.featureType + ": " + intersects + " " + filter);
+        LOGGER.info("MustTouch " + inputs.featureType + ": " + touches + " " + filter);
         return {
-            result: intersects
+            result: touches
         };
     }
 });

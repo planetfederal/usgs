@@ -77,7 +77,9 @@ public class NHDFlowlineTest extends USGSTestSupport {
 
     public void testInsertsPass() throws Exception {
         
-        String[] files = {"xml/rule-9-pass.xml"};
+        String[] files = {
+                "xml/rule-8-pass.xml",
+                "xml/rule-9-pass.xml"};
         
         for (String file : files) {
             Document dom = postRequest(file);
