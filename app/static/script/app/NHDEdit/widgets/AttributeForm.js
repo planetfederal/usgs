@@ -45,6 +45,7 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             fields: ['value', 'description'],
             data : NHDEdit.getFCodes(typeName)
         });
+        fCodeStore.sort("value");
         var fieldset = new Ext.form.FieldSet({title: "Attributes", defaults: {width: 150}});
         this.schema.each(function(r) {
             var name = r.get("name");
