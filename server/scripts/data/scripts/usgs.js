@@ -6,15 +6,15 @@ var NAMESPACE_URI = exports.NAMESPACE_URI = "http://www.usgs.gov/";
 var TOLERANCE = exports.TOLERANCE = 0.000001; // meters tolerance for intersection tests
 
 var featureRules = [
-    {code: "1", process: "js:MustIntersect", subjectLayer: "nhdpoint", subjectFType: 431, objects: [{layer: "nhdflowline"}]},
-    {code: "2", process: "js:MustIntersect", subjectLayer: "nhdpoint", subjectFType: 487, objects: [{layer: "nhdflowline"}]},
-    {code: "3", process: "js:MustIntersect", subjectLayer: "nhdpoint", subjectFType: 369, objects: [{layer: "nhdline", ftypes: [398]}, {layer: "nhdarea", ftypes: [398]}]},
-    {code: "4", process: "js:MustIntersect", subjectLayer: "nhdpoint", subjectFType: 398, objects: [{layer: "nhdflowline", ftypes: [336, 460]}, {layer: "nhdarea", ftypes: [460]}]},
-    {code: "5", process: "js:MustIntersectEndpoint", subjectLayer: "nhdpoint", subjectFType: 450, objects: [{layer: "nhdflowline", ftypes: [420, 460]}]},
-    {code: "6", title: "Pipeline Vertical Relationship", process: "js:MustHaveVerticalRelationship", subjectLayer: "nhdflowline", subjectFType: 428, objects: [{layer: "nhdflowline"}], autoCorrectable: true},
-    {code: "7", title: "Stream or River Crossing Waterbody", process: "js:MustNotCross", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdwaterbody", ftypes: [390]}], autoCorrectable: true},
-    {code: "8", process: "js:MustTouch", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [428, 460]}, {layer: "nhdpoint", ftypes: [450]}]},
-    {code: "9", process: "js:MustIntersectEndpoint", subjectLayer: "nhdflowline", subjectFType: 460, objects: [{layer: "nhdflowline", ftypes: [460]}]}
+    {code: "1", process: "js:MustIntersect", subjectLayer: "NHDPoint", subjectFType: 431, objects: [{layer: "NHDFlowline"}]},
+    {code: "2", process: "js:MustIntersect", subjectLayer: "NHDPoint", subjectFType: 487, objects: [{layer: "NHDFlowline"}]},
+    {code: "3", process: "js:MustIntersect", subjectLayer: "NHDPoint", subjectFType: 369, objects: [{layer: "NHDLine", ftypes: [398]}, {layer: "NHDArea", ftypes: [398]}]},
+    {code: "4", process: "js:MustIntersect", subjectLayer: "NHDPoint", subjectFType: 398, objects: [{layer: "NHDFlowline", ftypes: [336, 460]}, {layer: "NHDArea", ftypes: [460]}]},
+    {code: "5", process: "js:MustIntersectEndpoint", subjectLayer: "NHDPoint", subjectFType: 450, objects: [{layer: "NHDFlowline", ftypes: [420, 460]}]},
+    {code: "6", title: "Pipeline Vertical Relationship", process: "js:MustHaveVerticalRelationship", subjectLayer: "NHDFlowline", subjectFType: 428, objects: [{layer: "NHDFlowline"}], autoCorrectable: true},
+    {code: "7", title: "Stream or River Crossing Waterbody", process: "js:MustNotCross", subjectLayer: "NHDFlowline", subjectFType: 460, objects: [{layer: "NHDWaterbody", ftypes: [390]}], autoCorrectable: true},
+    {code: "8", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 460, objects: [{layer: "NHDFlowline", ftypes: [428, 460]}, {layer: "NHDPoint", ftypes: [450]}]},
+    {code: "9", process: "js:MustIntersectEndpoint", subjectLayer: "NHDFlowline", subjectFType: 460, objects: [{layer: "NHDFlowline", ftypes: [460]}]}
 ];
 
 function lower(str) {

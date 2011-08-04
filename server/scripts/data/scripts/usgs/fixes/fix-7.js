@@ -4,8 +4,8 @@ var catalog = require("geoserver/catalog");
 var filter = require("geoscript/filter");
 var geom = require("geoscript/geom");
 
-var flowlines = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdflowline");
-var waterbodies = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdwaterbody");
+var waterbodies = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDWaterbody");
+var flowlines = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDFlowline");
 
 exports.fix = function(featureInfo, outputs) {
 

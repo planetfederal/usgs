@@ -1,5 +1,5 @@
 <layer>
-  <name>nhdverticalrelationship</name>
+  <name>NHDVerticalRelationship</name>
   <id>LayerInfoImpl-285d23be:13187b91e60:-7feb</id>
   <type>VECTOR</type>
   <resource class="featureType">
@@ -7,13 +7,13 @@
   </resource>
   <enabled>true</enabled>
   <metadata>
-    <entry key="GWC.metaTilingX">4</entry>
     <entry key="GWC.autoCacheStyles">true</entry>
+    <entry key="GWC.metaTilingX">4</entry>
     <entry key="GWC.metaTilingY">4</entry>
     <entry key="GWC.gutter">0</entry>
     <entry key="GWC.enabled">true</entry>
-    <entry key="GWC.gridSets">EPSG:4326,EPSG:900913</entry>
     <entry key="GWC.cacheFormats">image/png,image/jpeg</entry>
+    <entry key="GWC.gridSets">EPSG:4326,EPSG:900913</entry>
   </metadata>
   <attribution>
     <logoWidth>0</logoWidth>

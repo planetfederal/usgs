@@ -3,8 +3,8 @@ var usgs = require("usgs");
 var catalog = require("geoserver/catalog");
 var filter = require("geoscript/filter");
 
-var relationships = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdverticalrelationship");
-var flowlines = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdflowline");
+var relationships = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDVerticalRelationship");
+var flowlines = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDFlowline");
 
 exports.fix = function(featureInfo, outputs, autoCorrect) {
 

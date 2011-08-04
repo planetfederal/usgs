@@ -47,7 +47,7 @@ exports.process = new Process({
         }
     },
     run: function(inputs) {
-        var relationships = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdverticalrelationship");
+        var relationships = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDVerticalRelationship");
         var geometry = inputs.geometry;
         var layer = catalog.getFeatureType(inputs.namespace, inputs.featureType);
 

@@ -1,6 +1,6 @@
 var usgs = require("../usgs");
 var catalog = require("geoserver/catalog");
-var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "nhdexceptions");
+var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDExceptions");
 
 exports.beforeCommit = function(details, request) {
     LOGGER.info("beforeCommit");

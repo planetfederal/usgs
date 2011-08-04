@@ -82,7 +82,7 @@
                     id: "flowline-snapping",
                     targets: [{
                         source: "local",
-                        name: "usgs:nhdflowline",
+                        name: "usgs:NHDFlowline",
                         maxResolution: 5,
                         node: true,
                         vertex: false,
@@ -134,7 +134,7 @@
                         excludeFields: ["OBJECTID","ComID","Permanent_Identifier", "WBAreaComID", "WBArea_Permanent_Identifier"],
                         metadataSource: {
                             url: "/geoserver/wfs?",
-                            featureType: "nhdmetadata",
+                            featureType: "NHDMetadata",
                             featureNS: "http://www.usgs.gov/"
                         }
                     }
@@ -156,7 +156,7 @@
                 }, {
                     ptype: "app_queue",
                     url: "/geoserver/wfs?",
-                    featureType: "nhdexceptions",
+                    featureType: "NHDExceptions",
                     featureNS: "http://www.usgs.gov/",
                     outputConfig: {
                         title: "Exception queue",
@@ -222,19 +222,19 @@
                         visibility: false
                     }, {
                         source: "local",
-                        name: "usgs:nhdwaterbody"
+                        name: "usgs:NHDWaterbody"
                     }, {
                         source: "local",
-                        name: "usgs:nhdarea"
+                        name: "usgs:NHDArea"
                     }, {
                         source: "local",
-                        name: "usgs:nhdline"
+                        name: "usgs:NHDLine"
                     }, {
                         source: "local",
-                        name: "usgs:nhdflowline"
+                        name: "usgs:NHDFlowline"
                     }, {
                         source: "local",
-                        name: "usgs:nhdpoint"
+                        name: "usgs:NHDPoint"
                     }]
                 }
             });
