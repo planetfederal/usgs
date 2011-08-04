@@ -69,15 +69,18 @@ function updateQueuedExceptions() {
         var fid = exception.get("featureid");
         var code = exception.get("processid");
         var feature = layer.get(fid);
+        var removed = false;
         if (!feature) {
             // feature has been deleted
             removals.push(exceptionId);
+            removed = true;
         } else {
             if (fid in fidMap) {
                 var codes = fidMap[fid];
                 if (codes.indexOf(code) >= 0) {
                     // duplicate exception of this type for this feature
                     removals.push(exceptionId);
+                    removed = true;
                 } else {
                     codes.push(fid);
                 }
@@ -86,9 +89,24 @@ function updateQueuedExceptions() {
                 fidMap[fid] = [code];
             }
         }
+        if (!removed) {
+            // re-run the rule
+            var featureInfo = {
+                feature: feature,
+                uri: usgs.NAMESPACE_URI,
+                name: layer.name
+            };
+            var satisfied = usgs.ruleSatisfied(code, featureInfo);
+            if (satisfied) {
+                removals.push(exceptionId);
+                removed = true;
+            }
+        }
     });
-    LOGGER.info("removing exceptions: " + removals);
-    exceptions.remove(fidFilter(removals));
+    if (removals.length > 0) {
+        LOGGER.info("removing exceptions: " + removals);
+        exceptions.remove(fidFilter(removals));
+    }
 }
 
 /**

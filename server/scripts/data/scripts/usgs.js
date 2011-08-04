@@ -46,6 +46,12 @@ function getRules(featureInfo) {
     return rules;
 };
 
+function getRule(code) {
+    return featureRules.filter(function(rule) {
+        return rule.code === code;
+    })[0];
+}
+
 function getFix(rule) {
     return require("./usgs/fixes/fix-" + rule.code).fix;
 }
@@ -126,6 +132,15 @@ function getProcessOutputs(featureInfo, rule, detail) {
         }
     }
     return outputs;
+};
+
+exports.ruleSatisfied = function(code, featureInfo) {
+    var satisfied = false;
+    var rule = getRule(code);
+    if (rule) {
+        satisfied = getProcessOutputs(featureInfo, rule).result;
+    }
+    return rule;
 };
 
 var getFirstException = exports.getFirstException = function(featureInfo, hints) {
