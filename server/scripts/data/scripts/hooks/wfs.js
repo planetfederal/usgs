@@ -1,4 +1,5 @@
 var usgs = require("../usgs");
+var fidFilter = require("geoscript/filter").fids;
 var catalog = require("geoserver/catalog");
 var exceptions = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDExceptions");
 
@@ -56,7 +57,21 @@ exports.afterTransaction = function(details, request) {
             LOGGER.info("exception queued: " + record.exceptionmessage);
         }
     }
+    updateQueuedExceptions();
 };
+
+function updateQueuedExceptions() {
+    var removals = [];
+    exceptions.features.forEach(function(exception) {
+        var layer = catalog.getFeatureType(usgs.NAMESPACE_URI, exception.get("featuretype"));
+        var fid = exception.get("featureid");
+        var feature = layer.get(fid);
+        if (!feature) {
+            removals.push(exception.id);
+        }
+    });
+    exceptions.remove(fidFilter(removals));
+}
 
 /**
  * Parse content from first Native element with vendorId "usgs".  Content
