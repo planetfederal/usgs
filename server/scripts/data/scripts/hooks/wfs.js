@@ -62,14 +62,32 @@ exports.afterTransaction = function(details, request) {
 
 function updateQueuedExceptions() {
     var removals = [];
+    var fidMap = {};
     exceptions.features.forEach(function(exception) {
+        var exceptionId = exception.id;
         var layer = catalog.getFeatureType(usgs.NAMESPACE_URI, exception.get("featuretype"));
         var fid = exception.get("featureid");
+        var code = exception.get("processid");
         var feature = layer.get(fid);
         if (!feature) {
-            removals.push(exception.id);
+            // feature has been deleted
+            removals.push(exceptionId);
+        } else {
+            if (fid in fidMap) {
+                var codes = fidMap[fid];
+                if (codes.indexOf(code) >= 0) {
+                    // duplicate exception of this type for this feature
+                    removals.push(exceptionId);
+                } else {
+                    codes.push(fid);
+                }
+            } else {
+                // first exception of this type for this feature
+                fidMap[fid] = [code];
+            }
         }
     });
+    LOGGER.info("removing exceptions: " + removals);
     exceptions.remove(fidFilter(removals));
 }
 
