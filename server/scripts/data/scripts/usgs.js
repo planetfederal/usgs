@@ -29,27 +29,25 @@ function lower(str) {
 }
 
 function getRules(featureInfo) {
-    var rules = [];
-    if (lower(featureInfo.uri) == lower(NAMESPACE_URI)) {
-        var fType = featureInfo.feature.get("FType");
-        var name = lower(featureInfo.name);
-        var candidate;
-        for (var i=0, ii=featureRules.length; i<ii; ++i) {
-            candidate = featureRules[i];
-            if (lower(candidate.subjectLayer) == name) {
-                if (!candidate.subjectFType || candidate.subjectFType == fType) {
-                    rules.push(candidate);
-                }
-            }
-        }
-    }
-    return rules;
+    return featureRules.filter(function(rule) {
+        return ruleApplies(rule, featureInfo);
+    });
 };
 
 function getRule(code) {
     return featureRules.filter(function(rule) {
         return rule.code === code;
     })[0];
+}
+
+function ruleApplies(rule, featureInfo) {
+    var applies = false;
+    if (lower(featureInfo.uri) == lower(NAMESPACE_URI) && lower(rule.subjectLayer) == lower(featureInfo.name)) {
+        if (!rule.subjectFType || rule.subjectFType == featureInfo.feature.get("FType")) {
+            applies = true;
+        }
+    }
+    return applies;
 }
 
 function getFix(rule) {
@@ -138,7 +136,11 @@ exports.ruleSatisfied = function(code, featureInfo) {
     var satisfied = false;
     var rule = getRule(code);
     if (rule) {
-        satisfied = getProcessOutputs(featureInfo, rule).result;
+        if (!ruleApplies(rule, featureInfo)) {
+            satisfied = true;
+        } else {
+            satisfied = getProcessOutputs(featureInfo, rule).result;
+        }
     }
     return satisfied;
 };
