@@ -140,7 +140,7 @@ exports.ruleSatisfied = function(code, featureInfo) {
     if (rule) {
         satisfied = getProcessOutputs(featureInfo, rule).result;
     }
-    return rule;
+    return satisfied;
 };
 
 var getFirstException = exports.getFirstException = function(featureInfo, hints) {
