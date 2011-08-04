@@ -95,7 +95,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                     xtype: "displayfield", 
                     fieldLabel: "Exception code", 
                     name: "exceptionCode", 
-                    value: code
+                    value: this.getProperty("code")
                 }, {
                     xtype: "displayfield", 
                     fieldLabel: "Locator", 
