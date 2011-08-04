@@ -89,7 +89,8 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             scope: this
         });
         var me = this;
-        this.grid = new gxp.grid.FeatureGrid({
+        var output = NHDEdit.plugins.Preferences.superclass.addOutput.call(this, {
+            xtype: "gxp_featuregrid",
             cls: "app-exceptionqueue",
             store: this.featureStore,
             includeFields: ["exceptionmessage"],
@@ -136,13 +137,12 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             schema: this.schema,
             loadMask: true,
             autoExpandColumn: 1,
-            height: 300
+            height: 200,
+            autoHeight: false,
+            border: false
         });
-        return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, {
-            xtype: 'container', 
-            layout: 'fit', 
-            items: [this.grid]
-        });
+        this.grid = output[0];
+        return output;
     },
 
     /** api: method[addActions]
