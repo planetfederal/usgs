@@ -84,7 +84,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
         this.featureStore.load();
         this.target.on({
             featureedit: function() {
-                this.featureStore.reload()
+                this.featureStore.reload();
             },
             scope: this
         });
