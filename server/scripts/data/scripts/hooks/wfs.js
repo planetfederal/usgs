@@ -65,41 +65,47 @@ function updateQueuedExceptions() {
     var fidMap = {};
     exceptions.features.forEach(function(exception) {
         var exceptionId = exception.id;
-        var layer = catalog.getFeatureType(usgs.NAMESPACE_URI, exception.get("featuretype"));
-        var fid = exception.get("featureid");
-        var code = exception.get("processid");
-        var feature = layer.get(fid);
         var removed = false;
-        if (!feature) {
-            // feature has been deleted
+        var layer = catalog.getFeatureType(usgs.NAMESPACE_URI, exception.get("featuretype"));
+        if (!layer) {
+            // bogus layer name
             removals.push(exceptionId);
             removed = true;
         } else {
-            if (fid in fidMap) {
-                var codes = fidMap[fid];
-                if (codes.indexOf(code) >= 0) {
-                    // duplicate exception of this type for this feature
-                    removals.push(exceptionId);
-                    removed = true;
-                } else {
-                    codes.push(fid);
-                }
-            } else {
-                // first exception of this type for this feature
-                fidMap[fid] = [code];
-            }
-        }
-        if (!removed) {
-            // re-run the rule
-            var featureInfo = {
-                feature: feature,
-                uri: usgs.NAMESPACE_URI,
-                name: layer.name
-            };
-            var satisfied = usgs.ruleSatisfied(code, featureInfo);
-            if (satisfied) {
+            var fid = exception.get("featureid");
+            var code = exception.get("processid");
+            var feature = layer.get(fid);
+            if (!feature) {
+                // feature has been deleted
                 removals.push(exceptionId);
                 removed = true;
+            } else {
+                if (fid in fidMap) {
+                    var codes = fidMap[fid];
+                    if (codes.indexOf(code) >= 0) {
+                        // duplicate exception of this type for this feature
+                        removals.push(exceptionId);
+                        removed = true;
+                    } else {
+                        codes.push(fid);
+                    }
+                } else {
+                    // first exception of this type for this feature
+                    fidMap[fid] = [code];
+                }
+            }
+            if (!removed) {
+                // re-run the rule
+                var featureInfo = {
+                    feature: feature,
+                    uri: usgs.NAMESPACE_URI,
+                    name: layer.name
+                };
+                var satisfied = usgs.ruleSatisfied(code, featureInfo);
+                if (satisfied) {
+                    removals.push(exceptionId);
+                    removed = true;
+                }
             }
         }
     });
