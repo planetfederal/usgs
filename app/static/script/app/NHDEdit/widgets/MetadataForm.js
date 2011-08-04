@@ -32,6 +32,21 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     featureStore: null,
 
     openWindow: null,
+    
+    fieldMetadata: {
+        contactorganization: {fieldset: "contact", label: "Contact Organization"},
+        contactemailaddress: {fieldset: "contact", label: "Contact E-mail"},
+        contactvoicetelephone: {fieldset: "contact", label: "Contact Telephone"},
+        address: {fieldset: "contact", label: "Address"},
+        postalcode: {fieldset: "contact", label: "Postal Code"},
+        city: {fieldset: "contact", label: "City"},
+        stateorprovince: {fieldset: "contact", label: "State or Province"},
+        contactinstructions: {fieldset: "contact", label: "Contact Instructions"},
+        datasetcredit: {label: "Dataset Credit", xtype: "textarea"},
+        metadatadate: {label: "Metadata Date"},
+        metadatastandardname: {label: "Metadata Standard Name"},
+        metadatastandardversion: {label: "Metadata Standard Version"}
+    },
 
     initComponent : function() {
         this.schema = new GeoExt.data.AttributeStore({
@@ -112,6 +127,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.getForm().items.each(function(field) {
             var value = record.get(field.name);
             field.setValue(value);
+            if (!value && field.getXType().indexOf("date") == 0) {
+                field.setValue(new Date().format("c"));
+            }
             if (copy === true) {
                 field.on("change", function() {
                     NHDEdit.setMetadataRecord(null);
@@ -184,39 +202,68 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     onLoad: function() {
         this.createStore();
         //Ext.getCmp("app-save-button").setDisabled(false);
-        var masterFieldset = new Ext.form.FieldSet({title: "Metadata Record"});
+        var masterFieldset = new Ext.form.FieldSet({
+            title: "Metadata Record",
+            cls: "app-metadata-fieldset",
+            labelAlign: "top"
+        });
         var fieldSet = new Ext.form.FieldSet({
             collapsible: true,
             collapsed: true,
             title: "Optional",
-            height: 300,
             autoHeight: false,
             autoScroll: true,
-            labelWidth: 170,
+            labelAlign: "top",
+            defaults: {
+                anchor: "-10",
+                labelAlign: "top"
+            },
             listeners: {
-                "expand": function() { fieldSet.setHeight(250); }
+                "expand": function() { fieldSet.setHeight(220); }
             }
         });
-        this.schema.each(function(r) {
-            var type = r.get("type");
-            if (type.match(/^[^:]*:?((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry))/)) {
-                // exclude gml geometries
-                return;
+        var fieldSets = {
+            contact: new Ext.form.FieldSet({
+                title: "Contact",
+                defaults: {
+                    anchor: "100%",
+                    labelAlign: "top"
+                }
+            })
+        };
+        for (var s in fieldSets) {
+            fieldSet.add(fieldSets[s]);
+        }
+        var desc = this.schema.getAt(this.schema.findBy(function(r) {
+            return r.get("name").toLowerCase() == "processdescription";
+        }));
+        var fieldCfg = GeoExt.form.recordToField(desc);
+        fieldCfg.xtype = "textarea";
+        fieldCfg.fieldLabel = "Commit message";
+        fieldCfg.allowBlank = false;
+        fieldCfg.anchor = "100%";
+        masterFieldset.add(fieldCfg);
+
+        var rec, fieldData, type, name;
+        for (var field in this.fieldMetadata) {
+            fieldData = this.fieldMetadata[field];
+            rec = this.schema.getAt(this.schema.findBy(function(r) {
+                return r.get("name").toLowerCase() == field;
+            }, this));
+            name = rec.get("name");
+            fieldCfg = GeoExt.form.recordToField(rec);
+            fieldCfg.fieldLabel = fieldData.label;
+            if (fieldData.xtype) {
+                fieldCfg.xtype = fieldData.xtype;
             }
-            var name = r.get("name");
-            var fieldCfg = GeoExt.form.recordToField(r);
-            fieldCfg.anchor = "100%";
-            if (name.toLowerCase() === "processdescription") {
-                fieldCfg.xtype = "textarea";
-                fieldCfg.hideLabel = true;
-                fieldCfg.allowBlank = false;
-                masterFieldset.add({xtype: 'label', text: "Commit message:"});
-                masterFieldset.add(fieldCfg);
+            if (fieldData.fieldset) {
+                fieldSets[fieldData.fieldset].add(fieldCfg);
             } else {
                 fieldSet.add(fieldCfg);
             }
-        }, this);
+        }
         masterFieldset.add(fieldSet);
+
         this.add(masterFieldset);
         this.add(new Ext.Button({
             iconCls: "gxp-icon-search",

@@ -50,6 +50,13 @@ body {
     padding-bottom: 5px;
 }
 
+.app-metadata-fieldset label.x-form-item-label {
+    font-size: 0.9em;
+}
+.app-metadata-fieldset {
+    padding-bottom: 5px;
+}
+
 /* exception queue grid */
 .app-exceptionqueue td.x-action-col-cell {
     vertical-align: middle;
