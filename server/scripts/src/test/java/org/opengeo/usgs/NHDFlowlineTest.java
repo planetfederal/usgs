@@ -40,7 +40,8 @@ public class NHDFlowlineTest extends USGSTestSupport {
 
     public void testInsertPipelineAutoCorrect() throws Exception {
 
-        SimpleFeatureSource relationships = getFeatureSource(new QName("nhdverticalrelationship"));
+        SimpleFeatureSource relationships = getFeatureSource(new QName("NHDVerticalRelationship"));
+        assertNotNull(relationships);
         assertEquals("no relationships initially", 0, relationships.getFeatures().size());
         
         Document dom = postRequest("xml/rule-6-correct.xml");
@@ -56,13 +57,14 @@ public class NHDFlowlineTest extends USGSTestSupport {
         SimpleFeature feature = it.next();
         it.close();
 
-        assertEquals("above", "nhdflowline.374", feature.getAttribute("Above_Permanent_Identifier"));
-        assertEquals("below", "nhdflowline.100", feature.getAttribute("Below_Permanent_Identifier"));
+        assertEquals("above", "NHDFlowline.374", feature.getAttribute("Above_Permanent_Identifier"));
+        assertEquals("below", "NHDFlowline.223", feature.getAttribute("Below_Permanent_Identifier"));
     }
     
     public void testInsertFlowlineAutoCorrect() throws Exception {
         
-        SimpleFeatureSource flowlines = getFeatureSource(new QName("nhdflowline"));
+        SimpleFeatureSource flowlines = getFeatureSource(new QName("NHDFlowline"));
+        assertNotNull(flowlines);
         int count = flowlines.getFeatures().size();
 
         Document dom = postRequest("xml/rule-7-correct.xml");

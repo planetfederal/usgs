@@ -20,7 +20,7 @@ public class NHDPointTest extends USGSTestSupport {
     
     public void testInsertsFail() throws Exception {
         
-        // nhdpoint MustIntersect rules
+        // MustIntersect rules
         List<String> files = Arrays.asList(
                 "xml/rule-1-fail.xml",
                 "xml/rule-2-fail.xml",
@@ -31,7 +31,7 @@ public class NHDPointTest extends USGSTestSupport {
             assertViolatesRule(file, code, "js:MustIntersect");
         }
 
-        // nhdpoint MustIntersectEndpoint rules
+        // MustIntersectEndpoint rules
         files = Arrays.asList(
                 "xml/rule-5-fail.xml");
         
