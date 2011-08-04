@@ -44,12 +44,29 @@ exports.process = new Process({
         if (inputs.filter) {
             filter = filter.and(inputs.filter);
         }
+
         var touches = false;
         var cursor = layer.query(filter);
         cursor.forEach(function(target) {
             touches = true;
             if (geometry.crosses(target.geometry)) {
                 touches = false;
+                // make sure crossing is greater than tolerance
+                if (geometry.dimension === 1) {
+                    var diff = geometry.difference(target.geometry);
+                    if (target.geometry.dimension === 1) {
+                        // check if the split left a dangle less than the tolerance
+                        var line;
+                        for (var i=0, ii=diff.components.length; i<ii; ++i) {
+                            line = diff.components[i];
+                            touches = line.length <= TOLERANCE;
+                            if (touches) {
+                                // stop looking if we've found a dangle
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             return touches; // stop looking if crosses
         });
