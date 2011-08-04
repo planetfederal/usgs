@@ -72,7 +72,7 @@ exports.getQueuedExceptions = function(featureInfo, hints) {
                         namespace: NAMESPACE_URI,
                         featuretype: featureType,
                         featureid: feature.id,
-                        processid: rule.process,
+                        processid: rule.code, // TODO: fix the schema https://github.com/opengeo/usgs/issues/89
                         exceptionmessage: JSON.stringify(rule)
                     });
                 }
