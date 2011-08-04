@@ -82,6 +82,12 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
      */
     addOutput: function() {
         this.featureStore.load();
+        this.target.on({
+            featureedit: function() {
+                this.featureStore.reload()
+            },
+            scope: this
+        });
         var me = this;
         this.grid = new gxp.grid.FeatureGrid({
             cls: "app-exceptionqueue",
