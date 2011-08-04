@@ -13,7 +13,7 @@ var featureRules = [
     {code: "5", process: "js:MustIntersectEndpoint", subjectLayer: "NHDPoint", subjectFType: 450, objects: [{layer: "NHDFlowline", ftypes: [420, 460]}]},
     {code: "6", title: "Pipeline Vertical Relationship", process: "js:MustHaveVerticalRelationship", subjectLayer: "NHDFlowline", subjectFType: 428, objects: [{layer: "NHDFlowline"}], autoCorrectable: true},
     {code: "7", title: "Stream or River Crossing Waterbody", process: "js:MustNotCross", subjectLayer: "NHDFlowline", subjectFType: 460, objects: [{layer: "NHDWaterbody", ftypes: [390]}], autoCorrectable: true},
-    {code: "8", process: "js:MustTouchEndpoint", subjectLayer: "NHDFlowline", subjectFType: 334, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
+    {code: "8", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 334, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
     {code: "9", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 336, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
     {code: "10", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 420, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
     {code: "11", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 460, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
