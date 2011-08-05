@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<wfs:Transaction xmlns:wfs="http://www.opengis.net/wfs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WFS" version="1.1.0" handle="NHDMetadata.1" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+    <wfs:Insert handle="NHDMetadata.1">
+        <feature:NHDFlowline xmlns:feature="http://www.usgs.gov/">
+            <feature:Shape>
+                <gml:MultiCurve xmlns:gml="http://www.opengis.net/gml" srsName="EPSG:900913">
+                    <gml:curveMember>
+                        <gml:LineString>
+                            <gml:posList>-11709218.20290711 4932743.832278115 -11709253.442951 4932777.1278499 -11709243.888322 4932829.6783069 -11709248.665636 4932858.3421925 -11709267.774893 4932910.8926494 -11709251.054293 4932934.7792207</gml:posList>
+                        </gml:LineString>
+                    </gml:curveMember>
+                </gml:MultiCurve>
+            </feature:Shape>
+            <feature:FType>460</feature:FType>
+            <feature:FCode>46000</feature:FCode>
+        </feature:NHDFlowline>
+    </wfs:Insert>
+    <wfs:Native vendorId="usgs" safeToIgnore="true">{"16":{"autoCorrect":true}}</wfs:Native>
+</wfs:Transaction>

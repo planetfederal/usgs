@@ -36,6 +36,14 @@ public class NHDFlowlineTest extends USGSTestSupport {
             assertViolatesRule(file, code, "js:MustHaveVerticalRelationship");
         }
 
+        // MustIntersectEndpoint rules
+        files = Arrays.asList("xml/rule-16-fail.xml");
+        
+        for (String file : files) {
+            String code = file.split("-")[1];
+            assertViolatesRule(file, code, "js:MustIntersectEndpoint");
+        }
+
     }
 
     public void testInsertPipelineAutoCorrect() throws Exception {
@@ -77,11 +85,25 @@ public class NHDFlowlineTest extends USGSTestSupport {
         
     }
 
+    public void testInsertFlowlineAutoCorrectEndpoint() throws Exception {
+        
+        SimpleFeatureSource flowlines = getFeatureSource(new QName("NHDFlowline"));
+        assertNotNull(flowlines);
+
+        Document dom = postRequest("xml/rule-16-correct.xml");
+        assertNotNull(dom);
+
+        String inserted = xpath.evaluate("//wfs:totalInserted/text()", dom);
+        assertEquals("flowline inserted", "1", inserted);
+        
+    }
+
     public void testInsertsPass() throws Exception {
         
         String[] files = {
                 "xml/rule-8-pass.xml",
-                "xml/rule-9-pass.xml"};
+                "xml/rule-9-pass.xml",
+                "xml/rule-16-pass.xml"};
         
         for (String file : files) {
             Document dom = postRequest(file);

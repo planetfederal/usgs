@@ -27,6 +27,11 @@ exports.process = new Process({
             type: "String",
             title: "Target Filter",
             description: "CQL used to filter features from the target feature type (optional)."
+        },
+        detail: {
+            type: "Boolean",
+            title: "Detail",
+            description: "Generate extra detail for the output."
         }
     },
     outputs: {
@@ -34,6 +39,11 @@ exports.process = new Process({
             type: "Boolean",
             title: "Intersection Result",
             description: "The input geometry intersects at least one endpoint of one feature in the target feature set."
+        },
+        fids: {
+            type: "String",
+            title: "Feature Ids",
+            description: "If the 'detail' input is true, a comma separated string of feature ids will be generated representing all features intersected by the input geometry where the intersection is not an endpoint."
         }
     },
     run: function(inputs) {
@@ -46,21 +56,28 @@ exports.process = new Process({
         }
         var cursor = layer.query(filter);
         var intersects = false;
+        var fids = [];
         cursor.forEach(function(target) {
+            var satisfies = false;  // for details, we need another flag
             target.geometry.endPoints.forEach(function(point) {
                 if (geometry.distance(point) <= TOLERANCE) {
                     // hit endpoint
                     intersects = true;
+                    satisfies = true;
                 }
-                return !intersects;
             });
-            return !intersects;
+            if (inputs.detail && !satisfies) {
+                fids.push(target.id);
+            }
+            // continue if looking for detail, stop if intersects
+            return inputs.detail || !intersects;
         });
         // in case we stopped early
         cursor.close();
         LOGGER.info("MustIntersectEndpoint " + inputs.featureType + ": " + intersects + " " + filter);
         return {
-            result: intersects
+            result: intersects,
+            fids: fids.join(",")
         };
     }
 });
