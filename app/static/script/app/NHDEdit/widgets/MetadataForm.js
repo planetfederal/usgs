@@ -256,6 +256,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             if (fieldData.xtype) {
                 fieldCfg.xtype = fieldData.xtype;
             }
+            if (fieldCfg.xtype.indexOf("date") == 0) {
+                fieldCfg.value = new Date().format("c");
+            }
             if (fieldData.fieldset) {
                 fieldSets[fieldData.fieldset].add(fieldCfg);
             } else {
