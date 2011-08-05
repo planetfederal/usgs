@@ -33,29 +33,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     vendorId: 'usgs',
 
-    ruleSpecificItems: {
-        // specific handling for vertical relationship rule
-        "6": function(rule) {
-            return {
-                xtype: "combo",
-                store: ["over", "under"],
-                fieldLabel: "Vertical relationship",
-                triggerAction: "all",
-                mode: 'local',
-                width: 60,
-                listeners: {
-                    select: function(combo, record, index) {
-                        var value = combo.getValue();
-                        NHDEdit.setPreference(rule, {
-                            autoCorrect: value ? {relationship: value} : false
-                        });
-                    },
-                    scope: this
-                }
-            };
-        }
-    },
-    
     initComponent : function() {
         NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
         var known = false,
@@ -80,7 +57,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 });
                 if (rule.autoCorrectable) {
                     // add auto-correct items or a generic auto-correct field
-                    this.add(this.createAutoCorrectItems(rule));
+                    this.add(NHDEdit.createAutoCorrectItems(rule));
                 } else {
                     // allow user to queue exception
                     this.add(this.createQueueField(rule.code));
@@ -112,30 +89,6 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         this.doLayout();
     },
 
-    createAutoCorrectItems: function(rule) {
-        var code = rule.code, items;
-        // add any items for specific rules
-        if (code in this.ruleSpecificItems) {
-            items = this.ruleSpecificItems[code].call(this, rule);
-        } else {
-            items = {
-                xtype: "checkbox",
-                fieldLabel: "Autocorrect",
-                value: false,
-                name: "autoCorrect",
-                listeners: {
-                    "check": function(checkbox, checked) {
-                        NHDEdit.setPreference(rule, {
-                            autoCorrect: checked ? true : false
-                        });
-                    },
-                    scope: this
-                }            
-            };
-        }
-        return items;
-    },
-    
     createQueueField: function(code) {
         return {
             xtype: "checkbox",

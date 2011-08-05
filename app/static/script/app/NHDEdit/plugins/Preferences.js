@@ -62,36 +62,33 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
         }
     },
     
-
-    apply: function() {
-        if (!NHDEdit.preferences) {
-            NHDEdit.preferences = {};
-        }
-        this.form.getForm().items.each(function(item) {
-            NHDEdit.preferences[item.name] = item.getValue();
-        });
-    },
-
     /** api: method[addOutput]
      */
     addOutput: function() {
+        var items = [], rule;
+        for (var code in NHDEdit.preferences) {
+            rule = Ext.apply({code: code}, NHDEdit.preferences[code]);
+            items.push({
+                xtype: "fieldset",
+                cls: "app-preferences-fieldset",
+                title: rule.title,
+                labelWidth: 115,
+                items: NHDEdit.createAutoCorrectItems(rule)
+            });
+        }
+        if (!items.length) {
+            //TODO move the setPreference method from the NHDEdit namespace to
+            // the NHDEdit prototype, so we can add a viewer event and auto-update
+            // this form and auto-enable an initially disabled preferences button.
+            items.push({
+                xtype: "box",
+                html: "Autocorrect preferences become available here once an autocorrect setting is made in the rule exception dialog."
+            });
+        }
         this.form = new Ext.form.FormPanel({
-            labelWidth: 100,
             padding: 5,
             border: false,
-            fbar: [{text: "Apply", handler: this.apply, scope: this}],
-            items: [{
-                xtype: "fieldset",
-                title: "Vertical relationships",
-                items: [{
-                    xtype: "combo",
-                    store: [["over", "Always over"], ["under", "Always under"]],
-                    name: "js:vert",
-                    mode: "local",
-                    triggerAction: "all",
-                    fieldLabel: "Default"
-                }]
-            }]
+            items: items
         });
         return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, this.form);
     },

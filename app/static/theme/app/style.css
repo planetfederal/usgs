@@ -54,6 +54,12 @@ body {
     font-size: 0.9em;
 }
 .app-metadata-fieldset {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.app-preferences-fieldset {
+    padding-top: 5px;
     padding-bottom: 5px;
 }
 

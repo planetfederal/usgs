@@ -38,6 +38,30 @@
      */
     NHDEdit.preferences = {};
     
+    NHDEdit.ruleSpecificItems = {
+        // specific handling for vertical relationship rule
+        "6": function(rule) {
+            return {
+                xtype: "combo",
+                store: ["over", "under"],
+                fieldLabel: "Vertical relationship",
+                triggerAction: "all",
+                mode: 'local',
+                value: rule.autoCorrect ? rule.autoCorrect.relationship : undefined,
+                width: 60,
+                listeners: {
+                    select: function(combo, record, index) {
+                        var value = combo.getValue();
+                        NHDEdit.setPreference(rule, {
+                            autoCorrect: value ? {relationship: value} : false
+                        });
+                    },
+                    scope: this
+                }
+            };
+        }
+    };
+    
     /** private: property[metadataId]
      *  ``String`` fid of the metadata record currently being used
      */
@@ -79,4 +103,28 @@
         }
     };
 
+    NHDEdit.createAutoCorrectItems = function(rule) {
+        var code = rule.code, items;
+        // add any items for specific rules
+        if (code in NHDEdit.ruleSpecificItems) {
+            items = NHDEdit.ruleSpecificItems[code].call(this, rule);
+        } else {
+            items = {
+                xtype: "checkbox",
+                fieldLabel: "Autocorrect",
+                checked: !!rule.autoCorrect,
+                name: "autoCorrect",
+                listeners: {
+                    "check": function(checkbox, checked) {
+                        NHDEdit.setPreference(rule, {
+                            autoCorrect: checked ? true : false
+                        });
+                    },
+                    scope: this
+                }            
+            };
+        }
+        return items;
+    };
+    
 })();
