@@ -6,6 +6,7 @@
     <id>NamespaceInfoImpl--11814b35:13067cdfb15:-7fff</id>
   </namespace>
   <title>NHD Area</title>
+  <abstract>The NHD is a national framework for assigning reach addresses to water-related entities, such as industrial discharges, drinking water supplies, fish habitat areas, wild and scenic rivers. Reach addresses establish the locations of these entities relative to one another within the NHD surface water drainage network, much like addresses on streets. Once linked to the NHD by their reach addresses, the upstream/downstream relationships of these water-related entities--and any associated information about them--can be analyzed using software tools ranging from spreadsheets to geographic information systems (GIS). GIS can also be used to combine NHD-based network analysis with other data layers, such as soils, land use and population, to help understand and display their respective effects upon one another. Furthermore, because the NHD provides a nationally consistent framework for addressing and analysis, water-related information linked to reach addresses by one organization (national, state, local) can be shared with other organizations and easily integrated into many different types of applications to the benefit of all.</abstract>
   <nativeCRS class="projected">PROJCS[&quot;WGS84 / Google Mercator&quot;, 
   GEOGCS[&quot;WGS 84&quot;, 
     DATUM[&quot;World Geodetic System 1984&quot;, 
