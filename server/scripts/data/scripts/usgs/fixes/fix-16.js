@@ -6,9 +6,6 @@ var geom = require("geoscript/geom");
 
 var flowlines = catalog.getFeatureType(usgs.NAMESPACE_URI, "NHDFlowline");
 
-// TODO: remove this
-var wkt = require("geoscript/geom/io/wkt");
-
 exports.fix = function(featureInfo, outputs) {
     var fixed = false;
     
