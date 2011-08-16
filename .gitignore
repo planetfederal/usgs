@@ -4,3 +4,5 @@ build/
 .settings/
 .m2
 target/
+server/scripts/data/*w*s.xml
+server/scripts/data/logs/geoserver.log
