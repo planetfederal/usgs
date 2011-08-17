@@ -30,6 +30,26 @@
             }
             NHDEdit.metadataId = urlConfig.m;
             callback.call(this, config);
+        },
+        /** private: method[setPreference]
+         *  :arg code: ``Object`` rule with an exception code
+         *  :arg object: ``Object`` object to set for the preference
+         */
+        setPreference: function(rule, object) {
+            var code = rule.code,
+                urlConfig = getUrlConfig();
+            var pref = Ext.apply(NHDEdit.preferences[code] || {
+                title: rule.title
+            }, object);
+            NHDEdit.preferences[code] = pref;
+            var record = NHDEdit.metadataRecord;
+            if (record) {
+                var completenessReport = record.fields.find(function(f) {
+                    return f.name.toLowerCase() == "completenessreport"; 
+                }).name;
+                //TODO the line below makes things break seriously
+                //record.set(completenessReport, Ext.encode(pref));
+            }           
         }
     });
     
@@ -52,7 +72,7 @@
                 listeners: {
                     select: function(combo, record, index) {
                         var value = combo.getValue();
-                        NHDEdit.setPreference(rule, {
+                        NHDEdit.prototype.setPreference(rule, {
                             autoCorrect: value ? {relationship: value} : false
                         });
                     },
@@ -92,27 +112,6 @@
         window.location.hash = Ext.urlEncode(urlConfig);
     };
     
-    /** private: method[setPreference]
-     *  :arg code: ``Object`` rule with an exception code
-     *  :arg object: ``Object`` object to set for the preference
-     */
-    NHDEdit.setPreference = function(rule, object) {
-        var code = rule.code,
-            urlConfig = getUrlConfig();
-        var pref = Ext.apply(NHDEdit.preferences[code] || {
-            title: rule.title
-        }, object);
-        NHDEdit.preferences[code] = pref;
-        var record = NHDEdit.metadataRecord;
-        if (record) {
-            var completenessReport = record.fields.find(function(f) {
-                return f.name.toLowerCase() == "completenessreport"; 
-            }).name;
-            //TODO the line below makes things break seriously
-            //record.set(completenessReport, Ext.encode(pref));
-        }
-    };
-
     NHDEdit.createAutoCorrectItems = function(rule) {
         var code = rule.code, items;
         // add any items for specific rules
@@ -126,7 +125,7 @@
                 name: "autoCorrect",
                 listeners: {
                     "check": function(checkbox, checked) {
-                        NHDEdit.setPreference(rule, {
+                        NHDEdit.prototype.setPreference(rule, {
                             autoCorrect: checked ? true : false
                         });
                     },
