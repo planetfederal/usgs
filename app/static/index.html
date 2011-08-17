@@ -91,6 +91,20 @@
                 }, {
                     ptype: "gxp_featuremanager",
                     id: "nhd-manager",
+                    listeners: {
+                        "query": function(featureManager) {
+                            var snappingAgent = featureManager.target.tools["flowline-snapping"];
+                            // if we are editing flow lines, we do not want to snap to the current feature
+                            if (featureManager.filter && featureManager.layerRecord.get('name') === snappingAgent.targets[0].name) {
+                                snappingAgent.snappingTargets[0].filter = new OpenLayers.Filter.Logical({
+                                    type: OpenLayers.Filter.Logical.NOT, 
+                                    filters: [featureManager.filter]
+                                });
+                            } else {
+                                delete snappingAgent.snappingTargets[0].filter;
+                            }
+                        }
+                    },
                     paging: false,
                     autoSetLayer: true,
                     maxFeatures: 1
