@@ -57,7 +57,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
                     SERVICE: "WFS",
                     VERSION: "1.1.0",
                     REQUEST: "DescribeFeatureType",
-                    TYPENAME: this.featurePrefix + ":" + this.featureType
+                    TYPENAME: this.featureType
                 },
                 autoLoad: true,
                 listeners: {
