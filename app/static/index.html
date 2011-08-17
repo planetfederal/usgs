@@ -101,7 +101,7 @@
                                     filters: [featureManager.filter]
                                 });
                             } else {
-                                delete snappingAgent.snappingTargets[0].filter;
+                                snappingAgent.snappingTargets[0].filter = null;
                             }
                         }
                     },
