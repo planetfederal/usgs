@@ -61,6 +61,16 @@
             };
         }
     };
+
+    /** private: property[metadataSchema]
+     *  ``GeoExt.data.AttributeStore`` The attribute store for the NHDMetadata 
+     *  feature type. Will be set and reused by the MetadataForm.
+     */
+
+    /** private: property[metadataStore]
+     * ``gxp.data.WFSFeatureStore`` The feature store for the NHDMetadata 
+     * feature type. Will be set and reused by the MetadataForm.
+     */
     
     /** private: property[metadataId]
      *  ``String`` fid of the metadata record currently being used

@@ -23,13 +23,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     url: null,
 
-    schema: null,
-
     featureType: null,
 
     featureNS: null,
-
-    featureStore: null,
 
     openWindow: null,
     
