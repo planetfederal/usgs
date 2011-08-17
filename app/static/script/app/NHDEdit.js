@@ -10,6 +10,13 @@
     window.NHDEdit = Ext.extend(gxp.Viewer, {
         constructor: function(config) {
             NHDEdit.superclass.constructor.apply(this, arguments);
+            // add any custom application events
+            this.addEvents(
+                /** api: event[setpreference]
+                 *  Fires when an autocorrect preference has been set.
+                 */
+                "setpreference"
+            );
             this.on("portalready", function() {
                 var map = this.mapPanel.map;
                 map.events.register("moveend", this, function() {
@@ -49,7 +56,8 @@
                 }).name;
                 //TODO the line below makes things break seriously
                 //record.set(completenessReport, Ext.encode(pref));
-            }           
+            }
+            this.fireEvent("setpreference", code, pref);
         }
     });
     
@@ -72,7 +80,7 @@
                 listeners: {
                     select: function(combo, record, index) {
                         var value = combo.getValue();
-                        NHDEdit.prototype.setPreference(rule, {
+                        app.setPreference(rule, {
                             autoCorrect: value ? {relationship: value} : false
                         });
                     },
@@ -125,7 +133,7 @@
                 name: "autoCorrect",
                 listeners: {
                     "check": function(checkbox, checked) {
-                        NHDEdit.prototype.setPreference(rule, {
+                        app.setPreference(rule, {
                             autoCorrect: checked ? true : false
                         });
                     },

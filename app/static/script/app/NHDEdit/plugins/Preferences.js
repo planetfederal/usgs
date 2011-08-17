@@ -37,6 +37,7 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
         NHDEdit.plugins.Preferences.superclass.init.apply(this, arguments);
         var featureManager = this.target.tools[this.featureManager];
         featureManager.addListener('layerchange', this.onLayerChange, this);
+        target.addListener('setpreference', this.onSetPreference, this);
     },
 
     onLayerChange: function(tool, layer, schema) {
@@ -44,6 +45,11 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
         if (store) {
             store.addListener('beforewrite', this.beforeStoreWrite, this);
         }
+    },
+
+    onSetPreference: function(code, pref) {
+        this.actions[0].enable();
+        // TODO update form if dialog already open
     },
     
     beforeStoreWrite: function(store, action, rs, options) {
@@ -76,15 +82,6 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
                 items: NHDEdit.createAutoCorrectItems(rule)
             });
         }
-        if (!items.length) {
-            //TODO move the setPreference method from the NHDEdit namespace to
-            // the NHDEdit prototype, so we can add a viewer event and auto-update
-            // this form and auto-enable an initially disabled preferences button.
-            items.push({
-                xtype: "box",
-                html: "Autocorrect preferences become available here once an autocorrect setting is made in the rule exception dialog."
-            });
-        }
         this.form = new Ext.form.FormPanel({
             padding: 5,
             border: false,
@@ -100,6 +97,7 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
             {
                 handler: this.addOutput,
                 scope: this,
+                disabled: true,
                 text: this.buttonText,
                 tooltip: this.tooltipText,
                 iconCls: "process"
