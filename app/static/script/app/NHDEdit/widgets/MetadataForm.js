@@ -49,25 +49,30 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     initComponent : function() {
-        this.schema = new GeoExt.data.AttributeStore({
-            sortInfo: {
-                field: 'name',
-                direction: 'ASC'
-            },
-            url: this.url,
-            baseParams: {
-                SERVICE: "WFS",
-                VERSION: "1.1.0",
-                REQUEST: "DescribeFeatureType",
-                TYPENAME: this.featurePrefix + ":" + this.featureType
-            },
-            autoLoad: true,
-            listeners: {
-                "load": this.onLoad,
-                scope: this
-            }
-        });
         NHDEdit.MetadataForm.superclass.initComponent.call(this);
+        if (NHDEdit.metadataSchema === undefined) {
+            NHDEdit.metadataSchema = new GeoExt.data.AttributeStore({
+                sortInfo: {
+                    field: 'name',
+                    direction: 'ASC'
+                },
+                url: this.url,
+                baseParams: {
+                    SERVICE: "WFS",
+                    VERSION: "1.1.0",
+                    REQUEST: "DescribeFeatureType",
+                    TYPENAME: this.featurePrefix + ":" + this.featureType
+                },
+                autoLoad: true,
+                listeners: {
+                    "load": this.onLoad,
+                    scope: this
+                }
+            });
+        } else {
+            this.createFieldSets();
+            this.createGrid();
+        }
         this.deleteLabel = new Ext.form.Label({
             hidden: true, 
             html: '<p style="color:red;font-weight:bold">Are you sure you want to delete this feature?</p>'
@@ -81,7 +86,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }, this);
         this.addEvents(
             'metadatasaved',
-            'metadataopened');
+            'metadataopened'
+        );
     },
 
     createGrid: function() {
@@ -91,8 +97,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             this.findButton.setDisabled(false);            
         }
         this.grid = new gxp.grid.FeatureGrid({
-            store: this.featureStore,
-            schema: this.schema,
+            store: NHDEdit.metadataStore,
+            schema: NHDEdit.metadataSchema,
             loadMask: true,
             listeners: {
                 'dblclick': this.openMetadata,
@@ -147,7 +153,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         });
         feature.state = OpenLayers.State.INSERT;
-        this.featureStore.add(new this.featureStore.recordType({feature: feature}));
+        NHDEdit.metadataStore.add(new NHDEdit.metadataStore.recordType({feature: feature}));
     },
 
     openEntry: function() {
@@ -171,10 +177,11 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     createStore: function() {
         var fields = [];
-        this.schema.each(function(r) {
+        var schema = NHDEdit.metadataSchema;
+        schema.each(function(r) {
             fields.push({name: r.get("name")});
         }, this);
-        this.featureStore = new gxp.data.WFSFeatureStore({
+        NHDEdit.metadataStore = new gxp.data.WFSFeatureStore({
             fields: fields,
             autoLoad: true,
             listeners: {
@@ -183,25 +190,28 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
                 },
                 scope: this
             },
-            url: this.schema.url,
+            url: schema.url,
             featureType: this.featureType,
             featureNS: this.featureNS
         });
-        this.featureStore.addListener('load', this.createGrid, this, {single: true});
+        NHDEdit.metadataStore.addListener('load', this.createGrid, this, {single: true});
         var fid = NHDEdit.metadataId;
         if (fid !== undefined) {
-            this.featureStore.on("load", function(store, records) {
+            NHDEdit.metadataStore.on("load", function(store, records) {
                 var record = store.getAt(store.findExact("fid", fid));
                 NHDEdit.setMetadataRecord(record);
                 this.fireEvent('metadataopened', this, record);
             }, this, {single: true});
         }
-        this.featureStore.load();
+        NHDEdit.metadataStore.load();
     },
 
     onLoad: function() {
         this.createStore();
-        //Ext.getCmp("app-save-button").setDisabled(false);
+        this.createFieldSets();
+    },
+
+    createFieldSets: function() {
         var masterFieldset = new Ext.form.FieldSet({
             title: "Metadata Record",
             cls: "app-metadata-fieldset",
@@ -234,7 +244,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         for (var s in fieldSets) {
             fieldSet.add(fieldSets[s]);
         }
-        var desc = this.schema.getAt(this.schema.findBy(function(r) {
+        var schema = NHDEdit.metadataSchema;
+        var desc = schema.getAt(schema.findBy(function(r) {
             return r.get("name").toLowerCase() == "processdescription";
         }));
         var fieldCfg = GeoExt.form.recordToField(desc);
@@ -247,7 +258,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         var rec, fieldData, type, name;
         for (var field in this.fieldMetadata) {
             fieldData = this.fieldMetadata[field];
-            rec = this.schema.getAt(this.schema.findBy(function(r) {
+            rec = schema.getAt(schema.findBy(function(r) {
                 return r.get("name").toLowerCase() == field;
             }, this));
             name = rec.get("name");
