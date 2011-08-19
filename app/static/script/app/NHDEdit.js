@@ -54,8 +54,7 @@
                 var completenessReport = record.fields.find(function(f) {
                     return f.name.toLowerCase() == "completenessreport"; 
                 }).name;
-                //TODO the line below makes things break seriously
-                //record.set(completenessReport, Ext.encode(pref));
+                record.set(completenessReport, Ext.encode(pref));
             }
             this.fireEvent("setpreference", code, pref);
         }
