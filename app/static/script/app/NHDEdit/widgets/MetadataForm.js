@@ -179,6 +179,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }, this);
         NHDEdit.metadataStore = new gxp.data.WFSFeatureStore({
             fields: fields,
+            layer: new OpenLayers.Layer.Vector(),
             autoLoad: true,
             listeners: {
                 "write": function(store, action, data, response, rs) {
