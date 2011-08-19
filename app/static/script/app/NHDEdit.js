@@ -54,7 +54,7 @@
                 var completenessReport = record.fields.find(function(f) {
                     return f.name.toLowerCase() == "completenessreport"; 
                 }).name;
-                record.set(completenessReport, Ext.encode(pref));
+                record.set(completenessReport, Ext.encode(NHDEdit.preferences));
                 record.store.save();
             }
             this.fireEvent("setpreference", code, pref);
@@ -112,6 +112,11 @@
         NHDEdit.metadataRecord = record;
         var urlConfig = getUrlConfig();
         if (record) {
+            // restore preferences
+            if (record.get("CompletenessReport") !== "") {
+                NHDEdit.preferences = Ext.decode(record.get("CompletenessReport"));
+                app.fireEvent("setpreference");
+            }
             urlConfig.m = record.getFeature().fid;
             NHDEdit.metadataId = urlConfig.m;
         } else {
