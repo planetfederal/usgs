@@ -113,8 +113,11 @@
         var urlConfig = getUrlConfig();
         if (record) {
             // restore preferences
-            if (record.get("CompletenessReport") !== "") {
-                NHDEdit.preferences = Ext.decode(record.get("CompletenessReport"));
+            var completenessReport = record.fields.find(function(f) {
+                return f.name.toLowerCase() == "completenessreport";
+            }).name;
+            if (record.get(completenessReport) !== "") {
+                NHDEdit.preferences = Ext.decode(record.get(completenessReport));
                 app.fireEvent("setpreference");
             }
             urlConfig.m = record.getFeature().fid;
