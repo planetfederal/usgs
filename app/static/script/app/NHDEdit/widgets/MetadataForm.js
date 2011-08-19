@@ -150,6 +150,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         });
         feature.state = OpenLayers.State.INSERT;
         NHDEdit.metadataStore.add(new NHDEdit.metadataStore.recordType({feature: feature}));
+        NHDEdit.metadataStore.save();
     },
 
     openEntry: function() {
@@ -181,6 +182,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             fields: fields,
             layer: new OpenLayers.Layer.Vector(),
             autoLoad: true,
+            autoSave: false,
             listeners: {
                 "write": function(store, action, data, response, rs) {
                     this.fireEvent('metadatasaved', this, rs);

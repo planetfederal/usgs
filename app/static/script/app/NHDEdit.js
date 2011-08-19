@@ -55,6 +55,7 @@
                     return f.name.toLowerCase() == "completenessreport"; 
                 }).name;
                 record.set(completenessReport, Ext.encode(pref));
+                record.store.save();
             }
             this.fireEvent("setpreference", code, pref);
         }
