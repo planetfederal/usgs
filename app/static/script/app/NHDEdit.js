@@ -116,7 +116,7 @@
             var completenessReport = record.fields.find(function(f) {
                 return f.name.toLowerCase() == "completenessreport";
             }).name;
-            if (record.get(completenessReport) !== "") {
+            if (record.get(completenessReport) !== undefined && record.get(completenessReport) !== "") {
                 NHDEdit.preferences = Ext.decode(record.get(completenessReport));
                 app.fireEvent("setpreference");
             }
