@@ -180,7 +180,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }, this);
         NHDEdit.metadataStore = new gxp.data.WFSFeatureStore({
             fields: fields,
-            layer: new OpenLayers.Layer.Vector(),
+            layer: new OpenLayers.Layer.Vector(null, {projection: new OpenLayers.Projection("EPSG:900913")}),
             autoLoad: true,
             autoSave: false,
             listeners: {
