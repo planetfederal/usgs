@@ -85,8 +85,34 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 }]
             });
         }
+
+        this.nativeElements = {};
+        if (this.store) {
+            this.store.addListener('beforewrite', this.beforeStoreWrite, this);
+        }
+
+        this.on({
+            "beforedestroy": function() {
+                this.store.un("beforewrite", this.beforeStoreWrite, this);
+            },
+            scope: this
+        });
         
         this.doLayout();
+    },
+
+    beforeStoreWrite: function(store, action, rs, options) {
+        var nativeElements = options.params.nativeElements;
+        var obj = {};
+        if (nativeElements && nativeElements.length === 1) {
+            obj = Ext.util.JSON.decode(nativeElements[0].value);
+        }
+        OpenLayers.Util.extend(obj, this.nativeElements);
+        options.params.nativeElements = [{
+            vendorId: this.vendorId,
+            safeToIgnore: true,
+            value: Ext.util.JSON.encode(obj)
+        }];
     },
 
     createQueueField: function(code) {
@@ -102,24 +128,11 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                             item.setDisabled(checked);
                         }
                     });
-                    if (this._beforeWriteQueue){
-                        this.store.removeListener("beforewrite", this._beforeWriteQueue, this);
-                    }
                     if (checked === true) {
-                        this._beforeWriteQueue = function(store, action, rs, options) {
-                            var nativeElements = options.params.nativeElements;
-                            var obj = {};
-                            if (nativeElements && nativeElements.length === 1) {
-                                obj = Ext.util.JSON.decode(nativeElements[0].value);
-                            }
-                            obj[code] = {queue: checked};
-                            options.params.nativeElements = [{
-                                vendorId: this.vendorId,
-                                safeToIgnore: true,
-                                value: Ext.util.JSON.encode(obj)
-                            }];
-                        };
-                        this.store.addListener("beforewrite", this._beforeWriteQueue, this, {single: true});
+                        // this should be cumulative
+                        var obj = {};
+                        obj[code] = {queue: checked};
+                        OpenLayers.Util.extend(this.nativeElements, obj);
                     }
                 },
                 scope: this
