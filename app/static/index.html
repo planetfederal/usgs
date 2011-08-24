@@ -201,6 +201,9 @@
                     } 
                 }], 
                 sources: {
+                    ol: {
+                        ptype: "gxp_olsource"
+                    },
                     local: {
                         ptype: "gxp_wmscsource",
                         url: "/geoserver/wms",
@@ -232,6 +235,13 @@
                         new OpenLayers.Control.Attribution()
                     ],
                     layers: [{
+                        source: "ol",
+                        group: "background",
+                        type: "OpenLayers.Layer",
+                        args: [
+                            "Blank", {visibility: false}
+                        ]
+                    }, {
                         source: "osm",
                         name: "mapnik",
                         group: "background"
