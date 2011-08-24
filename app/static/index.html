@@ -42,11 +42,6 @@
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             Ext.USE_NATIVE_JSON = true;
             OpenLayers.ImgPath = "theme/app/img/";
-            // configure to which layer we should be snapping based on the source layer 
-            NHDEdit.snappingTargets = {
-                "usgs:NHDPoint": "usgs:NHDPoint",
-                "usgs:NHDFlowline": "usgs:NHDFlowline"
-            };
             var app = new NHDEdit({
                 mapItems: [{
                     xtype: "gx_zoomslider",
@@ -105,11 +100,6 @@
                     ptype: "gxp_featuremanager",
                     id: "nhd-manager",
                     listeners: {
-                        "layerchange": function(featureManager, layer) {
-                            var snappingAgent = featureManager.target.tools["snapping-agent"];
-                            var target = NHDEdit.snappingTargets[layer.get('name')];
-                            snappingAgent.targets[0].name = target;
-                        },
                         "query": function(featureManager) {
                             var snappingAgent = featureManager.target.tools["snapping-agent"];
                             // if we are editing flow lines, we do not want to snap to the current feature
