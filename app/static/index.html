@@ -79,6 +79,7 @@
                     groups: {
                         "nhd": "National Hydrography Dataset",
                         "struct": "Structures",
+                        "trans": "Transportation",
                         "background": {
                             title: "Base Layers", 
                             exclusive: true
@@ -246,16 +247,31 @@
                         source: "local",
                         group: "struct",
                         name: "usgs:Struct_Point",
+                        title: "Structure",
                         visibility: false
                     }, {
                         source: "local",
                         group: "struct",
+                        title: "Airport",
                         name: "usgs:Trans_AirportPoint",
                         visibility: false
                     }, {
                         source: "local",
-                        group: "struct",
+                        group: "trans",
+                        title: "Airport Runway",
                         name: "usgs:Trans_AirportRunway",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "trans",
+                        title: "Railroad",
+                        name: "usgs:Trans_RailFeature",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "trans",
+                        title: "Road Segment",
+                        name: "usgs:Trans_RoadSegment",
                         visibility: false
                     }, {
                         source: "local",
