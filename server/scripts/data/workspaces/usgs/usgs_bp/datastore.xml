@@ -1,0 +1,32 @@
+<dataStore>
+  <id>DataStoreInfoImpl-78167cbe:131d39f5b63:-7d9a</id>
+  <name>usgs_bp</name>
+  <description>USGS BP data</description>
+  <type>PostGIS</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--11814b35:13067cdfb15:-8000</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="Connection timeout">20</entry>
+    <entry key="port">5432</entry>
+    <entry key="passwd">opengeo78902</entry>
+    <entry key="dbtype">postgis</entry>
+    <entry key="host">db.demo.opengeo.org</entry>
+    <entry key="validate connections">true</entry>
+    <entry key="encode functions">false</entry>
+    <entry key="max connections">40</entry>
+    <entry key="database">usgs_bp</entry>
+    <entry key="namespace">http://www.usgs.gov/</entry>
+    <entry key="schema">public</entry>
+    <entry key="Loose bbox">true</entry>
+    <entry key="Expose primary keys">false</entry>
+    <entry key="fetch size">1000</entry>
+    <entry key="Max open prepared statements">50</entry>
+    <entry key="preparedStatements">false</entry>
+    <entry key="Estimated extends">true</entry>
+    <entry key="user">opengeo</entry>
+    <entry key="min connections">1</entry>
+  </connectionParameters>
+  <__default>false</__default>
+</dataStore>

@@ -1,0 +1,25 @@
+<layer>
+  <name>Trans_AirportPoint</name>
+  <id>LayerInfoImpl-78167cbe:131d39f5b63:-7d96</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--2d72c0d4:123e3a69b74:-8000</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-78167cbe:131d39f5b63:-7d97</id>
+  </resource>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="GWC.metaTilingX">4</entry>
+    <entry key="GWC.autoCacheStyles">true</entry>
+    <entry key="GWC.metaTilingY">4</entry>
+    <entry key="GWC.gutter">0</entry>
+    <entry key="GWC.enabled">true</entry>
+    <entry key="GWC.gridSets">EPSG:4326,EPSG:900913</entry>
+    <entry key="GWC.cacheFormats">image/jpeg,image/png</entry>
+  </metadata>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
