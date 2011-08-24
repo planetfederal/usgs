@@ -42,6 +42,11 @@
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             Ext.USE_NATIVE_JSON = true;
             OpenLayers.ImgPath = "theme/app/img/";
+            // configure to which layer we should be snapping based on the source layer 
+            NHDEdit.snappingTargets = {
+                "usgs:NHDPoint": "usgs:NHDPoint",
+                "usgs:NHDFlowline": "usgs:NHDFlowline"
+            };
             var app = new NHDEdit({
                 mapItems: [{
                     xtype: "gx_zoomslider",
@@ -76,10 +81,18 @@
                         border: true,
                         tbar: []
                     },
+                    groups: {
+                        "nhd": "National Hydrography Dataset",
+                        "struct": "Structures",
+                        "background": {
+                            title: "Base Layers", 
+                            exclusive: true
+                        }
+                    },
                     outputTarget: "westpanel"
                 }, {
                     ptype: "gxp_snappingagent",
-                    id: "flowline-snapping",
+                    id: "snapping-agent",
                     targets: [{
                         source: "local",
                         name: "usgs:NHDFlowline",
@@ -92,8 +105,13 @@
                     ptype: "gxp_featuremanager",
                     id: "nhd-manager",
                     listeners: {
+                        "layerchange": function(featureManager, layer) {
+                            var snappingAgent = featureManager.target.tools["snapping-agent"];
+                            var target = NHDEdit.snappingTargets[layer.get('name')];
+                            snappingAgent.targets[0].name = target;
+                        },
                         "query": function(featureManager) {
-                            var snappingAgent = featureManager.target.tools["flowline-snapping"];
+                            var snappingAgent = featureManager.target.tools["snapping-agent"];
                             // if we are editing flow lines, we do not want to snap to the current feature
                             if (featureManager.filter && featureManager.layerRecord.get('name') === snappingAgent.targets[0].name) {
                                 snappingAgent.snappingTargets[0].filter = new OpenLayers.Filter.Logical({
@@ -139,7 +157,7 @@
                     ptype: "gxp_featureeditor",
                     featureManager: "nhd-manager",
                     autoLoadFeatures: true,
-                    snappingAgent: "flowline-snapping",
+                    snappingAgent: "snapping-agent",
                     toggleGroup: "main",
                     actionTarget: {target: "map.tbar", index: 6},
                     tolerance: 6,
@@ -236,18 +254,28 @@
                         visibility: false
                     }, {
                         source: "local",
+                        group: "struct",
+                        name: "usgs:Struct_Point",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "nhd",
                         name: "usgs:NHDWaterbody"
                     }, {
                         source: "local",
+                        group: "nhd",
                         name: "usgs:NHDArea"
                     }, {
                         source: "local",
+                        group: "nhd",
                         name: "usgs:NHDLine"
                     }, {
                         source: "local",
+                        group: "nhd",
                         name: "usgs:NHDFlowline"
                     }, {
                         source: "local",
+                        group: "nhd",
                         name: "usgs:NHDPoint",
                         cached: false
                     }]
