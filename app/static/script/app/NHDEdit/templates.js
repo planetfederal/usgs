@@ -9,7 +9,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value];
+                return NHDEdit.fTypeDict[value] || "All";
             }
         }
     ),
@@ -23,7 +23,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value];
+                return NHDEdit.fTypeDict[value] || "All";
             }
         }
     ),
@@ -36,7 +36,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value];
+                return NHDEdit.fTypeDict[value] || "All";
             }
         }
     ),
@@ -45,7 +45,7 @@ NHDEdit.exceptionTemplates = {
         '<tpl if="values.autoCorrectable">This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value];
+                return NHDEdit.fTypeDict[value] || "All";
             }
         }
     ),
@@ -58,7 +58,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value];
+                return NHDEdit.fTypeDict[value] || "All";
             }
         }
     ),
@@ -71,7 +71,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value];
+                return NHDEdit.fTypeDict[value] || "All";
             }
         }
     )
