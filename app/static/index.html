@@ -46,6 +46,7 @@
             NHDEdit.snappingLayers = ["usgs:NHDPoint", "usgs:NHDFlowline"];
             var app = new NHDEdit({
                 authorizedRoles: [],
+                proxy: "proxy/?url=",
                 mapItems: [{
                     xtype: "gx_zoomslider",
                     vertical: true,
