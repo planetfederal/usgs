@@ -42,6 +42,8 @@
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             Ext.USE_NATIVE_JSON = true;
             OpenLayers.ImgPath = "theme/app/img/";
+            // the layers for which to activate flowline snapping
+            NHDEdit.snappingLayers = ["usgs:NHDPoint", "usgs:NHDFlowline"];
             var app = new NHDEdit({
                 mapItems: [{
                     xtype: "gx_zoomslider",
@@ -105,6 +107,16 @@
                     listeners: {
                         "query": function(featureManager) {
                             var snappingAgent = featureManager.target.tools["snapping-agent"];
+                            var i, len;
+                            if (NHDEdit.snappingLayers.indexOf(featureManager.layerRecord.get("name")) !== -1) {
+                                for (i=0, len=snappingAgent.controls.length; i<len; i++) {
+                                    snappingAgent.controls[i].activate();
+                                }
+                            } else {
+                                for (i=0, len=snappingAgent.controls.length; i<len; i++) {
+                                    snappingAgent.controls[i].deactivate();
+                                }
+                            }
                             // if we are editing flow lines, we do not want to snap to the current feature
                             if (featureManager.filter && featureManager.layerRecord.get('name') === snappingAgent.targets[0].name) {
                                 snappingAgent.snappingTargets[0].filter = new OpenLayers.Filter.Logical({
