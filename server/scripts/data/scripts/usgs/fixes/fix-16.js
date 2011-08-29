@@ -31,7 +31,7 @@ exports.fix = function(featureInfo, outputs) {
             if (!(object.distance(splitPoint) <= usgs.TOLERANCE)) {
                 // try the endpoint
                 splitPoint = input.endPoint;
-                if (!object.distance(splitPoint) <= usgs.TOLERANCE) {
+                if (!(object.distance(splitPoint) <= usgs.TOLERANCE)) {
                     splitPoint = null;
                 }
             }
