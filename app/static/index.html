@@ -81,16 +81,16 @@
                         split: true,
                         tbar: []
                     },
-                    groups: {
-                        "default": "Other layers",
-                        "nhd": "Hydrography",
-                        "struct": "Structures",
-                        "trans": "Transportation",
-                        "background": {
-                            title: "Base Layers", 
-                            exclusive: true
-                        }
-                    },
+                    // groups: {
+                    //     "default": "Other layers",
+                    //     "nhd": "Hydrography",
+                    //     "struct": "Structures",
+                    //     "trans": "Transportation",
+                    //     "background": {
+                    //         title: "Base Layers", 
+                    //         exclusive: true
+                    //     }
+                    // },
                     outputTarget: "westpanel"
                 }, {
                     ptype: "gxp_snappingagent",
@@ -249,13 +249,13 @@
                         new OpenLayers.Control.Attribution()
                     ],
                     layers: [{
-                        source: "ol",
-                        group: "background",
-                        type: "OpenLayers.Layer",
-                        args: [
-                            "Blank", {visibility: false}
-                        ]
-                    }, {
+                    //     source: "ol",
+                    //     group: "background",
+                    //     type: "OpenLayers.Layer",
+                    //     args: [
+                    //         "None", {visibility: false}
+                    //     ]
+                    // }, {
                         source: "osm",
                         name: "mapnik",
                         group: "background"
@@ -270,60 +270,60 @@
                         group: "background",
                         visibility: false
                     }, {
+                    //     source: "local",
+                    //     group: "struct",
+                    //     name: "usgs:Struct_Point",
+                    //     title: "Structure",
+                    //     visibility: false
+                    // }, {
+                    //     source: "local",
+                    //     group: "struct",
+                    //     title: "Airport",
+                    //     name: "usgs:Trans_AirportPoint",
+                    //     visibility: false
+                    // }, {
+                    //     source: "local",
+                    //     group: "trans",
+                    //     title: "Airport Runway",
+                    //     name: "usgs:Trans_AirportRunway",
+                    //     visibility: false
+                    // }, {
+                    //     source: "local",
+                    //     group: "trans",
+                    //     title: "Railroad",
+                    //     name: "usgs:Trans_RailFeature",
+                    //     visibility: false
+                    // }, {
+                    //     source: "local",
+                    //     group: "trans",
+                    //     title: "Road Segment",
+                    //     name: "usgs:Trans_RoadSegment",
+                    //     visibility: false
+                    // }, {
                         source: "local",
-                        group: "struct",
-                        name: "usgs:Struct_Point",
-                        title: "Structure",
-                        visibility: false
+                        // group: "nhd",
+                        name: "usgs:NHDWaterbody" //,
+                        // title: "Lake, Reservoir and Swamp Areal Feature"
                     }, {
                         source: "local",
-                        group: "struct",
-                        title: "Airport",
-                        name: "usgs:Trans_AirportPoint",
-                        visibility: false
+                        // group: "nhd",
+                        name: "usgs:NHDArea" //,
+                        // title: "Area: Stream, Canal, Ocean and Miscellaneous Feature"
                     }, {
                         source: "local",
-                        group: "trans",
-                        title: "Airport Runway",
-                        name: "usgs:Trans_AirportRunway",
-                        visibility: false
+                        // group: "nhd",
+                        name: "usgs:NHDLine" //,
+                        // title: "Miscellaneous Water Line Feature"
                     }, {
                         source: "local",
-                        group: "trans",
-                        title: "Railroad",
-                        name: "usgs:Trans_RailFeature",
-                        visibility: false
+                        // group: "nhd",
+                        name: "usgs:NHDFlowline" //,
+                        // title: "Line: Stream, Canal, Pipeline and Shoreline Line Feature"
                     }, {
                         source: "local",
-                        group: "trans",
-                        title: "Road Segment",
-                        name: "usgs:Trans_RoadSegment",
-                        visibility: false
-                    }, {
-                        source: "local",
-                        group: "nhd",
-                        name: "usgs:NHDWaterbody",
-                        title: "Lake, Reservoir and Swamp Areal Feature"
-                    }, {
-                        source: "local",
-                        group: "nhd",
-                        name: "usgs:NHDArea",
-                        title: "Area: Stream, Canal, Ocean and Miscellaneous Feature"
-                    }, {
-                        source: "local",
-                        group: "nhd",
-                        name: "usgs:NHDLine",
-                        title: "Miscellaneous Water Line Feature"
-                    }, {
-                        source: "local",
-                        group: "nhd",
-                        name: "usgs:NHDFlowline",
-                        title: "Line: Stream, Canal, Pipeline and Shoreline Line Feature"
-                    }, {
-                        source: "local",
-                        group: "nhd",
-                        name: "usgs:NHDPoint",
-                        title: "Water Point Feature"
+                        // group: "nhd",
+                        name: "usgs:NHDPoint" //,
+                        // title: "Water Point Feature"
                     }]
                 }
             });
