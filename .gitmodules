@@ -13,3 +13,9 @@
 [submodule "server/geoserver-geoscript-js"]
 	path = server/geoserver-geoscript-js
 	url = git://github.com/tschaub/geoserver-geoscript-js.git
+[submodule "server/geotools-wfs2"]
+	path = server/geotools-wfs2
+	url = git://github.com/groldan/geotools.git
+[submodule "server/geoserver-gss"]
+	path = server/geoserver-gss
+	url = git://github.com/groldan/geoserver_trunk.git
