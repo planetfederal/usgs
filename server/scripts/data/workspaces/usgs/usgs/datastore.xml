@@ -12,7 +12,7 @@
     <entry key="port">5432</entry>
     <entry key="passwd">opengeo78902</entry>
     <entry key="dbtype">postgis</entry>
-    <entry key="host">db.demo.opengeo.org</entry>
+    <entry key="host">db2.demo.opengeo.org</entry>
     <entry key="validate connections">true</entry>
     <entry key="encode functions">false</entry>
     <entry key="max connections">40</entry>
@@ -21,8 +21,8 @@
     <entry key="schema">public</entry>
     <entry key="Loose bbox">true</entry>
     <entry key="Expose primary keys">false</entry>
-    <entry key="Max open prepared statements">50</entry>
     <entry key="fetch size">1000</entry>
+    <entry key="Max open prepared statements">50</entry>
     <entry key="preparedStatements">false</entry>
     <entry key="Estimated extends">true</entry>
     <entry key="user">opengeo</entry>
