@@ -113,6 +113,15 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             feature = this.feature = feature.getFeature();
         }
         
+        /**
+         * Working around what looks like an issue with deletes and feature ids
+         * that include a hash corresponding to a feature version.
+         * TODO: https://github.com/opengeo/usgs/issues/115
+         */
+        if (feature.fid) {
+            feature.fid = feature.fid.split("@").shift();
+        }
+
         if(!this.title && feature.fid) {
             this.title = feature.fid;
         }
