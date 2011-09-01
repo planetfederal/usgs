@@ -149,7 +149,7 @@
         <exec executable="${mvn}" dir="${server}" failonerror="true">
 	    <arg value="${localrepo}"/>
             <arg value="-DskipTests"/>
-            <arg value="-P geoscript-js,wps"/>
+            <arg value="-P geosync,geoscript-js,wps"/>
             <arg value="clean"/>
             <arg value="install"/>
         </exec>
