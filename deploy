@@ -45,7 +45,7 @@ if [ "$?" == 0 ]; then
         sudo rm -rf /var/lib/tomcat6/webapps/usgs
     fi
     if [[ -n "$SERVER" ]]; then
-        sudo mv server/geoserver/src/web/app/target/geoserver.war /var/lib/tomcat6/webapps/
+        sudo mv server/geoserver-gss/web/app/target/geoserver.war /var/lib/tomcat6/webapps/
         sudo rm -rf /var/lib/tomcat6/webapps/geoserver
     fi
     sudo service tomcat6 start 
