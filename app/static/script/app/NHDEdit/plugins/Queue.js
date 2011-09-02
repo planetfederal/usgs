@@ -17,7 +17,9 @@ Ext.ns("NHDEdit.plugins");
 /** api: constructor
  *  .. class:: Queue(config)
  *
- *    Show the exceptions queue.
+ *  Show the exceptions queue. This is a dialog with the rows of the server-side
+ *  managed exceptions queue in a grid, along with a button to zoom to the feature
+ *  which is the subject of the exception message.
  */
 NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
 
@@ -27,24 +29,49 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     /** i18n */
     tooltip: "Show the exception queue",
     buttonText: "Exceptions",
+    exceptionFieldTitle: "Exception Message",
+    zoomToFeatureTooltip: "Zoom to the feature associated with this exception",
+    /** end i18n */
 
+    /** api: config[url]
+     * ``String`` 
+     * The online resource of the Web Feature Service to retrieve the exception 
+     * queue feature type from.
+     */
     url: null,
 
+    /** api: config[featurePrefix]
+     * ``String``
+     * The prefix to use to get a fully qualified typename.
+     */
     featurePrefix: null,
 
+    /** api: config[featureType]
+     *  ``String``
+     *  The unqualified typename associated with the exception queue
+     */
     featureType: null,
 
+    /** private: property[schema]
+     *  ``GeoExt.data.AttributeStore``
+     *  The attribute store for the exception queue feature type.
+     */
     schema: null,
 
+    /** private: property[featureStore]
+     *  ``gxp.data.WFSFeatureStore``
+     *  The feature store containing the records of the exception queue.
+     */
     featureStore: null,
     
     /** api: config[nhdFeatureManager]
      *  ``String`` id of the feature manager used for editing nhd feature types.
-     *  Default is "nhd-manager".
      */
-    nhdFeatureManager: "nhd-manager",
+    nhdFeatureManager: null,
 
     /** private: method[init]
+     *
+     *  :arg target: ``gxp.Viewer`` The viewer initializing this plugin.
      */
     init: function(target) {
         NHDEdit.plugins.Queue.superclass.init.apply(this, arguments);
@@ -64,6 +91,23 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
         });
     },
 
+    /** private: method[destroy]
+     * Clean up.
+     */
+    destroy: function() {
+        if (this.schema) {
+            this.schema.removeListener("load", this.onSchemaLoad, this);
+        }
+        this.schema = null;
+        this.featureStore = null;
+        NHDEdit.plugins.Queue.superclass.destroy.apply(this, arguments);
+    },
+
+    /** private: method[onSchemaLoad]
+     *  Listener for when the attribute store is ready. Create the featureStore.
+     *  Currently we show the full queue, not filtered by the current metadata
+     *  record.
+     */
     onSchemaLoad: function() {
         var fields = [];
         this.schema.each(function(r) {
@@ -75,10 +119,11 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             featureType: this.featureType,
             featureNS: this.featureNS
         });
-        // TODO: decide if we should filter by the current metadata record or not
     },
 
     /** api: method[addOutput]
+     * When someone pressed the Queue button, this function will be called.
+     * So load the featureStore and show it in a grid.
      */
     addOutput: function() {
         this.featureStore.load();
@@ -94,7 +139,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             cls: "app-exceptionqueue",
             store: this.featureStore,
             includeFields: ["exceptionmessage"],
-            propertyNames: {exceptionmessage: "Exception Message"},
+            propertyNames: {exceptionmessage: this.exceptionFieldTitle},
             customRenderers: {
                 exceptionmessage: function(output) {
                     var data = Ext.decode(output);
@@ -108,7 +153,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             getColumns: function(store) {
                 var columns = gxp.grid.FeatureGrid.prototype.getColumns.apply(this, arguments);
                 columns.unshift({xtype: 'actioncolumn', width: 30, items: [{
-                    tooltip: "Zoom to the feature associated with this exception",
+                    tooltip: this.zoomToFeatureTooltip,
                     iconCls: 'gxp-icon-zoomtofeature',
                     handler: function(grid, rowIndex, colIndex) {
                         var record = store.getAt(rowIndex);
@@ -146,17 +191,16 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     },
 
     /** api: method[addActions]
+     *  Which actions should we show in the UI?
      */
     addActions: function() {
-        return NHDEdit.plugins.Queue.superclass.addActions.call(this, [
-            {
-                text: this.buttonText,
-                handler: this.addOutput,
-                iconCls: "gxp-icon-queue",
-                tooltip: this.tooltip,
-                scope: this
-            }
-        ]);
+        return NHDEdit.plugins.Queue.superclass.addActions.call(this, [{
+            text: this.buttonText,
+            handler: this.addOutput,
+            iconCls: "gxp-icon-queue",
+            tooltip: this.tooltip,
+            scope: this
+        }]);
     }
 
 });
