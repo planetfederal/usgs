@@ -42,7 +42,7 @@ public class NHDPointTest extends USGSTestSupport {
 
     }
     public void testInsertsQueue() throws Exception {
-        SimpleFeatureSource exceptions = getFeatureSource(new QName("nhdexceptions"));
+        SimpleFeatureSource exceptions = getFeatureSource(new QName("NHDExceptions"));
         assertEquals("no exceptions initially", 0, exceptions.getFeatures().size());
 
         String[] files = { "xml/rule-1-queue.xml", "xml/rule-2-queue.xml" };
