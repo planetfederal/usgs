@@ -119,7 +119,23 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         }, this);
         this.addEvents(
+            /** api: event[metadatasaved]
+             *  Fires when a new metadata record is saved.
+             *
+             *  Listeners arguments:
+             *
+             *  * cmp - ``NHDEdit.MetadataForm`` This form.
+             *  * record - ``Ext.data.Record`` The metadata record.
+             */
             'metadatasaved',
+            /** api: event[metadataopened]
+             *  Fires when an existing metadata record has been opened.
+             *
+             *  Listeners arguments:
+             *
+             *  * cmp - ``NHDEdit.MetadataForm`` This form.
+             *  * record - ``Ext.data.Record`` The metadata record.
+             */
             'metadataopened'
         );
     },
