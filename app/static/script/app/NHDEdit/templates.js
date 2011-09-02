@@ -8,6 +8,13 @@
 
 Ext.ns("NHDEdit");
 
+/**
+ * api: property[NHDEdit.exceptionTemplates]
+ * ``Object``
+ * An object containing an ``Ext.XTemplate`` to present error messages to the
+ * end user. The key of the object is the value of "locator". See also:
+ * https://github.com/opengeo/usgs/wiki/Exceptions
+ */
 NHDEdit.exceptionTemplates = {
     "js:MustIntersect": new Ext.XTemplate(
         ['{subjectFType:this.getFType} {subjectLayer} features must ', 
