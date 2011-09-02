@@ -23,14 +23,14 @@ public class USGSTest extends USGSTestSupport {
         assertNotNull(cat);
         assertEquals("namespaces count", 1, cat.getNamespaces().size());
         List<LayerInfo> layers = cat.getLayers();
-        assertEquals(8, layers.size());
+        assertEquals(13, layers.size());
         List<DataStoreInfo> dataStores = cat.getDataStores();
         for (DataStoreInfo dsi: dataStores) {
             System.out.println(dsi.getDataStore(null).getNames());
         }
         
-        checkFeatures(new QName("nhdarea"), 5);
-        deleteFeatures(new QName("nhdarea"));
+        checkFeatures(new QName("NHDArea"), 5);
+        deleteFeatures(new QName("NHDArea"));
     }
     
     /*
@@ -39,8 +39,8 @@ public class USGSTest extends USGSTestSupport {
      * before each test case.
      */
     public void testSanity2() throws Exception {
-        checkFeatures(new QName("nhdarea"), 5);
-        deleteFeatures(new QName("nhdarea"));
+        checkFeatures(new QName("NHDArea"), 5);
+        deleteFeatures(new QName("NHDArea"));
     }
     
     private void deleteFeatures(QName name) throws IOException {

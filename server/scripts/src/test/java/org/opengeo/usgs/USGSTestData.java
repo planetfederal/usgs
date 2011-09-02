@@ -39,11 +39,16 @@ public class USGSTestData extends LiveDbmsData {
             File destScripts = new File(testDataDir, "scripts");
             IOUtils.deepCopy(sourceWorkspaces, destWorkspaces);
             IOUtils.deepCopy(sourceScripts, destScripts);
-            // copy datastore template - values to be replaced by usgs.properties file
-            URL resource = USGSTestData.class.getResource("data/datastore.xml");
+            // copy usgs datastore template - values to be replaced by usgs.properties file
+            URL resource = USGSTestData.class.getResource("data/usgs/datastore.xml");
             File template = new File(resource.getFile());
             FileUtils.copyFileToDirectory(
                     template, new File(destWorkspaces, "usgs/usgs"));
+            // copy usgs_bp datastore template - values to be replaced by usgs.properties file
+            resource = USGSTestData.class.getResource("data/usgs_bp/datastore.xml");
+            template = new File(resource.getFile());
+            FileUtils.copyFileToDirectory(
+                    template, new File(destWorkspaces, "usgs/usgs_bp"));
         } catch (IOException e) {
             throw new RuntimeException("Trouble creating test data dir", e);
         }
@@ -53,7 +58,7 @@ public class USGSTestData extends LiveDbmsData {
     public USGSTestData() {
         // the usgs-script.sql is bogus just to trick super class
         super(testDataDir, "usgs", new File("usgs-script.sql"));
-        filteredPaths = new ArrayList<String>(Arrays.asList("workspaces/usgs/usgs/datastore.xml"));
+        filteredPaths = new ArrayList<String>(Arrays.asList("workspaces/usgs/usgs/datastore.xml", "workspaces/usgs/usgs_bp/datastore.xml"));
     }
 
     protected void setRunDBSetup(boolean runDBSetup) {
