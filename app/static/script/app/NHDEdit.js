@@ -7,6 +7,12 @@
  */
 
 (function() {
+    /** private[method] getUrlConfig
+     *  Gets the url config from the anchor/hash in the url.
+     * 
+     *  :returns: ``Object`` Object containing the values for c (center),
+     *  z (zoom level) and m (metadata record id).
+     */
     function getUrlConfig(){
         var hash = window.location.hash, urlConfig = {};
         if (hash) {
@@ -14,14 +20,27 @@
         }
         return urlConfig;
     }
-    
+
+    /** api: constructor
+     *  .. class:: NHDEdit(config)
+     *
+     *  Create a viewer object specific for the NHDEdit prototype.
+     */    
     window.NHDEdit = Ext.extend(gxp.Viewer, {
+        /** private: method[constructor]
+         *  Construct the viewer.
+         */
         constructor: function(config) {
             NHDEdit.superclass.constructor.apply(this, arguments);
             // add any custom application events
             this.addEvents(
                 /** api: event[setpreference]
                  *  Fires when an autocorrect preference has been set.
+                 *
+                 *  Optional listeners arguments:
+                 *
+                 *  * code - ``Object`` rule with an exception code
+                 *  * pref - ``Object`` the preference object for the code.
                  */
                 "setpreference"
             );
@@ -35,6 +54,12 @@
                 });
             }, this);
         },
+        /** api: method[loadConfig]
+         *  :arg config: ``Object`` The config object passed to the constructor.
+         *
+         *  Subclasses that load config asynchronously can override this to load
+         *  any configuration before applyConfig is called.
+         */ 
         loadConfig: function(config, callback) {
             var urlConfig = getUrlConfig();
             if (urlConfig.z != null) {
@@ -47,6 +72,8 @@
             callback.call(this, config);
         },
         /** private: method[setPreference]
+         *  Sets an autocorrect preference and saves it to the metadata record.
+         *
          *  :arg code: ``Object`` rule with an exception code
          *  :arg object: ``Object`` object to set for the preference
          */
@@ -71,9 +98,14 @@
     
     /** private: property[preferences]
      *  ``Object``
+     *  Central object containing all the prefences in a session.
      */
     NHDEdit.preferences = {};
-    
+
+    /** private: property[ruleSpecificItems]
+     *  ``Object``
+     *  Specific handling for certain rules.
+     */
     NHDEdit.ruleSpecificItems = {
         // specific handling for vertical relationship rule
         "6": function(rule) {
@@ -115,7 +147,12 @@
     /** private: property[metadataRecord]
      *  ``GeoExt.data.FeatureRecord`` metadata record currently being used
      */
-    
+
+    /** api: method[NHDEdit.setMetadataRecord]
+     *  Set the specified record as the current metadata record.
+     *
+     *  :arg record: ``Ext.data.Record``
+     */
     NHDEdit.setMetadataRecord = function(record) {
         NHDEdit.metadataRecord = record;
         var urlConfig = getUrlConfig();
@@ -135,7 +172,12 @@
         }
         window.location.hash = Ext.urlEncode(urlConfig);
     };
-    
+
+    /** api: method[NHDEdit.createAutoCorrectItems]
+     *  Creates any auto correct form items for the specific rule.
+     *
+     * :arg rule: ``Object``
+     */    
     NHDEdit.createAutoCorrectItems = function(rule) {
         var code = rule.code, items;
         // add any items for specific rules
