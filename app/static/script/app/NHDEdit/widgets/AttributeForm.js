@@ -21,19 +21,36 @@ Ext.ns("NHDEdit");
 /** api: constructor
  *  .. class:: AttributeForm(config)
  *
- *    Entry form for feature types of NDD. Has special handling for adding
+ *    Entry form for feature types of NHD. Has special handling for adding
  *    lookup values for FType and FCode attributes.
  */
 NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
 
+    /** api: config[feature]
+     *  ``OpenLayers.Feature.Vector`` The feature for which to show the 
+     *  attributes.
+     */
     feature: null,
 
+    /** api: config[schema]
+     *  ``GeoExt.data.AttributeStore``
+     *  The attribute store for the feature type to which feature belongs.
+     */
     schema: null,
 
+    /** api: config[autoScroll]
+     *  ``Boolean` Should we automatically show scrollbars in this form?
+     *  Defaults to true.
+     */
     autoScroll: true,
-    
+
+    /** api: config[excludeFields]
+     *  ``Array`` The fields not to show in this form.
+     */    
     excludeFields: null,
 
+    /** private: method[initComponent]
+     */
     initComponent : function() {
         NHDEdit.AttributeForm.superclass.initComponent.call(this);
         var typeName = this.schema.reader.raw.featureTypes[0].typeName;

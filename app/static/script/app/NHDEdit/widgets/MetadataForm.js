@@ -17,18 +17,54 @@ Ext.ns("NHDEdit");
 /** api: constructor
  *  .. class:: MetadataForm(config)
  *
- *    Entry form for metadata.
+ *    Entry form for a metadata record.
  */
 NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
+    /** i18n */
+    findText: "Find",
+    findTooltip: "Find an existing metadata record",
+    commitTitle: "Commit message",
+    contactTitle: "Contact",
+    masterFieldsetTitle: "Metadata Record",
+    optionalFieldsetTitle: "Optional",
+    windowTitle: "Metadata Records",
+    deleteText: "Are you sure you want to delete this feature?",
+    cancelText: "Cancel",
+    openText: "Open",
+    /** end i18n */
+
+    /** api: config[url]
+     * ``String`` 
+     * The online resource of the Web Feature Service to retrieve the exception 
+     * queue feature type from.
+     */
     url: null,
 
-    featureType: null,
-
+    /** api: config[featureNS]
+     * ``String``
+     * The feature name space.
+     */
     featureNS: null,
 
+    /** api: config[featureType]
+     *  ``String``
+     *  The unqualified typename associated with the exception queue
+     */
+    featureType: null,
+
+    /**
+     * private: property[openWindow]
+     * ``Ext.Window``
+     * The window to open up an existing metadata record.
+     */
     openWindow: null,
     
+    /** api: config[fieldMetadata]
+     *  ``Object``
+     *  Metadata about the fields, i.e. how are the fieldsets organized and
+     *  what field titles should be used?
+     */
     fieldMetadata: {
         contactorganization: {fieldset: "contact", label: "Contact Organization"},
         contactemailaddress: {fieldset: "contact", label: "Contact E-mail"},
@@ -44,6 +80,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         metadatastandardversion: {label: "Metadata Standard Version"}
     },
 
+    /** private: method[initComponent]
+     */
     initComponent : function() {
         NHDEdit.MetadataForm.superclass.initComponent.call(this);
         if (NHDEdit.metadataSchema === undefined) {
@@ -71,7 +109,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }
         this.deleteLabel = new Ext.form.Label({
             hidden: true, 
-            html: '<p style="color:red;font-weight:bold">Are you sure you want to delete this feature?</p>'
+            html: '<p style="color:red;font-weight:bold">' + this.deleteText + '</p>'
         });
         this.add(this.deleteLabel);
         this.on('show', function() {
@@ -86,6 +124,11 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         );
     },
 
+    /**
+     * private: method[createGrid]
+     * Creates the feature grid which is used for opening up an existing 
+     * metadata record.
+     */
     createGrid: function() {
         //TODO this check is just a workaround - the solution is to create a
         // new store for every popup - see https://github.com/opengeo/usgs/issues/84
@@ -110,17 +153,22 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             },
             height: 300,
             bbar: ["->", {
-                text: "Cancel", 
+                text: this.cancelText, 
                 handler: function() { this.openWindow.close(); }, 
                 scope: this
             }, {
-                text: "Open", 
+                text: this.openText, 
                 handler: this.openMetadata, 
                 scope: this
             }]
         });
     },
-    
+
+    /** private: method[setFieldValues]
+     *  Update the record with the values from the form.
+     *
+     *  :arg record: ``Ext.data.Record``
+     */
     setFieldValues: function(record) {
         var processDescription = record.fields.find(function(f) {
             return f.name.toLowerCase() == "processdescription"; 
@@ -140,6 +188,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         });
     },
 
+    /** api: method[saveEntry]
+     *  Save the new metadata record to the WFS.
+     */
     saveEntry: function() {
         var feature = new OpenLayers.Feature.Vector(null, {});
         this.getForm().items.each(function(item) {
@@ -153,10 +204,13 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         NHDEdit.metadataStore.save();
     },
 
+    /** private: method[openEntry]
+     *  Show the window to open up an existing metadata record.
+     */
     openEntry: function() {
         if (this.openWindow === null) {
             this.openWindow = new Ext.Window({
-                title: "Metadata Records", 
+                title: this.windowTitle, 
                 layout: "fit",
                 closeAction: "hide",
                 items: [this.grid]
@@ -165,6 +219,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.openWindow.show();
     },
 
+    /** private: method[openMetadata]
+     *  Open up an exisiting metadata record, and fire the metadataopened event.
+     */
     openMetadata: function() {
         var record = this.grid.getSelectionModel().getSelected();
         this.setFieldValues(record);
@@ -172,6 +229,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.openWindow.hide();
     },
 
+    /** private: method[createStore]
+     *  Create the feature store for the metadata records.
+     */
     createStore: function() {
         var fields = [];
         var schema = NHDEdit.metadataSchema;
@@ -205,21 +265,27 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         NHDEdit.metadataStore.load();
     },
 
+    /** private: method[onLoad]
+     *  load handler for the AttributeStore.
+     */
     onLoad: function() {
         this.createStore();
         this.createFieldSets();
     },
 
+    /** private: method[createFieldSets]
+     *  Creates the fielsets for the form.
+     */
     createFieldSets: function() {
         var masterFieldset = new Ext.form.FieldSet({
-            title: "Metadata Record",
+            title: this.masterFieldsetTitle,
             cls: "app-metadata-fieldset",
             labelAlign: "top"
         });
         var fieldSet = new Ext.form.FieldSet({
             collapsible: true,
             collapsed: true,
-            title: "Optional",
+            title: this.optionalFieldsetTitle,
             autoHeight: false,
             autoScroll: true,
             labelAlign: "top",
@@ -233,7 +299,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         });
         var fieldSets = {
             contact: new Ext.form.FieldSet({
-                title: "Contact",
+                title: this.contactTitle,
                 defaults: {
                     anchor: "100%",
                     labelAlign: "top"
@@ -249,7 +315,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         }));
         var fieldCfg = GeoExt.form.recordToField(desc);
         fieldCfg.xtype = "textarea";
-        fieldCfg.fieldLabel = "Commit message";
+        fieldCfg.fieldLabel = this.commitTitle;
         fieldCfg.allowBlank = false;
         fieldCfg.anchor = "100%";
         masterFieldset.add(fieldCfg);
@@ -282,8 +348,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             iconCls: "gxp-icon-search",
             disabled: true,
             ref: "findButton",
-            text: "Find",
-            tooltip: "Find an existing metadata record",
+            text: this.findText,
+            tooltip: this.findTooltip,
             handler: this.openEntry,
             scope: this
         }));

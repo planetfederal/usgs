@@ -32,16 +32,15 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     deleteButtonTooltip: 'Delete this feature',
     saveButtonText: 'Save',
     saveButtonTooltip: 'Save changes',
+    cancelButtonText: 'Cancel',
+    previousButtonText: 'Previous',
+    nextButtonText: 'Next',
+    /** end i18n */
     
     /** private config overrides **/
     autoHeight: true,
     shadow: false,
         
-    /** api: config[feature]
-     *  ``OpenLayers.Feature.Vector``|``GeoExt.data.FeatureRecord`` The feature
-     *  to edit and display.
-     */
-    
     /** api: config[vertexRenderIntent]
      *  ``String`` renderIntent for feature vertices when modifying. Undefined
      *  by default.
@@ -59,7 +58,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      */
     schema: null,
     
-   /** api: config[excludeFields]
+    /** api: config[excludeFields]
      *  ``Array`` Optional list of field names (case sensitive) that are to be
      *  excluded from the attributeForm.
      */
@@ -93,6 +92,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      */
     deleteButton: null,
 
+    /** private: property[postDeleteButton]
+     *  ``Ext.Button``
+     */
     postDeleteButton: null,
     
     /** private: property[store]
@@ -102,9 +104,20 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     /** api: config[metadataSource]
      *  ``Object``
      */
-     
+
+    /** private: property[metadataForm]
+     *  ``NHDEdit.MetadataForm``
+     */     
     metadataForm: null,
+
+    /** private: property[attributeForm]
+     *  ``NHDEdit.AttributeForm``
+     */
     attributeForm: null,
+
+    /** private: property[exceptionPanel]
+     *  ``NHDEdit.ExceptionPanel``
+     */
     exceptionPanel: null,
      
     /** private: method[initComponent]
@@ -165,7 +178,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         });
 
         this.cancelButton = new Ext.Button({
-            text: "Cancel",
+            text: this.cancelButtonText,
             iconCls: "cancel",
             handler: function() {
                 this.close();
@@ -174,7 +187,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         });
         
         this.previousButton = new Ext.Button({
-            text: "Previous",
+            text: this.previousButtonText,
             iconCls: "gxp-icon-zoom-previous",
             hidden: true,
             handler: function() {
@@ -194,7 +207,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             scope: this
         });
         this.nextButton = new Ext.Button({
-            text: "Next",
+            text: this.nextButtonText,
             iconCls: "gxp-icon-zoom-next",
             disabled: true,
             handler: function() {
@@ -307,7 +320,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             scope: this
         });
     },
-    
+
+    /** private: method[handleBeforeClose]
+     *  beforeclose handler of this window.
+     */    
     handleBeforeClose: function() {
         this.updateFeature();
         if(this.feature.state === this.getDirtyState()) {
@@ -335,11 +351,17 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         return true;
     },
     
-    /** Method: handleStoreException
+    /** private: method[handleStoreException]
      *  Handler that shows an exception report in the wizard after an
      *  unsuccessful write that caused an exception.
+     *
+     * :arg proxy: ``gxp.data.WFSProtocolProxy`` The proxy of the store.
+     * :arg type: ``String`` remote or response
+     * :arg action: ``String`` Name of the action.
+     * :arg options: ``Object`` The options for the action that were specified.
+     * :arg response: ``Object``
      */
-    handleStoreException: function(proxy, type, action, options, response, records) {
+    handleStoreException: function(proxy, type, action, options, response) {
         this.attributeForm.hide();
         this.metadataForm.hide();
         this.nextButton.hide();
@@ -358,7 +380,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.doLayout();
     },
     
-    /** Method: handleStoreWrite
+    /** private: method[handleStoreWrite]
      *  Handler that closes the wizard popup after a successful write that
      *  resolves an exception
      */
@@ -371,6 +393,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      *  Get the appropriate OpenLayers.State value to indicate a dirty feature.
      *  We don't cache this value because the popup may remain open through
      *  several state changes.
+     *
+     * :returns: ``OpenLayers.State``
      */
     getDirtyState: function() {
         return this.feature.state === OpenLayers.State.INSERT ?
@@ -378,6 +402,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     },
     
     /** private: method[startEditing]
+     *  Starts the editing process using the ModifyFeature Control.
      */
     startEditing: function() {
         this.geometry = this.feature.geometry.clone();
@@ -391,7 +416,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         this.modifyControl.activate();
         this.modifyControl.selectFeature(this.feature);
     },
-    
+
+    /** private: method[updateFeature]
+     *  Update the feature from the attribute form values.
+     */    
     updateFeature: function() {
         var feature = this.feature;
         var fields = this.attributeForm.getForm().items;
@@ -411,6 +439,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     },
     
     /** private: method[stopEditing]
+     *  Stop the editing process.
+     *
      *  :arg save: ``Boolean`` If set to true, changes will be saved and the
      *      ``featuremodified`` event will be fired.
      */
@@ -457,7 +487,11 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             }
         }
     },
-    
+
+    /** private: method[preDeleteFeature]
+     *  Handler for the delete button. Hide appropriate elements and show
+     *  the button that will handle the actual delete process.
+     */    
     preDeleteFeature: function() {
         if (this.feature.state == OpenLayers.State.INSERT) {
             this.close();
@@ -473,6 +507,9 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         }
     },
 
+    /** private: method[deleteFeature]
+     *  Actually delete the feature.
+     */
     deleteFeature: function() {
         if (!NHDEdit.metadataRecord) {
             this.metadataForm.saveEntry();
@@ -485,6 +522,8 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
     /** private: method[setFeatureState]
      *  Set the state of this popup's feature and trigger a featuremodified
      *  event on the feature's layer.
+     *
+     *  :arg state: ``OpenLayers.State``
      */
     setFeatureState: function(state) {
         this.feature.state = state;

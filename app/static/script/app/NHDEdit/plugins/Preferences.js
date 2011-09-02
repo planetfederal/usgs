@@ -84,7 +84,7 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     
     /**
      * private: method[beforeStoreWrite]
-     * beforewrite handle of the storer. This handler is used to set up the 
+     * beforewrite handle of the store. This handler is used to set up the 
      * Native element in the WFS Transaction with the preferences information.
      * 
      * :arg store: ``Ext.data.Store`` The store
