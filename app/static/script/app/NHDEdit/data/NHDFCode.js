@@ -8,6 +8,11 @@
 
 Ext.namespace("NHDEdit");
 
+/**
+ * api: property[NHDEdit.fCodeDict]
+ * ``Object``
+ * A code list mapping FCODE values to their respective descriptions.
+ */
 NHDEdit.fCodeDict = {
     '30700':'Area to be Submerged',
     '31200':'Bay/Inlet',
@@ -132,6 +137,16 @@ NHDEdit.fCodeDict = {
     '56800':'Levee'
 };
 
+/** api: method[NHDEdit.getFCodes]
+ *  Get a list of FCODE values and their corresponding descriptions filtered 
+ *  by the layer type.
+ *
+ *  :arg layer: ``String`` The layer to filter for, e.g. NHDFlowline
+ *
+ *  Returns:
+ *  ``Array`` An Array containing the keys and values for FCODE matching the
+ *  layer type.
+ */
 NHDEdit.getFCodes = function(layer) {
     var fCodes = [];
     var fTypes = NHDEdit.layerFTypes[layer];
