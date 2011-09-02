@@ -1,5 +1,9 @@
 /**
  * Copyright (c) 2008-2011 The Open Planning Project
+ * 
+ * Published under the GPL license.
+ * See https://github.com/opengeo/gxp/raw/master/license.txt for the full text
+ * of the license.
  */
 
 Ext.ns("NHDEdit");
