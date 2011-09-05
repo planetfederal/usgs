@@ -186,7 +186,11 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             autoHeight: false,
             border: false
         });
-        this.grid = output[0];
+        this.grid = output;
+        this.grid.ownerCt.ownerCt.addListener("beforehide", function() {
+            var featureManager = this.target.tools[this.nhdFeatureManager];
+            featureManager.clearFeatures();
+        }, this);
         return output;
     },
 
