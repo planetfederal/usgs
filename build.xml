@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="usgs" default="static-war" basedir=".">
+<project name="editor" default="static-war" basedir=".">
 
     <description>
-        USGS National Mapper Build File
+        USGS National Map Editor Build File
     </description>
 
     <property name="build" location="build"/>

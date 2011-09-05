@@ -22,16 +22,16 @@
     }
 
     /** api: constructor
-     *  .. class:: NHDEdit(config)
+     *  .. class:: Editor(config)
      *
-     *  Create a viewer object specific for the NHDEdit prototype.
+     *  Create a viewer object specific for the Editor prototype.
      */    
-    window.NHDEdit = Ext.extend(gxp.Viewer, {
+    window.Editor = Ext.extend(gxp.Viewer, {
         /** private: method[constructor]
          *  Construct the viewer.
          */
         constructor: function(config) {
-            NHDEdit.superclass.constructor.apply(this, arguments);
+            Editor.superclass.constructor.apply(this, arguments);
             // add any custom application events
             this.addEvents(
                 /** api: event[setpreference]
@@ -68,7 +68,7 @@
             if (urlConfig.c != null) {
                 config.map.center = urlConfig.c.split(",");
             }
-            NHDEdit.metadataId = urlConfig.m;
+            Editor.metadataId = urlConfig.m;
             callback.call(this, config);
         },
         /** private: method[setPreference]
@@ -80,16 +80,16 @@
         setPreference: function(rule, object) {
             var code = rule.code,
                 urlConfig = getUrlConfig();
-            var pref = Ext.apply(NHDEdit.preferences[code] || {
+            var pref = Ext.apply(Editor.preferences[code] || {
                 title: rule.title
             }, object);
-            NHDEdit.preferences[code] = pref;
-            var record = NHDEdit.metadataRecord;
+            Editor.preferences[code] = pref;
+            var record = Editor.metadataRecord;
             if (record) {
                 var completenessReport = record.fields.find(function(f) {
                     return f.name.toLowerCase() == "completenessreport"; 
                 }).name;
-                record.set(completenessReport, Ext.encode(NHDEdit.preferences));
+                record.set(completenessReport, Ext.encode(Editor.preferences));
                 record.store.save();
             }
             this.fireEvent("setpreference", code, pref);
@@ -100,13 +100,13 @@
      *  ``Object``
      *  Central object containing all the prefences in a session.
      */
-    NHDEdit.preferences = {};
+    Editor.preferences = {};
 
     /** private: property[ruleSpecificItems]
      *  ``Object``
      *  Specific handling for certain rules.
      */
-    NHDEdit.ruleSpecificItems = {
+    Editor.ruleSpecificItems = {
         // specific handling for vertical relationship rule
         "6": function(rule) {
             return {
@@ -148,13 +148,13 @@
      *  ``GeoExt.data.FeatureRecord`` metadata record currently being used
      */
 
-    /** api: method[NHDEdit.setMetadataRecord]
+    /** api: method[Editor.setMetadataRecord]
      *  Set the specified record as the current metadata record.
      *
      *  :arg record: ``Ext.data.Record``
      */
-    NHDEdit.setMetadataRecord = function(record) {
-        NHDEdit.metadataRecord = record;
+    Editor.setMetadataRecord = function(record) {
+        Editor.metadataRecord = record;
         var urlConfig = getUrlConfig();
         if (record) {
             // restore preferences
@@ -162,27 +162,27 @@
                 return f.name.toLowerCase() == "completenessreport";
             }).name;
             if (record.get(completenessReport) !== undefined && record.get(completenessReport) !== "") {
-                NHDEdit.preferences = Ext.decode(record.get(completenessReport));
+                Editor.preferences = Ext.decode(record.get(completenessReport));
                 app.fireEvent("setpreference");
             }
             urlConfig.m = record.getFeature().fid;
-            NHDEdit.metadataId = urlConfig.m;
+            Editor.metadataId = urlConfig.m;
         } else {
             delete urlConfig.m;
         }
         window.location.hash = Ext.urlEncode(urlConfig);
     };
 
-    /** api: method[NHDEdit.createAutoCorrectItems]
+    /** api: method[Editor.createAutoCorrectItems]
      *  Creates any auto correct form items for the specific rule.
      *
      * :arg rule: ``Object``
      */    
-    NHDEdit.createAutoCorrectItems = function(rule) {
+    Editor.createAutoCorrectItems = function(rule) {
         var code = rule.code, items;
         // add any items for specific rules
-        if (code in NHDEdit.ruleSpecificItems) {
-            items = NHDEdit.ruleSpecificItems[code].call(this, rule);
+        if (code in Editor.ruleSpecificItems) {
+            items = Editor.ruleSpecificItems[code].call(this, rule);
         } else {
             items = {
                 xtype: "checkbox",

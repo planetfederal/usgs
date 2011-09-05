@@ -6,15 +6,15 @@
  * of the license.
  */
 
-Ext.ns("NHDEdit");
+Ext.ns("Editor");
 
 /**
- * @requires NHDEdit.js
- * @requires NHDEdit/data/NHDFCode.js
+ * @requires Editor.js
+ * @requires Editor/data/NHDFCode.js
  */
 
 /** api: (define)
- *  module = NHDEdit
+ *  module = Editor
  *  class = AttributeForm
  *  extends = Ext.form.FormPanel
  */
@@ -25,7 +25,7 @@ Ext.ns("NHDEdit");
  *    Entry form for feature types of NHD. Has special handling for adding
  *    lookup values for FType and FCode attributes.
  */
-NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
+Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
 
     /** api: config[feature]
      *  ``OpenLayers.Feature.Vector`` The feature for which to show the 
@@ -53,15 +53,15 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
     /** private: method[initComponent]
      */
     initComponent : function() {
-        NHDEdit.AttributeForm.superclass.initComponent.call(this);
+        Editor.AttributeForm.superclass.initComponent.call(this);
         var typeName = this.schema.reader.raw.featureTypes[0].typeName;
         var fTypeStore = new Ext.data.ArrayStore({
             fields: ['value', 'description'],
-            data : NHDEdit.getFTypes(typeName)
+            data : Editor.getFTypes(typeName)
         });
         var fCodeStore = new Ext.data.ArrayStore({
             fields: ['value', 'description'],
-            data : NHDEdit.getFCodes(typeName)
+            data : Editor.getFCodes(typeName)
         });
         fCodeStore.sort("value");
         
@@ -142,4 +142,4 @@ NHDEdit.AttributeForm = Ext.extend(Ext.form.FormPanel, {
 
 });
 
-Ext.reg('app_attributeform', NHDEdit.AttributeForm);
+Ext.reg('app_attributeform', Editor.AttributeForm);

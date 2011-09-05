@@ -6,14 +6,14 @@
  * of the license.
  */
 
-Ext.ns("NHDEdit");
+Ext.ns("Editor");
 
 /**
- * @requires NHDEdit.js
+ * @requires Editor.js
  */
 
 /** api: (define)
- *  module = NHDEdit
+ *  module = Editor
  *  class = MetadataForm
  *  extends = Ext.form.FormPanel
  */
@@ -23,7 +23,7 @@ Ext.ns("NHDEdit");
  *
  *    Entry form for a metadata record.
  */
-NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
+Editor.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
     /** i18n */
     findText: "Find",
@@ -87,9 +87,9 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     /** private: method[initComponent]
      */
     initComponent : function() {
-        NHDEdit.MetadataForm.superclass.initComponent.call(this);
-        if (NHDEdit.metadataSchema === undefined) {
-            NHDEdit.metadataSchema = new GeoExt.data.AttributeStore({
+        Editor.MetadataForm.superclass.initComponent.call(this);
+        if (Editor.metadataSchema === undefined) {
+            Editor.metadataSchema = new GeoExt.data.AttributeStore({
                 sortInfo: {
                     field: 'name',
                     direction: 'ASC'
@@ -118,8 +118,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         this.add(this.deleteLabel);
         this.on('show', function() {
             // restore previous record
-            if (NHDEdit.metadataRecord) {
-                this.setFieldValues(NHDEdit.metadataRecord);
+            if (Editor.metadataRecord) {
+                this.setFieldValues(Editor.metadataRecord);
             }
         }, this);
         this.addEvents(
@@ -128,7 +128,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
              *
              *  Listeners arguments:
              *
-             *  * cmp - ``NHDEdit.MetadataForm`` This form.
+             *  * cmp - ``Editor.MetadataForm`` This form.
              *  * record - ``Ext.data.Record`` The metadata record.
              */
             'metadatasaved',
@@ -137,7 +137,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
              *
              *  Listeners arguments:
              *
-             *  * cmp - ``NHDEdit.MetadataForm`` This form.
+             *  * cmp - ``Editor.MetadataForm`` This form.
              *  * record - ``Ext.data.Record`` The metadata record.
              */
             'metadataopened'
@@ -156,8 +156,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             this.findButton.setDisabled(false);            
         }
         this.grid = new gxp.grid.FeatureGrid({
-            store: NHDEdit.metadataStore,
-            schema: NHDEdit.metadataSchema,
+            store: Editor.metadataStore,
+            schema: Editor.metadataSchema,
             loadMask: true,
             listeners: {
                 'dblclick': this.openMetadata,
@@ -202,7 +202,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
             if (copy === true) {
                 field.on("change", function() {
-                    NHDEdit.setMetadataRecord(null);
+                    Editor.setMetadataRecord(null);
                 });
             }
         });
@@ -220,8 +220,8 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             }
         });
         feature.state = OpenLayers.State.INSERT;
-        NHDEdit.metadataStore.add(new NHDEdit.metadataStore.recordType({feature: feature}));
-        NHDEdit.metadataStore.save();
+        Editor.metadataStore.add(new Editor.metadataStore.recordType({feature: feature}));
+        Editor.metadataStore.save();
     },
 
     /** private: method[openEntry]
@@ -254,11 +254,11 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
      */
     createStore: function() {
         var fields = [];
-        var schema = NHDEdit.metadataSchema;
+        var schema = Editor.metadataSchema;
         schema.each(function(r) {
             fields.push({name: r.get("name")});
         }, this);
-        NHDEdit.metadataStore = new gxp.data.WFSFeatureStore({
+        Editor.metadataStore = new gxp.data.WFSFeatureStore({
             fields: fields,
             layer: new OpenLayers.Layer.Vector(null, {projection: new OpenLayers.Projection("EPSG:900913")}),
             autoLoad: true,
@@ -273,16 +273,16 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
             featureType: this.featureType,
             featureNS: this.featureNS
         });
-        NHDEdit.metadataStore.addListener('load', this.createGrid, this, {single: true});
-        var fid = NHDEdit.metadataId;
+        Editor.metadataStore.addListener('load', this.createGrid, this, {single: true});
+        var fid = Editor.metadataId;
         if (fid !== undefined) {
-            NHDEdit.metadataStore.on("load", function(store, records) {
+            Editor.metadataStore.on("load", function(store, records) {
                 var record = store.getAt(store.findExact("fid", fid));
-                NHDEdit.setMetadataRecord(record);
+                Editor.setMetadataRecord(record);
                 this.fireEvent('metadataopened', this, record);
             }, this, {single: true});
         }
-        NHDEdit.metadataStore.load();
+        Editor.metadataStore.load();
     },
 
     /** private: method[onLoad]
@@ -329,7 +329,7 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         for (var s in fieldSets) {
             fieldSet.add(fieldSets[s]);
         }
-        var schema = NHDEdit.metadataSchema;
+        var schema = Editor.metadataSchema;
         var desc = schema.getAt(schema.findBy(function(r) {
             return r.get("name").toLowerCase() == "processdescription";
         }));
@@ -378,4 +378,4 @@ NHDEdit.MetadataForm = Ext.extend(Ext.form.FormPanel, {
 
 });
 
-Ext.reg('app_metadataform', NHDEdit.MetadataForm);
+Ext.reg('app_metadataform', Editor.MetadataForm);

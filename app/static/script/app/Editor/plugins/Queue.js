@@ -7,13 +7,13 @@
  */
 
 /**
- * @requires NHDEdit.js
- * @requires NHDEdit/templates.js
+ * @requires Editor.js
+ * @requires Editor/templates.js
  */
-Ext.ns("NHDEdit.plugins");
+Ext.ns("Editor.plugins");
 
 /** api: (define)
- *  module = NHDEdit.plugins
+ *  module = Editor.plugins
  *  class = Queue
  *  extends = gxp.plugins.Tool
  */
@@ -25,7 +25,7 @@ Ext.ns("NHDEdit.plugins");
  *  managed exceptions queue in a grid, along with a button to zoom to the feature
  *  which is the subject of the exception message.
  */
-NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
+Editor.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
 
     /** api: ptype = app_queue */
     ptype: "app_queue",
@@ -78,7 +78,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
      *  :arg target: ``gxp.Viewer`` The viewer initializing this plugin.
      */
     init: function(target) {
-        NHDEdit.plugins.Queue.superclass.init.apply(this, arguments);
+        Editor.plugins.Queue.superclass.init.apply(this, arguments);
         this.schema = new GeoExt.data.AttributeStore({
             url: this.url,
             baseParams: {
@@ -104,7 +104,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
         }
         this.schema = null;
         this.featureStore = null;
-        NHDEdit.plugins.Queue.superclass.destroy.apply(this, arguments);
+        Editor.plugins.Queue.superclass.destroy.apply(this, arguments);
     },
 
     /** private: method[onSchemaLoad]
@@ -138,7 +138,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             scope: this
         });
         var me = this;
-        var output = NHDEdit.plugins.Queue.superclass.addOutput.call(this, {
+        var output = Editor.plugins.Queue.superclass.addOutput.call(this, {
             xtype: "gxp_featuregrid",
             cls: "app-exceptionqueue",
             store: this.featureStore,
@@ -147,7 +147,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             customRenderers: {
                 exceptionmessage: function(output) {
                     var data = Ext.decode(output);
-                    var tpl = NHDEdit.exceptionTemplates[data.process];
+                    var tpl = Editor.exceptionTemplates[data.process];
                     if (tpl) {
                         output = tpl.applyTemplate(data);
                     }
@@ -202,7 +202,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
      *  Which actions should we show in the UI?
      */
     addActions: function() {
-        return NHDEdit.plugins.Queue.superclass.addActions.call(this, [{
+        return Editor.plugins.Queue.superclass.addActions.call(this, [{
             text: this.buttonText,
             handler: this.addOutput,
             iconCls: "gxp-icon-queue",
@@ -213,4 +213,4 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
 
 });
 
-Ext.preg(NHDEdit.plugins.Queue.prototype.ptype, NHDEdit.plugins.Queue);
+Ext.preg(Editor.plugins.Queue.prototype.ptype, Editor.plugins.Queue);

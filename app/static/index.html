@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>USGS NHD editing prototype</title>
+        <title>USGS National Map Editor Prototype</title>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="./favicon.ico">
@@ -37,14 +37,14 @@
         <!-- app resources -->
         <link rel="stylesheet" type="text/css" href="theme/app/style.css">
         <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
-        <script type="text/javascript" src="script/NHDEdit.js"></script>
+        <script type="text/javascript" src="script/Editor.js"></script>
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             Ext.USE_NATIVE_JSON = true;
             OpenLayers.ImgPath = "theme/app/img/";
             // the layers for which to activate flowline snapping
-            NHDEdit.snappingLayers = ["usgs:NHDPoint", "usgs:NHDFlowline"];
-            var app = new NHDEdit({
+            Editor.snappingLayers = ["usgs:NHDPoint", "usgs:NHDFlowline"];
+            var app = new Editor({
                 proxy: "proxy/?url=",
                 mapItems: [{
                     xtype: "gx_zoomslider",
@@ -118,7 +118,7 @@
                         "query": function(featureManager) {
                             var snappingAgent = featureManager.target.tools["snapping-agent"];
                             var i, len;
-                            if (NHDEdit.snappingLayers.indexOf(featureManager.layerRecord.get("name")) !== -1) {
+                            if (Editor.snappingLayers.indexOf(featureManager.layerRecord.get("name")) !== -1) {
                                 for (i=0, len=snappingAgent.controls.length; i<len; i++) {
                                     snappingAgent.controls[i].activate();
                                 }

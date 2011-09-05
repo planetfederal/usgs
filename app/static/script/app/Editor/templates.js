@@ -7,19 +7,19 @@
  */
  
 /**
- * @requires NHDEdit.js
+ * @requires Editor.js
  */
 
-Ext.ns("NHDEdit");
+Ext.ns("Editor");
 
 /**
- * api: property[NHDEdit.exceptionTemplates]
+ * api: property[Editor.exceptionTemplates]
  * ``Object``
  * An object containing an ``Ext.XTemplate`` to present error messages to the
  * end user. The key of the object is the value of "locator". See also:
  * https://github.com/opengeo/usgs/wiki/Exceptions
  */
-NHDEdit.exceptionTemplates = {
+Editor.exceptionTemplates = {
     "js:MustIntersect": new Ext.XTemplate(
         ['{subjectFType:this.getFType} {subjectLayer} features must ', 
         'intersect a feature from one of the following layers: ',
@@ -29,7 +29,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value] || "All";
+                return Editor.fTypeDict[value] || "All";
             }
         }
     ),
@@ -43,7 +43,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value] || "All";
+                return Editor.fTypeDict[value] || "All";
             }
         }
     ),
@@ -56,7 +56,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value] || "All";
+                return Editor.fTypeDict[value] || "All";
             }
         }
     ),
@@ -65,7 +65,7 @@ NHDEdit.exceptionTemplates = {
         '<tpl if="values.autoCorrectable">This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value] || "All";
+                return Editor.fTypeDict[value] || "All";
             }
         }
     ),
@@ -78,7 +78,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value] || "All";
+                return Editor.fTypeDict[value] || "All";
             }
         }
     ),
@@ -91,7 +91,7 @@ NHDEdit.exceptionTemplates = {
         ' This exception can be autocorrected.</tpl>'].join(""), 
         {
             getFType: function(value) {
-                return NHDEdit.fTypeDict[value] || "All";
+                return Editor.fTypeDict[value] || "All";
             }
         }
     )

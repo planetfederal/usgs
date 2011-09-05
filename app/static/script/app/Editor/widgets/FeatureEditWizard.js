@@ -6,10 +6,10 @@
  * of the license.
  */
 
-Ext.ns("NHDEdit");
+Ext.ns("Editor");
 
 /**
- * @requires NHDEdit.js
+ * @requires Editor.js
  */
 
 /** api: (define)
@@ -25,7 +25,7 @@ Ext.ns("NHDEdit");
  *      makes the feature editable,
  *      using an ``OpenLayers.Control.ModifyFeature``.
  */
-NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
+Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
     
     /** i18n **/
     closeMsgTitle: 'Undo changes?',
@@ -110,17 +110,17 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      */
 
     /** private: property[metadataForm]
-     *  ``NHDEdit.MetadataForm``
+     *  ``Editor.MetadataForm``
      */     
     metadataForm: null,
 
     /** private: property[attributeForm]
-     *  ``NHDEdit.AttributeForm``
+     *  ``Editor.AttributeForm``
      */
     attributeForm: null,
 
     /** private: property[exceptionPanel]
-     *  ``NHDEdit.ExceptionPanel``
+     *  ``Editor.ExceptionPanel``
      */
     exceptionPanel: null,
      
@@ -169,10 +169,10 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             text: this.saveButtonText,
             iconCls: "save",
             tooltip: this.saveButtonTooltip,
-            hidden: !NHDEdit.metadataRecord,
+            hidden: !Editor.metadataRecord,
             disabled: true,
             handler: function() {
-                if (!NHDEdit.metadataRecord) {
+                if (!Editor.metadataRecord) {
                     this.metadataForm.saveEntry();
                 } else {
                     this.stopEditing(true);
@@ -198,7 +198,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                 this.metadataForm.hide();
                 this.attributeForm.show();
                 this.previousButton.hide();
-                if (!NHDEdit.metadataRecord) {
+                if (!Editor.metadataRecord) {
                     this.saveButton.hide();
                 }
                 if (this.exceptionPanel) {
@@ -229,7 +229,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             scope: this
         });
         
-        this.attributeForm = new NHDEdit.AttributeForm({
+        this.attributeForm = new Editor.AttributeForm({
             feature: feature,
             monitorValid: true,
             listeners: {
@@ -246,7 +246,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             border: false
         });
         
-        this.metadataForm = new NHDEdit.MetadataForm({
+        this.metadataForm = new Editor.MetadataForm({
             hidden: true,
             padding: 5,
             border: false,
@@ -256,11 +256,11 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             featureNS: this.metadataSource.featureNS,
             listeners: {
                 "clientvalidation": function(panel, valid) {
-                    this.metadataValid = valid || NHDEdit.metadataRecord;
+                    this.metadataValid = valid || Editor.metadataRecord;
                     this.saveButton.setDisabled(!(this.attributesValid && this.metadataValid));
                 },
                 "metadatasaved": function(cmp, record) {
-                    NHDEdit.setMetadataRecord(record);
+                    Editor.setMetadataRecord(record);
                     var map = this.feature.layer.map;
                     var id = record.get("feature").fid;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
@@ -274,7 +274,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
                     }
                 },
                 "metadataopened": function(cmp, record) {
-                    NHDEdit.setMetadataRecord(record);
+                    Editor.setMetadataRecord(record);
                     var map = this.feature.layer.map;
                     var id = record.getFeature().fid;
                     this.store.addListener('beforewrite', function(store, action, rs, options) {
@@ -302,7 +302,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
             ]
         });
         
-        NHDEdit.FeatureEditWizard.superclass.initComponent.call(this);
+        Editor.FeatureEditWizard.superclass.initComponent.call(this);
         
         this.store.on({
             "exception": this.handleStoreException,
@@ -373,7 +373,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
         if (this.exceptionPanel !== null) {
             this.remove(this.exceptionPanel);
         }
-        this.exceptionPanel = new NHDEdit.ExceptionPanel({
+        this.exceptionPanel = new Editor.ExceptionPanel({
             padding: 5,
             border: false,
             store: this.store,
@@ -515,7 +515,7 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
      *  Actually delete the feature.
      */
     deleteFeature: function() {
-        if (!NHDEdit.metadataRecord) {
+        if (!Editor.metadataRecord) {
             this.metadataForm.saveEntry();
         } else {
             this.setFeatureState(OpenLayers.State.DELETE);
@@ -542,4 +542,4 @@ NHDEdit.FeatureEditWizard = Ext.extend(Ext.Window, {
 });
 
 /** api: xtype = app_featureeditwizard */
-Ext.reg('app_featureeditwizard', NHDEdit.FeatureEditWizard);
+Ext.reg('app_featureeditwizard', Editor.FeatureEditWizard);

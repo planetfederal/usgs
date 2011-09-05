@@ -7,16 +7,16 @@
  */
 
 /**
- * @requires NHDEdit.js
+ * @requires Editor.js
  */
-Ext.namespace("NHDEdit");
+Ext.namespace("Editor");
 
 /**
- * api: property[NHDEdit.layerFTypes]
+ * api: property[Editor.layerFTypes]
  * ``Object``
  * A code list for mapping layer types to their possible FTYPE values.
  */
-NHDEdit.layerFTypes = {
+Editor.layerFTypes = {
     "NHDFlowline": ['334', '336', '420', '428', '460', '558', '566', '567'],
     "NHDArea": ['307', '312', '318', '336', '343', '362', '364', '373', '398', '403', '431', '445', '454', '455', '460', '461', '484', '485', '537', '568'],
     "NHDLine": ['318', '343', '362', '369', '398', '411', '431', '434', '450', '478', '483', '487', '503', '533', '568'],
@@ -25,11 +25,11 @@ NHDEdit.layerFTypes = {
 };
 
 /**
- * api: property[NHDEdit.fTypeDict]
+ * api: property[Editor.fTypeDict]
  * ``Object``
  * A code list for mapping FTYPE codes to their values/descriptions.
  */
-NHDEdit.fTypeDict = {
+Editor.fTypeDict = {
     '307':'Area to be Submerged',
     '312':'Bay/Inlet',
     '318':'Bridge',
@@ -77,7 +77,7 @@ NHDEdit.fTypeDict = {
     '568':'Levee'
 };
 
-/** api: method[NHDEdit.getFTypes]
+/** api: method[Editor.getFTypes]
  *  Get a list of FTYPE values and their corresponding descriptions filtered 
  *  by the layer type.
  *
@@ -87,11 +87,11 @@ NHDEdit.fTypeDict = {
  *  ``Array`` An Array containing the keys and values for FTYPE matching the
  *  layer type.
  */
-NHDEdit.getFTypes = function(layer) {
+Editor.getFTypes = function(layer) {
     var fTypes = [], fType;
-    for (var i=0,ii=NHDEdit.layerFTypes[layer].length; i<ii; ++i) {
-        fType = NHDEdit.layerFTypes[layer][i];
-        fTypes.push([fType, NHDEdit.fTypeDict[fType]]);
+    for (var i=0,ii=Editor.layerFTypes[layer].length; i<ii; ++i) {
+        fType = Editor.layerFTypes[layer][i];
+        fTypes.push([fType, Editor.fTypeDict[fType]]);
     }
     return fTypes;
 };

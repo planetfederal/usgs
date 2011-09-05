@@ -6,15 +6,15 @@
  * of the license.
  */
 
-Ext.ns("NHDEdit");
+Ext.ns("Editor");
 
 /**
- * @requires NHDEdit/templates.js
- * @requires NHDEdit/data/NHDFType.js
+ * @requires Editor/templates.js
+ * @requires Editor/data/NHDFType.js
  */
 
 /** api: (define)
- *  module = NHDEdit
+ *  module = Editor
  *  class = ExceptionPanel
  *  extends = Ext.form.FormPanel
  */
@@ -26,7 +26,7 @@ Ext.ns("NHDEdit");
  *    a question (e.g. is this feature over other features) and re-submit a 
  *    WFS transaction.
  */
-NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
+Editor.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     /** api: config[exceptionReport]
      * ``Object`` An object representing the exception returned by the WFS.
@@ -57,10 +57,10 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     /** private: method[initComponent]
      */
     initComponent : function() {
-        NHDEdit.ExceptionPanel.superclass.initComponent.call(this);
+        Editor.ExceptionPanel.superclass.initComponent.call(this);
         var known = false,
             locator = this.getProperty("locator"),
-            tpl = NHDEdit.exceptionTemplates[locator];
+            tpl = Editor.exceptionTemplates[locator];
         if (tpl) {
             // this is a known exception type, we expect a parseable message
             var rule = this.getRule();
@@ -78,7 +78,7 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
                 });
                 if (rule.autoCorrectable) {
                     // add auto-correct items or a generic auto-correct field
-                    this.add(NHDEdit.createAutoCorrectItems(rule));
+                    this.add(Editor.createAutoCorrectItems(rule));
                 } else {
                     // allow user to queue exception
                     this.add(this.createQueueField(rule.code));
@@ -217,4 +217,4 @@ NHDEdit.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
     
 });
 
-Ext.reg('app_exceptionpanel', NHDEdit.ExceptionPanel);
+Ext.reg('app_exceptionpanel', Editor.ExceptionPanel);

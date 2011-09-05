@@ -7,16 +7,16 @@
  */
 
 /**
- * @requires NHDEdit.js
+ * @requires Editor.js
  */
-Ext.namespace("NHDEdit");
+Ext.namespace("Editor");
 
 /**
- * api: property[NHDEdit.fCodeDict]
+ * api: property[Editor.fCodeDict]
  * ``Object``
  * A code list mapping FCODE values to their respective descriptions.
  */
-NHDEdit.fCodeDict = {
+Editor.fCodeDict = {
     '30700':'Area to be Submerged',
     '31200':'Bay/Inlet',
     '31800':'Bridge',
@@ -140,7 +140,7 @@ NHDEdit.fCodeDict = {
     '56800':'Levee'
 };
 
-/** api: method[NHDEdit.getFCodes]
+/** api: method[Editor.getFCodes]
  *  Get a list of FCODE values and their corresponding descriptions filtered 
  *  by the layer type.
  *
@@ -150,12 +150,12 @@ NHDEdit.fCodeDict = {
  *  ``Array`` An Array containing the keys and values for FCODE matching the
  *  layer type.
  */
-NHDEdit.getFCodes = function(layer) {
+Editor.getFCodes = function(layer) {
     var fCodes = [];
-    var fTypes = NHDEdit.layerFTypes[layer];
-    for (var fCode in NHDEdit.fCodeDict) {
+    var fTypes = Editor.layerFTypes[layer];
+    for (var fCode in Editor.fCodeDict) {
         if (fTypes.indexOf(fCode.substring(0, 3)) >= 0) {
-            fCodes.push([fCode, NHDEdit.fCodeDict[fCode]]);
+            fCodes.push([fCode, Editor.fCodeDict[fCode]]);
         }
     }
     return fCodes;

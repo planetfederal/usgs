@@ -7,12 +7,12 @@
  */
 
 /**
- * @requires NHDEdit.js
+ * @requires Editor.js
  */
-Ext.ns("NHDEdit.plugins");
+Ext.ns("Editor.plugins");
 
 /** api: (define)
- *  module = NHDEdit.plugins
+ *  module = Editor.plugins
  *  class = Preferences
  *  extends = gxp.plugins.Tool
  */
@@ -24,7 +24,7 @@ Ext.ns("NHDEdit.plugins");
  *  preferences such as "always use over for the vertical relationship" 
  *  question. The preferences are tied to a specific metadata record.  
  */
-NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
+Editor.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
 
     /** api: ptype = app_preferences */
     ptype: "app_preferences",
@@ -52,7 +52,7 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
      *  :arg target: ``gxp.Viewer`` The viewer initializing this plugin.
      */
     init: function(target) {
-        NHDEdit.plugins.Preferences.superclass.init.apply(this, arguments);
+        Editor.plugins.Preferences.superclass.init.apply(this, arguments);
         var featureManager = this.target.tools[this.featureManager];
         featureManager.addListener('layerchange', this.onLayerChange, this);
         target.addListener('setpreference', this.onSetPreference, this);
@@ -96,13 +96,13 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
      * :arg options: ``Object`` The loading options that were specified.
      */
     beforeStoreWrite: function(store, action, rs, options) {
-        if (NHDEdit.preferences) {
+        if (Editor.preferences) {
             var nativeElements = options.params.nativeElements;
             var obj = {};
             if (nativeElements && nativeElements.length === 1) {
                 obj = Ext.util.JSON.decode(nativeElements[0].value);
             }
-            OpenLayers.Util.extend(obj, NHDEdit.preferences);
+            OpenLayers.Util.extend(obj, Editor.preferences);
             options.params.nativeElements = [{
                 vendorId: this.vendorId,
                 safeToIgnore: true,
@@ -116,14 +116,14 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
      */
     addOutput: function() {
         var items = [], rule;
-        for (var code in NHDEdit.preferences) {
-            rule = Ext.apply({code: code}, NHDEdit.preferences[code]);
+        for (var code in Editor.preferences) {
+            rule = Ext.apply({code: code}, Editor.preferences[code]);
             items.push({
                 xtype: "fieldset",
                 cls: "app-preferences-fieldset",
                 title: rule.title,
                 labelWidth: 115,
-                items: NHDEdit.createAutoCorrectItems(rule)
+                items: Editor.createAutoCorrectItems(rule)
             });
         }
         this.form = new Ext.form.FormPanel({
@@ -131,14 +131,14 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
             border: false,
             items: items
         });
-        return NHDEdit.plugins.Preferences.superclass.addOutput.call(this, this.form);
+        return Editor.plugins.Preferences.superclass.addOutput.call(this, this.form);
     },
 
     /** api: method[addActions]
      * Creates the actions for this tool.
      */
     addActions: function() {
-        return NHDEdit.plugins.Preferences.superclass.addActions.call(this, [{
+        return Editor.plugins.Preferences.superclass.addActions.call(this, [{
             handler: this.addOutput,
             scope: this,
             disabled: true,
@@ -165,9 +165,9 @@ NHDEdit.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
             }
             this.target.removeListener('setpreference', this.onSetPreference, this);
         }
-        NHDEdit.plugins.Preferences.superclass.destroy.apply(this, arguments);
+        Editor.plugins.Preferences.superclass.destroy.apply(this, arguments);
     }
 
 });
 
-Ext.preg(NHDEdit.plugins.Preferences.prototype.ptype, NHDEdit.plugins.Preferences);
+Ext.preg(Editor.plugins.Preferences.prototype.ptype, Editor.plugins.Preferences);
