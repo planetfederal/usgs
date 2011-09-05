@@ -134,7 +134,7 @@ NHDEdit.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
             scope: this
         });
         var me = this;
-        var output = NHDEdit.plugins.Preferences.superclass.addOutput.call(this, {
+        var output = NHDEdit.plugins.Queue.superclass.addOutput.call(this, {
             xtype: "gxp_featuregrid",
             cls: "app-exceptionqueue",
             store: this.featureStore,
