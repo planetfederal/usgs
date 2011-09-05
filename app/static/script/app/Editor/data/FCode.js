@@ -151,11 +151,14 @@ Editor.fCodeDict = {
  *  layer type.
  */
 Editor.getFCodes = function(layer) {
-    var fCodes = [];
+    var fCodes;
     var fTypes = Editor.layerFTypes[layer];
-    for (var fCode in Editor.fCodeDict) {
-        if (fTypes.indexOf(fCode.substring(0, 3)) >= 0) {
-            fCodes.push([fCode, Editor.fCodeDict[fCode]]);
+    if (fTypes) {
+        fCodes = [];
+        for (var fCode in Editor.fCodeDict) {
+            if (fTypes.indexOf(fCode.substring(0, 3)) >= 0) {
+                fCodes.push([fCode, Editor.fCodeDict[fCode]]);
+            }
         }
     }
     return fCodes;

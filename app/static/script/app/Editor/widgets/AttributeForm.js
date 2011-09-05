@@ -54,65 +54,69 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
      */
     initComponent : function() {
         Editor.AttributeForm.superclass.initComponent.call(this);
-        var typeName = this.schema.reader.raw.featureTypes[0].typeName;
-        var fTypeStore = new Ext.data.ArrayStore({
-            fields: ['value', 'description'],
-            data : Editor.getFTypes(typeName)
-        });
-        var fCodeStore = new Ext.data.ArrayStore({
-            fields: ['value', 'description'],
-            data : Editor.getFCodes(typeName)
-        });
-        fCodeStore.sort("value");
-        
+
         var fieldset = new Ext.form.FieldSet({title: "Attributes", defaults: {width: 150}});
 
-        // ftype field first
-        fieldset.add({
-            xtype: "combo",
-            mode: "local",
-            forceSelection: true,
-            allowBlank: false,
-            name: "FType",
-            fieldLabel: "FType",
-            value: this.feature.attributes.FType,
-            store: fTypeStore, 
-            triggerAction: "all",
-            displayField: "description",
-            valueField: "value",
-            listeners: {
-                valid: function(field) {
-                    window.setTimeout(function() {
-                        var value = field.getValue();
-                        fCodeStore.filterBy(function(r) {
-                            return r.get("value").indexOf(value) === 0;
-                        }, this);
-                        var fCode = field.ownerCt.fCode;
-                        if (fCodeStore.findExact("value", fCode.getValue()) == -1) {
-                            fCode.setValue(fCodeStore.getAt(0).get("value"));
-                        }
-                    }, 0);
+        var typeName = this.schema.reader.raw.featureTypes[0].typeName;
+        var fTypeData = Editor.getFTypes(typeName);
+        if (fTypeData) {
+            var fTypeStore = new Ext.data.ArrayStore({
+                fields: ['value', 'description'],
+                data: Editor.getFTypes(typeName)
+            });
+            var fCodeStore = new Ext.data.ArrayStore({
+                fields: ['value', 'description'],
+                data: Editor.getFCodes(typeName)
+            });
+            fCodeStore.sort("value");
+
+            // ftype field first
+            fieldset.add({
+                xtype: "combo",
+                mode: "local",
+                forceSelection: true,
+                allowBlank: false,
+                name: "FType",
+                fieldLabel: "FType",
+                value: this.feature.attributes.FType,
+                store: fTypeStore, 
+                triggerAction: "all",
+                displayField: "description",
+                valueField: "value",
+                listeners: {
+                    valid: function(field) {
+                        window.setTimeout(function() {
+                            var value = field.getValue();
+                            fCodeStore.filterBy(function(r) {
+                                return r.get("value").indexOf(value) === 0;
+                            }, this);
+                            var fCode = field.ownerCt.fCode;
+                            if (fCodeStore.findExact("value", fCode.getValue()) == -1) {
+                                fCode.setValue(fCodeStore.getAt(0).get("value"));
+                            }
+                        }, 0);
+                    }
                 }
-            }
-        });
-        
-        // fcode field next
-        fieldset.add({
-            xtype: "combo",
-            ref: "fCode",
-            allowBlank: false,
-            listWidth: 650,
-            mode: "local",
-            lastQuery: "",
-            forceSelection: true,
-            name: "FCode",
-            fieldLabel: "FCode",
-            value: this.feature.attributes.FCode,
-            store: fCodeStore, 
-            triggerAction: "all",
-            displayField: "description",
-            valueField: "value"
-        });
+            });
+
+            // fcode field next
+            fieldset.add({
+                xtype: "combo",
+                ref: "fCode",
+                allowBlank: false,
+                listWidth: 650,
+                mode: "local",
+                lastQuery: "",
+                forceSelection: true,
+                name: "FCode",
+                fieldLabel: "FCode",
+                value: this.feature.attributes.FCode,
+                store: fCodeStore, 
+                triggerAction: "all",
+                displayField: "description",
+                valueField: "value"
+            });
+        }
         
         // all remaining fields
         this.schema.each(function(r) {

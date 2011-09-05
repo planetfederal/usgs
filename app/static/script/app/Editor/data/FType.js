@@ -91,10 +91,14 @@ Editor.fTypeDict = {
  *  layer type.
  */
 Editor.getFTypes = function(layer) {
-    var fTypes = [], fType;
-    for (var i=0,ii=Editor.layerFTypes[layer].length; i<ii; ++i) {
-        fType = Editor.layerFTypes[layer][i];
-        fTypes.push([fType, Editor.fTypeDict[fType]]);
+    var fTypes, fType;
+    var layerFTypes = Editor.layerFTypes[layer];
+    if (layerFTypes) {
+        fTypes = [];
+        for (var i=0,ii=layerFTypes.length; i<ii; ++i) {
+            fType = layerFTypes[i];
+            fTypes.push([fType, Editor.fTypeDict[fType]]);
+        }
     }
     return fTypes;
 };
