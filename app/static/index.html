@@ -107,6 +107,14 @@
                     ptype: "gxp_featuremanager",
                     id: "nhd-manager",
                     listeners: {
+                        "layerchange": function(featureManager, layerRecord) {
+                            featureManager.featureLayer.events.on({
+                                "sketchstarted": function(evt) {
+                                    var snappingAgent = featureManager.target.tools["snapping-agent"];
+                                    snappingAgent.snappingTargets[0].filter = null;
+                                }
+                            });
+                        },
                         "query": function(featureManager) {
                             var snappingAgent = featureManager.target.tools["snapping-agent"];
                             var i, len;
