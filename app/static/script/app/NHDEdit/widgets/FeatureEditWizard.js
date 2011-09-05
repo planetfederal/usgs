@@ -8,6 +8,10 @@
 
 Ext.ns("NHDEdit");
 
+/**
+ * @requires NHDEdit.js
+ */
+
 /** api: (define)
  *  module = app
  *  class = FeatureEditWizard

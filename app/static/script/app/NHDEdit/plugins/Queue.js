@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/**
+ * @requires NHDEdit.js
+ * @requires NHDEdit/templates.js
+ */
 Ext.ns("NHDEdit.plugins");
 
 /** api: (define)

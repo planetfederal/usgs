@@ -9,7 +9,8 @@
 Ext.ns("NHDEdit");
 
 /**
- * @include NHDEdit/data/NHDFType.js
+ * @requires NHDEdit/templates.js
+ * @requires NHDEdit/data/NHDFType.js
  */
 
 /** api: (define)

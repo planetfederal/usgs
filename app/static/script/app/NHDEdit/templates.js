@@ -5,6 +5,10 @@
  * See https://github.com/opengeo/gxp/raw/master/license.txt for the full text
  * of the license.
  */
+ 
+/**
+ * @requires NHDEdit.js
+ */
 
 Ext.ns("NHDEdit");
 

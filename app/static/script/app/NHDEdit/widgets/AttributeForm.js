@@ -9,7 +9,8 @@
 Ext.ns("NHDEdit");
 
 /**
- * @include NHDEdit/data/NHDFCode.js
+ * @requires NHDEdit.js
+ * @requires NHDEdit/data/NHDFCode.js
  */
 
 /** api: (define)
