@@ -12,12 +12,11 @@
 
 Ext.ns("Editor");
 
-/**
- * api: property[Editor.exceptionTemplates]
- * ``Object``
- * An object containing an ``Ext.XTemplate`` to present error messages to the
- * end user. The key of the object is the value of "locator". See also:
- * https://github.com/opengeo/usgs/wiki/Exceptions
+/** api: property[Editor.exceptionTemplates]
+ *  ``Object``
+ *  An object containing an ``Ext.XTemplate`` to present error messages to the
+ *  end user. The key of the object is the value of "locator". See also:
+ *  https://github.com/opengeo/usgs/wiki/Exceptions
  */
 Editor.exceptionTemplates = {
     "js:MustIntersect": new Ext.XTemplate(

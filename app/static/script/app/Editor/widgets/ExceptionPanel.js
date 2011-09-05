@@ -29,13 +29,12 @@ Ext.ns("Editor");
 Editor.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
 
     /** api: config[exceptionReport]
-     * ``Object`` An object representing the exception returned by the WFS.
+     *  ``Object`` An object representing the exception returned by the WFS.
      */
     exceptionReport: null,
 
-    /**
-     * api: config[store]
-     * ``gxp.data.WFSFeatureStore`` The store used to do the WFS transactions.
+    /** api: config[store]
+     *  ``gxp.data.WFSFeatureStore`` The store used to do the WFS transactions.
      */
     store: null,
 
@@ -122,16 +121,15 @@ Editor.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         this.doLayout();
     },
 
-    /**
-     * private: method[beforeStoreWrite]
-     * beforewrite handle of the store. This handler is used to set up the 
-     * Native element in the WFS Transaction with the information for the
-     * server on how to continue with this transaction.
+    /** private: method[beforeStoreWrite]
+     *  beforewrite handle of the store. This handler is used to set up the 
+     *  Native element in the WFS Transaction with the information for the
+     *  server on how to continue with this transaction.
      * 
-     * :arg store: ``Ext.data.Store`` The store
-     * :arg action: ``String`` create, update or destroy
-     * :arg rs: ``Ext.data.Record`` The record set (can also be an array)
-     * :arg options: ``Object`` The loading options that were specified.
+     *  :arg store: ``Ext.data.Store`` The store
+     *  :arg action: ``String`` create, update or destroy
+     *  :arg rs: ``Ext.data.Record`` The record set (can also be an array)
+     *  :arg options: ``Object`` The loading options that were specified.
      */
     beforeStoreWrite: function(store, action, rs, options) {
         var nativeElements = options.params.nativeElements;
@@ -147,14 +145,13 @@ Editor.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
         }];
     },
 
-    /**
-     * private: method[createQueueField]
-     * Creates a field for the user to select if they want to queue the
-     * exception server-side.
+    /** private: method[createQueueField]
+     *  Creates a field for the user to select if they want to queue the
+     *  exception server-side.
      *
-     * :arg code: ``String`` The value of the locator attribute.
+     *  :arg code: ``String`` The value of the locator attribute.
      *
-     * :returns: ``Object`` Configuration for Ext to create a checkbox.
+     *  :returns: ``Object`` Configuration for Ext to create a checkbox.
      */
     createQueueField: function(code) {
         return {

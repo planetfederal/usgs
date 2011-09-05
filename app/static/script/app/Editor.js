@@ -136,8 +136,8 @@
      */
 
     /** private: property[metadataStore]
-     * ``gxp.data.WFSFeatureStore`` The feature store for the NHDMetadata 
-     * feature type. Will be set and reused by the MetadataForm.
+     *  ``gxp.data.WFSFeatureStore`` The feature store for the NHDMetadata 
+     *  feature type. Will be set and reused by the MetadataForm.
      */
     
     /** private: property[metadataId]
@@ -176,7 +176,7 @@
     /** api: method[Editor.createAutoCorrectItems]
      *  Creates any auto correct form items for the specific rule.
      *
-     * :arg rule: ``Object``
+     *  :arg rule: ``Object``
      */    
     Editor.createAutoCorrectItems = function(rule) {
         var code = rule.code, items;

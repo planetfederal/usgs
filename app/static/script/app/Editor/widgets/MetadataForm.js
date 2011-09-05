@@ -39,15 +39,15 @@ Editor.MetadataForm = Ext.extend(Ext.form.FormPanel, {
     /** end i18n */
 
     /** api: config[url]
-     * ``String`` 
-     * The online resource of the Web Feature Service to retrieve the exception 
-     * queue feature type from.
+     *  ``String`` 
+     *  The online resource of the Web Feature Service to retrieve the exception 
+     *  queue feature type from.
      */
     url: null,
 
     /** api: config[featureNS]
-     * ``String``
-     * The feature name space.
+     *  ``String``
+     *  The feature name space.
      */
     featureNS: null,
 
@@ -57,10 +57,9 @@ Editor.MetadataForm = Ext.extend(Ext.form.FormPanel, {
      */
     featureType: null,
 
-    /**
-     * private: property[openWindow]
-     * ``Ext.Window``
-     * The window to open up an existing metadata record.
+    /** private: property[openWindow]
+     *  ``Ext.Window``
+     *  The window to open up an existing metadata record.
      */
     openWindow: null,
     
@@ -144,10 +143,9 @@ Editor.MetadataForm = Ext.extend(Ext.form.FormPanel, {
         );
     },
 
-    /**
-     * private: method[createGrid]
-     * Creates the feature grid which is used for opening up an existing 
-     * metadata record.
+    /** private: method[createGrid]
+     *  Creates the feature grid which is used for opening up an existing 
+     *  metadata record.
      */
     createGrid: function() {
         //TODO this check is just a workaround - the solution is to create a

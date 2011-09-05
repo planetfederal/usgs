@@ -42,8 +42,8 @@ Editor.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     vendorId: "usgs",
 
     /** api: config[featureManager]
-     * The feature manager to use for this tool. This is needed to hook up
-     * to the layerchange event of the feature manager.
+     *  The feature manager to use for this tool. This is needed to hook up
+     *  to the layerchange event of the feature manager.
      */
     featureManager: null,
 
@@ -85,15 +85,14 @@ Editor.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
         this.actions[0].enable();
     },
     
-    /**
-     * private: method[beforeStoreWrite]
-     * beforewrite handle of the store. This handler is used to set up the 
-     * Native element in the WFS Transaction with the preferences information.
+    /** private: method[beforeStoreWrite]
+     *  beforewrite handle of the store. This handler is used to set up the 
+     *  Native element in the WFS Transaction with the preferences information.
      * 
-     * :arg store: ``Ext.data.Store`` The store
-     * :arg action: ``String`` create, update or destroy
-     * :arg rs: ``Ext.data.Record`` The record set (can also be an array)
-     * :arg options: ``Object`` The loading options that were specified.
+     *  :arg store: ``Ext.data.Store`` The store
+     *  :arg action: ``String`` create, update or destroy
+     *  :arg rs: ``Ext.data.Record`` The record set (can also be an array)
+     *  :arg options: ``Object`` The loading options that were specified.
      */
     beforeStoreWrite: function(store, action, rs, options) {
         if (Editor.preferences) {
@@ -112,7 +111,7 @@ Editor.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     },
     
     /** api: method[addOutput]
-     * Creates the output for this tool.
+     *  Creates the output for this tool.
      */
     addOutput: function() {
         var items = [], rule;
@@ -135,7 +134,7 @@ Editor.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     },
 
     /** api: method[addActions]
-     * Creates the actions for this tool.
+     *  Creates the actions for this tool.
      */
     addActions: function() {
         return Editor.plugins.Preferences.superclass.addActions.call(this, [{
@@ -149,7 +148,7 @@ Editor.plugins.Preferences = Ext.extend(gxp.plugins.Tool, {
     },
 
     /** private: method[destroy]
-     * Clean up.
+     *  Clean up.
      */
     destroy: function() {
         this.form = null;

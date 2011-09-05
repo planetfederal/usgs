@@ -359,11 +359,11 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
      *  Handler that shows an exception report in the wizard after an
      *  unsuccessful write that caused an exception.
      *
-     * :arg proxy: ``gxp.data.WFSProtocolProxy`` The proxy of the store.
-     * :arg type: ``String`` remote or response
-     * :arg action: ``String`` Name of the action.
-     * :arg options: ``Object`` The options for the action that were specified.
-     * :arg response: ``Object``
+     *  :arg proxy: ``gxp.data.WFSProtocolProxy`` The proxy of the store.
+     *  :arg type: ``String`` remote or response
+     *  :arg action: ``String`` Name of the action.
+     *  :arg options: ``Object`` The options for the action that were specified.
+     *  :arg response: ``Object``
      */
     handleStoreException: function(proxy, type, action, options, response) {
         this.attributeForm.hide();

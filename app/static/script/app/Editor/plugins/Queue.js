@@ -38,15 +38,15 @@ Editor.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     /** end i18n */
 
     /** api: config[url]
-     * ``String`` 
-     * The online resource of the Web Feature Service to retrieve the exception 
-     * queue feature type from.
+     *  ``String`` 
+     *  The online resource of the Web Feature Service to retrieve the exception 
+     *  queue feature type from.
      */
     url: null,
 
     /** api: config[featurePrefix]
-     * ``String``
-     * The prefix to use to get a fully qualified typename.
+     *  ``String``
+     *  The prefix to use to get a fully qualified typename.
      */
     featurePrefix: null,
 
@@ -96,7 +96,7 @@ Editor.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     },
 
     /** private: method[destroy]
-     * Clean up.
+     *  Clean up.
      */
     destroy: function() {
         if (this.schema) {
@@ -126,8 +126,8 @@ Editor.plugins.Queue = Ext.extend(gxp.plugins.Tool, {
     },
 
     /** api: method[addOutput]
-     * When someone pressed the Queue button, this function will be called.
-     * So load the featureStore and show it in a grid.
+     *  When someone pressed the Queue button, this function will be called.
+     *  So load the featureStore and show it in a grid.
      */
     addOutput: function() {
         this.featureStore.load();
