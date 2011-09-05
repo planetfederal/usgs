@@ -10,7 +10,7 @@ Ext.ns("Editor");
 
 /**
  * @requires Editor/templates.js
- * @requires Editor/data/NHDFType.js
+ * @requires Editor/data/FType.js
  */
 
 /** api: (define)
