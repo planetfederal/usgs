@@ -127,15 +127,6 @@
                                     snappingAgent.controls[i].deactivate();
                                 }
                             }
-                            // if we are editing flow lines, we do not want to snap to the current feature
-                            if (featureManager.filter && featureManager.layerRecord.get('name') === snappingAgent.targets[0].name) {
-                                snappingAgent.snappingTargets[0].filter = new OpenLayers.Filter.Logical({
-                                    type: OpenLayers.Filter.Logical.NOT, 
-                                    filters: [featureManager.filter]
-                                });
-                            } else {
-                                snappingAgent.snappingTargets[0].filter = null;
-                            }
                         }
                     },
                     paging: false,
