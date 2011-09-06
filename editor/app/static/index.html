@@ -108,7 +108,27 @@
                         ],
                         node: true,
                         vertex: false,
-                        tolerance: 15 // in pixels - default is 10
+                        tolerance: 15
+                    }, {
+                        source: "local",
+                        name: "usgs:Trans_RoadSegment",
+                        maxResolution: 5,
+                        restrictedLayers: [
+                            {source: "local", name: "usgs:Trans_RoadSegment"}
+                        ],
+                        node: true,
+                        vertex: false,
+                        tolerance: 15
+                    }, {
+                        source: "local",
+                        name: "usgs:Trans_RailFeature",
+                        maxResolution: 5,
+                        restrictedLayers: [
+                            {source: "local", name: "usgs:Trans_RailFeature"}
+                        ],
+                        node: true,
+                        vertex: false,
+                        tolerance: 15
                     }]
                 }, {
                     ptype: "gxp_featuremanager",
