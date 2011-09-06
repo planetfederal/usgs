@@ -42,8 +42,7 @@
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             Ext.USE_NATIVE_JSON = true;
             OpenLayers.ImgPath = "theme/app/img/";
-            // the layers for which to activate flowline snapping
-            Editor.snappingLayers = ["usgs:NHDPoint", "usgs:NHDFlowline"];
+
             var app = new Editor({
                 proxy: "proxy/?url=",
                 mapItems: [{
@@ -99,6 +98,10 @@
                         source: "local",
                         name: "usgs:NHDFlowline",
                         maxResolution: 5,
+                        restrictedLayers: [
+                            {source: "local", name: "usgs:NHDPoint"}, 
+                            {source: "local", name: "usgs:NHDFlowline"}
+                        ],
                         node: true,
                         vertex: false,
                         tolerance: 15 // in pixels - default is 10
@@ -106,29 +109,6 @@
                 }, {
                     ptype: "gxp_featuremanager",
                     id: "nhd-manager",
-                    listeners: {
-                        "layerchange": function(featureManager, layerRecord) {
-                            featureManager.featureLayer.events.on({
-                                "sketchstarted": function(evt) {
-                                    var snappingAgent = featureManager.target.tools["snapping-agent"];
-                                    snappingAgent.snappingTargets[0].filter = null;
-                                }
-                            });
-                        },
-                        "query": function(featureManager) {
-                            var snappingAgent = featureManager.target.tools["snapping-agent"];
-                            var i, len;
-                            if (Editor.snappingLayers.indexOf(featureManager.layerRecord.get("name")) !== -1) {
-                                for (i=0, len=snappingAgent.controls.length; i<len; i++) {
-                                    snappingAgent.controls[i].activate();
-                                }
-                            } else {
-                                for (i=0, len=snappingAgent.controls.length; i<len; i++) {
-                                    snappingAgent.controls[i].deactivate();
-                                }
-                            }
-                        }
-                    },
                     paging: false,
                     autoSetLayer: true,
                     maxFeatures: 1
