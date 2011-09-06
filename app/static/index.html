@@ -64,9 +64,13 @@
                         items: ["mymap"]
                     }, {
                         id: "westpanel",
-                        xtype: "container",
+                        xtype: "panel",
                         layout: "fit",
                         region: "west",
+                        split: true,
+                        collapsible: true,
+                        collapseMode: "mini",
+                        header: false,
                         width: 200
                     }],
                     bbar: {id: "mybbar"}
@@ -283,22 +287,22 @@
                         source: "local",
                         group: "nhd",
                         name: "usgs:NHDWaterbody",
-                        title: "Lake, Reservoir and Swamp Areal Feature"
+                        title: "Waterbody"
                     }, {
                         source: "local",
                         group: "nhd",
                         name: "usgs:NHDArea",
-                        title: "Area: Stream, Canal, Ocean and Miscellaneous Feature"
+                        title: "Misc. Water Area Feature"
                     }, {
                         source: "local",
                         group: "nhd",
                         name: "usgs:NHDLine",
-                        title: "Miscellaneous Water Line Feature"
+                        title: "Misc. Water Line Feature"
                     }, {
                         source: "local",
                         group: "nhd",
                         name: "usgs:NHDFlowline",
-                        title: "Line: Stream, Canal, Pipeline and Shoreline Line Feature"
+                        title: "Flowline"
                     }, {
                         source: "local",
                         group: "nhd",
