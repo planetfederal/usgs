@@ -10,3 +10,18 @@
 [submodule "server/geoserver-gss"]
 	path = server/geoserver-gss
 	url = git://github.com/groldan/geoserver_trunk.git
+[submodule "editor/app/static/externals/openlayers"]
+	path = editor/app/static/externals/openlayers
+	url = git://github.com/openlayers/openlayers.git
+[submodule "editor/app/static/externals/gxp"]
+	path = editor/app/static/externals/gxp
+	url = git://github.com/opengeo/gxp.git
+[submodule "editor/app/static/externals/geoext"]
+	path = editor/app/static/externals/geoext
+	url = git://github.com/opengeo/GeoExt.git
+[submodule "editor/externals/buildkit"]
+	path = editor/externals/buildkit
+	url = git://github.com/tschaub/buildkit.git
+[submodule "editor/externals/ringojs"]
+	path = editor/externals/ringojs
+	url = git://github.com/ringo/ringojs.git
