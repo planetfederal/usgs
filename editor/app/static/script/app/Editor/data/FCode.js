@@ -417,7 +417,18 @@ Editor.fCodeDict = {
     '84002':'Warning Center',
     '84004':'Weather Data Center',
     '84006':'Weather Forecast Office',
-    '84008':'Weather Radar Site'
+    '84008':'Weather Radar Site',
+    '20000':'Airport Complex',
+    '20100':'Airport Runway',
+    '20101':'Taxiway',
+    '20102':'Apron/Hardstand',
+    '20103':'Stopway',
+    '20200':'Rail',
+    '20201':'Rail Siding/Spur',
+    '20202':'Subway',
+    '20203':'Light Rail',
+    '20204':'Street Car',
+    '20205':'Narrow Gauge'
 };
 
 /** api: method[Editor.getFCodes]

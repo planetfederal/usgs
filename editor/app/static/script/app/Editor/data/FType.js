@@ -23,8 +23,9 @@ Editor.layerFTypes = {
     "NHDPoint": ['367', '369', '398', '431', '436', '441', '450', '458', '485', '487', '488'],
     "NHDWaterbody": ['361', '378', '390', '436', '466', '493'],
     "Struct_Point": ['701', '790', '760', '720', '730', '740', '750', '830', '800', '710', '880', '780', '820', '810', '850', '840'],
-    "Trans_AirportPoint": [200, 201],
-    "Trans_RailFeature": [202]
+    "Trans_AirportPoint": ['200', '201'],
+    "Trans_AirportRunway": ['201'],
+    "Trans_RailFeature": ['202']
 };
 
 /**
@@ -93,7 +94,10 @@ Editor.fTypeDict = {
     '820': 'Public Attractions and Landmark Buildings',
     '810': 'Transportation Facilities',
     '850': 'Water Supply and Treatment',
-    '840': 'Weather'
+    '840': 'Weather',
+    '200': 'Complex',
+    '201': 'Runway',
+    '202': 'Rail'
 };
 
 /** api: method[Editor.getFTypes]
