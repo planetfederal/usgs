@@ -11,6 +11,7 @@
     <property name="server" location="${basedir}/server"/>
     <property name="editor" location="${basedir}/editor"/>
     <property name="mvn" value="mvn"/>
+    <property name="geoserver-src" location="${server}/geoserver-gssp"/>
     <property name="localrepo" value="-DdummyProperty"/>
 
     <target name="init">
@@ -18,7 +19,7 @@
         <mkdir dir="${build}"/>
 
         <!-- revert previously patched pom.xml and modified sources -->
-        <exec executable="git" dir="${server}/geoserver/src" failonerror="false">
+        <exec executable="git" dir="${geoserver-src}" failonerror="false">
             <arg value="checkout"/>
             <arg value="."/>
         </exec>
@@ -38,11 +39,11 @@
             Shuffle to get geoscript-js as a geoserver community module.  This
             could be simplified by making the extension a community module.
         -->
-        <symlink link="${server}/geoserver/src/community/geoscript-js" resource="${server}/geoserver-geoscript-js" overwrite="true"/>
+        <symlink link="${geoserver-src}/community/geoscript-js" resource="${server}/geoserver-geoscript-js" overwrite="true"/>
         <!-- patch pom.xml to include geoscript-js extension -->
-        <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="1" dir="${server}/geoserver/src" failonerror="true"/>
+        <patch patchfile="${server}/geoserver-geoscript-js/etc/geoserver.patch" strip="1" dir="${geoserver-src}" failonerror="true"/>
         <!-- finally, link the minimal directory so the build doesn't fail without a specific configId and configDirectory -->
-        <symlink link="${server}/geoserver/src/web/app/minimal" resource="${server}/geoserver/data/minimal" overwrite="true"/>
+        <symlink link="${geoserver-src}/web/app/minimal" resource="${server}/geoserver/data/minimal" overwrite="true"/>
 
         <echo message="building ringo jars"/>
         <ant dir="${editor}/externals/ringojs" target="jar"/>

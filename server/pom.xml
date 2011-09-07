@@ -6,8 +6,8 @@
     <artifactId>server</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <!-- <module>geotools-wfs2</module> -->
-        <module>geoserver/src</module>
+        <module>geotools-wfs2</module>
+        <module>geoserver-gssp</module>
         <module>scripts</module>
     </modules>
 </project>
