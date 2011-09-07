@@ -22,7 +22,7 @@ Editor.layerFTypes = {
     "NHDLine": ['318', '343', '362', '369', '398', '411', '431', '434', '450', '478', '483', '487', '503', '533', '568'],
     "NHDPoint": ['367', '369', '398', '431', '436', '441', '450', '458', '485', '487', '488'],
     "NHDWaterbody": ['361', '378', '390', '436', '466', '493'],
-    "Struct_Point": [880, 730, 800, 790, 740, 850, 830, 810, 750, 710],
+    "Struct_Point": ['701', '790', '760', '720', '730', '740', '750', '830', '800', '710', '880', '780', '820', '810', '850', '840'],
     "Trans_AirportPoint": [200, 201],
     "Trans_RailFeature": [202]
 };
@@ -77,7 +77,23 @@ Editor.fTypeDict = {
     '558':'Artificial Path',
     '566':'Coastline',
     '567':'Shoreline',
-    '568':'Levee'
+    '568':'Levee',
+    '701': 'Agriculture, Food and Livestock',
+    '790': 'Building General',
+    '760': 'Banking and Finance',
+    '720': 'Commercial and Retail',
+    '730': 'Education',
+    '740': 'Emergency Response and Law Enforcement',
+    '750': 'Energy',
+    '830': 'Government and Military',
+    '800': 'Health and Medical',
+    '710': 'Industry',
+    '880': 'Information and Communication',
+    '780': 'Mail and Shipping',
+    '820': 'Public Attractions and Landmark Buildings',
+    '810': 'Transportation Facilities',
+    '850': 'Water Supply and Treatment',
+    '840': 'Weather'
 };
 
 /** api: method[Editor.getFTypes]
