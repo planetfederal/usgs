@@ -25,3 +25,6 @@
 [submodule "editor/externals/ringojs"]
 	path = editor/externals/ringojs
 	url = git://github.com/ringo/ringojs.git
+[submodule "server/geoserver-gssp"]
+	path = server/geoserver-gssp
+	url = git://github.com/tschaub/geoserver_trunk.git
