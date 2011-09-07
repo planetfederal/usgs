@@ -70,6 +70,16 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             });
             fCodeStore.sort("value");
 
+            var ftype, fcode;
+            for (var key in this.feature.attributes) {
+                if (key.toLowerCase() === 'ftype') {
+                    ftype = key;
+                }
+                if (key.toLowerCase() === 'fcode') {
+                    fcode = key;
+                }
+            }
+
             // ftype field first
             fieldset.add({
                 xtype: "combo",
@@ -78,7 +88,7 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 allowBlank: false,
                 name: "FType",
                 fieldLabel: "FType",
-                value: this.feature.attributes.FType,
+                value: this.feature.attributes[ftype],
                 store: fTypeStore, 
                 triggerAction: "all",
                 displayField: "description",
@@ -110,7 +120,7 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
                 forceSelection: true,
                 name: "FCode",
                 fieldLabel: "FCode",
-                value: this.feature.attributes.FCode,
+                value: this.feature.attributes[fcode],
                 store: fCodeStore, 
                 triggerAction: "all",
                 displayField: "description",
