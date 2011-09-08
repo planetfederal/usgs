@@ -259,26 +259,21 @@
                         new OpenLayers.Control.Attribution()
                     ],
                     layers: [{
+                        source: "osm",
+                        name: "mapnik",
+                        group: "background"
+                    }, {
+                        source: "bing",
+                        name: "AerialWithLabels",
+                        group: "background",
+                        visibility: false
+                    }, {
                         source: "ol",
                         group: "background",
                         type: "OpenLayers.Layer",
                         args: [
                             "None", {visibility: false}
                         ]
-                    }, {
-                        source: "osm",
-                        name: "mapnik",
-                        group: "background"
-                    }, {
-                        source: "google",
-                        name: "TERRAIN",
-                        group: "background",
-                        visibility: false
-                    }, {
-                        source: "google",
-                        name: "SATELLITE",
-                        group: "background",
-                        visibility: false
                     }, {
                         source: "local",
                         group: "struct",
