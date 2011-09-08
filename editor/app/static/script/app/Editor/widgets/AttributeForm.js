@@ -62,7 +62,7 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
         if (fTypeData) {
             var fTypeStore = new Ext.data.ArrayStore({
                 fields: ['value', 'description'],
-                data: Editor.getFTypes(typeName)
+                data: fTypeData
             });
             var fCodeStore = new Ext.data.ArrayStore({
                 fields: ['value', 'description'],
@@ -71,61 +71,68 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
             fCodeStore.sort("value");
 
             var ftype, fcode;
-            for (var key in this.feature.attributes) {
-                if (key.toLowerCase() === 'ftype') {
-                    ftype = key;
+            this.schema.each(function(r) {
+                var name = r.get("name");
+                var lower = name.toLowerCase();
+                if (lower === "ftype") {
+                    ftype = name;
+                } else if (lower === "fcode") {
+                    fcode = name;
                 }
-                if (key.toLowerCase() === 'fcode') {
-                    fcode = key;
-                }
+            });
+
+            // ftype field first - if it exists
+            if (ftype) {
+                fieldset.add({
+                    xtype: "combo",
+                    mode: "local",
+                    forceSelection: true,
+                    allowBlank: false,
+                    name: ftype,
+                    fieldLabel: "FType",
+                    value: this.feature.attributes[ftype],
+                    store: fTypeStore, 
+                    triggerAction: "all",
+                    displayField: "description",
+                    valueField: "value",
+                    listeners: {
+                        valid: function(field) {
+                            window.setTimeout(function() {
+                                if (fCodeStore.getCount() > 0) {
+                                    var value = field.getValue();
+                                    fCodeStore.filterBy(function(r) {
+                                        return r.get("value").indexOf(value) === 0;
+                                    }, this);
+                                    var fCode = field.ownerCt.fCode;
+                                    if (fCodeStore.findExact("value", fCode.getValue()) == -1) {
+                                        fCode.setValue(fCodeStore.getAt(0).get("value"));
+                                    }
+                                }
+                            }, 0);
+                        }
+                    }
+                });
             }
 
-            // ftype field first
-            fieldset.add({
-                xtype: "combo",
-                mode: "local",
-                forceSelection: true,
-                allowBlank: false,
-                name: ftype,
-                fieldLabel: "FType",
-                value: this.feature.attributes[ftype],
-                store: fTypeStore, 
-                triggerAction: "all",
-                displayField: "description",
-                valueField: "value",
-                listeners: {
-                    valid: function(field) {
-                        window.setTimeout(function() {
-                            var value = field.getValue();
-                            fCodeStore.filterBy(function(r) {
-                                return r.get("value").indexOf(value) === 0;
-                            }, this);
-                            var fCode = field.ownerCt.fCode;
-                            if (fCodeStore.findExact("value", fCode.getValue()) == -1) {
-                                fCode.setValue(fCodeStore.getAt(0).get("value"));
-                            }
-                        }, 0);
-                    }
-                }
-            });
-
-            // fcode field next
-            fieldset.add({
-                xtype: "combo",
-                ref: "fCode",
-                allowBlank: false,
-                listWidth: 650,
-                mode: "local",
-                lastQuery: "",
-                forceSelection: true,
-                name: fcode,
-                fieldLabel: "FCode",
-                value: this.feature.attributes[fcode],
-                store: fCodeStore, 
-                triggerAction: "all",
-                displayField: "description",
-                valueField: "value"
-            });
+            // fcode field next - if it exists
+            if (fcode) {
+                fieldset.add({
+                    xtype: "combo",
+                    ref: "fCode",
+                    allowBlank: false,
+                    listWidth: 650,
+                    mode: "local",
+                    lastQuery: "",
+                    forceSelection: true,
+                    name: fcode,
+                    fieldLabel: "FCode",
+                    value: this.feature.attributes[fcode],
+                    store: fCodeStore, 
+                    triggerAction: "all",
+                    displayField: "description",
+                    valueField: "value"
+                });
+            }
         }
         
         // all remaining fields
