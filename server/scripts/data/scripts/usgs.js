@@ -21,7 +21,13 @@ var featureRules = [
     {code: "13", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 566, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
     {code: "14", process: "js:MustTouch", subjectLayer: "NHDFlowline", subjectFType: 567, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
     {code: "15", process: "js:MustTouchCanCross", subjectLayer: "NHDFlowline", subjectFType: 428, objects: [{layer: "NHDFlowline", ftypes: [334, 336, 420, 428, 460, 558, 566, 567]}, {layer: "NHDPoint", ftypes: [450]}]},
-    {code: "16", process: "js:MustIntersectEndpoint", subjectLayer: "NHDFlowline", objects: [{layer: "NHDFlowline"}], autoCorrectable: true, title: "Split Flowline"}
+    {code: "16", process: "js:MustIntersectEndpoint", subjectLayer: "NHDFlowline", objects: [{layer: "NHDFlowline"}], autoCorrectable: true, title: "Split Flowline"},
+    {code: "17", process: "js:MustNotCross", subjectLayer: "Trans_RoadSegment", objects: [{layer: "Trans_RoadSegment"}]},
+    {code: "18", process: "js:MustTouch", subjectLayer: "Trans_RoadSegment", objects: [{layer: "Trans_RoadSegment"}]},
+    {code: "19", process: "js:MustIntersectEndpoint", subjectLayer: "Trans_RoadSegment", objects: [{layer: "Trans_RoadSegment"}], autoCorrectable: true, title: "Split Road Segment"},
+    {code: "20", process: "js:MustNotCross", subjectLayer: "Trans_RailFeature", objects: [{layer: "Trans_RailFeature"}]},
+    {code: "21", process: "js:MustTouch", subjectLayer: "Trans_RailFeature", objects: [{layer: "Trans_RailFeature"}]},
+    {code: "22", process: "js:MustIntersectEndpoint", subjectLayer: "Trans_RailFeature", objects: [{layer: "Trans_RailFeature"}], autoCorrectable: true, title: "Split Rail Feature"}
 ];
 
 function lower(str) {
