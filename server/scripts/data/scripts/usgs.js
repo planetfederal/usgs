@@ -79,6 +79,7 @@ exports.getQueuedExceptions = function(featureInfo, hints) {
                     try {
                         var fix = getFix(rule);
                         fixed = fix(featureInfo, outputs, hint.autoCorrect);
+                        LOGGER.info("fix " + rule.code + " " + fixed);
                     } catch (err) {
                         LOGGER.warning("fix failed: " + err.message);
                     }

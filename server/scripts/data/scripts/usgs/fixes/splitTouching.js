@@ -18,7 +18,6 @@ exports.split = function(layer, featureInfo, outputs) {
             return count < 2;
         });
         cursor.close();
-
         if ((count == 1) && target.geometry.components && (target.geometry.components.length == 1)) {
             var input = geometry.components[0];
             var object = target.geometry.components[0];
