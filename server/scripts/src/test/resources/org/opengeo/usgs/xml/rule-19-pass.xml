@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<wfs:Transaction xmlns:wfs="http://www.opengis.net/wfs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="WFS" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">
+    <wfs:Insert>
+        <feature:Trans_RoadSegment xmlns:feature="http://www.usgs.gov/">
+            <feature:Shape>
+                <gml:MultiCurve xmlns:gml="http://www.opengis.net/gml" srsName="EPSG:900913">
+                    <gml:curveMember>
+                        <gml:LineString>
+                            <gml:posList>-11713546.88720127 4929830.234252393 -11713544.964873001 4929845.9461648 -11713530.632929996 4929862.6667647 -11713533.618750997 4929879.3873646</gml:posList>
+                        </gml:LineString>
+                    </gml:curveMember>
+                </gml:MultiCurve>
+            </feature:Shape>
+        </feature:Trans_RoadSegment>
+    </wfs:Insert>
+    <wfs:Native vendorId="usgs" safeToIgnore="true">{"19":{"title":"Split Road Segment","autoCorrect":false}}</wfs:Native>
+</wfs:Transaction>
