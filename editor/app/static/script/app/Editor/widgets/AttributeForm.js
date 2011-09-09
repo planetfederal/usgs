@@ -49,13 +49,21 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
      *  ``Array`` The fields not to show in this form.
      */    
     excludeFields: null,
-
+    
+    /** api: config[labelWidth]
+     *  ``Number`` 
+     *  Label width.  Default is 125.
+     */
+    labelWidth: 125,
+    
     /** private: method[initComponent]
      */
     initComponent : function() {
         Editor.AttributeForm.superclass.initComponent.call(this);
 
-        var fieldset = new Ext.form.FieldSet({title: "Attributes", defaults: {width: 150}});
+        var fieldset = new Ext.form.FieldSet({
+            title: "Attributes", defaults: {width: 150, anchor: '-5'}
+        });
 
         var typeName = this.schema.reader.raw.featureTypes[0].typeName;
         var fTypeData = Editor.getFTypes(typeName);
