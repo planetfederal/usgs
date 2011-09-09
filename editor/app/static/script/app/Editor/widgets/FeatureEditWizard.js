@@ -63,7 +63,7 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
     schema: null,
     
     /** api: config[excludeFields]
-     *  ``Array`` Optional list of field names (case sensitive) that are to be
+     *  ``Array`` Optional list of field names (case insensitive) that are to be
      *  excluded from the attributeForm.
      */
     

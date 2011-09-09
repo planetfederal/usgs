@@ -136,11 +136,17 @@ Editor.AttributeForm = Ext.extend(Ext.form.FormPanel, {
         }
         
         // all remaining fields
+        var excludeFields = [];
+        for (var i=0, ii=this.excludeFields.length; i<ii; ++i) {
+            excludeFields[i] = this.excludeFields[i].toLowerCase();
+        }
+        
         this.schema.each(function(r) {
             var name = r.get("name");
-            if (this.excludeFields.indexOf(name) != -1 || 
-                    name.toLowerCase() == "ftype" || 
-                    name.toLowerCase() == "fcode") {
+            var lower = name.toLowerCase();
+            if (excludeFields.indexOf(lower) != -1 || 
+                    lower == "ftype" || 
+                    lower == "fcode") {
                 return;
             }
             var type = r.get("type");
