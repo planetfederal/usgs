@@ -87,9 +87,9 @@
                     },
                     groups: {
                         "default": "Other layers",
-                        "nhd": "Hydrography",
                         "struct": "Structures",
                         "trans": "Transportation",
+                        "nhd": "Hydrography",
                         "background": {
                             title: "Base Layers", 
                             exclusive: true
@@ -277,36 +277,6 @@
                         ]
                     }, {
                         source: "local",
-                        group: "struct",
-                        name: "usgs:Struct_Point",
-                        title: "Structure",
-                        visibility: false
-                    }, {
-                        source: "local",
-                        group: "struct",
-                        title: "Airport",
-                        name: "usgs:Trans_AirportPoint",
-                        visibility: false
-                    }, {
-                        source: "local",
-                        group: "trans",
-                        title: "Airport Runway",
-                        name: "usgs:Trans_AirportRunway",
-                        visibility: false
-                    }, {
-                        source: "local",
-                        group: "trans",
-                        title: "Railroad",
-                        name: "usgs:Trans_RailFeature",
-                        visibility: false
-                    }, {
-                        source: "local",
-                        group: "trans",
-                        title: "Road Segment",
-                        name: "usgs:Trans_RoadSegment",
-                        visibility: false
-                    }, {
-                        source: "local",
                         group: "nhd",
                         name: "usgs:NHDWaterbody",
                         title: "Waterbody",
@@ -334,6 +304,36 @@
                         group: "nhd",
                         name: "usgs:NHDPoint",
                         title: "Water Point Feature",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "trans",
+                        title: "Airport Runway",
+                        name: "usgs:Trans_AirportRunway",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "trans",
+                        title: "Railroad",
+                        name: "usgs:Trans_RailFeature",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "trans",
+                        title: "Road Segment",
+                        name: "usgs:Trans_RoadSegment",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "struct",
+                        name: "usgs:Struct_Point",
+                        title: "Structure",
+                        visibility: false
+                    }, {
+                        source: "local",
+                        group: "struct",
+                        title: "Airport",
+                        name: "usgs:Trans_AirportPoint",
                         visibility: false
                     }]
                 }
