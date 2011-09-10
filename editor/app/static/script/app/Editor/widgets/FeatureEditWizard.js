@@ -534,6 +534,7 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
             this.deleteButton.hide();
             this.previousButton.hide();
             this.postDeleteButton.show();
+            this.correctHeight(this.metadataForm);
         }
     },
 
