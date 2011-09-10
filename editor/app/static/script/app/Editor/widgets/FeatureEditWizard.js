@@ -42,7 +42,7 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
     /** end i18n */
     
     /** private config overrides **/
-    autoHeight: true,
+    autoScroll: true,
     shadow: false,
         
     /** api: config[vertexRenderIntent]
@@ -207,6 +207,7 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
                     this.nextButton.show();
                 }
                 this.deleteButton.show();
+                this.correctHeight(this.attributeForm);
             },
             scope: this
         });
@@ -216,15 +217,13 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
             disabled: true,
             handler: function() {
                 this.attributeForm.hide();
-                if (this.exceptionPanel) {
-                    this.exceptionPanel.show();
-                } else {
-                    this.metadataForm.show();
-                }
+                var child = this.exceptionPanel || this.metadataForm;
+                child.show();
                 this.nextButton.hide();
                 this.saveButton.show();
                 this.deleteButton.hide();
                 this.previousButton.show();
+                this.correctHeight(child);
             },
             scope: this
         });
@@ -312,7 +311,15 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
         
         this.on({
             "show": function() {
+                this.preferredHeight = this.getHeight();
+                this.correctHeight(this.attributeForm);
                 this.startEditing();
+            },
+            "resize": function() {
+                // keep track of user changes to the height
+                if (!this.correctingHeight) {
+                    this.preferredHeight = this.getHeight();
+                }
             },
             "beforeclose": this.handleBeforeClose,
             "beforedestroy": function() {
@@ -323,6 +330,24 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
             },
             scope: this
         });
+    },
+    
+    /** private: method[correctHeight]
+     *  :arg child: ``Ext.Component``
+     * 
+     *  Adjust the window height to fit within the map portal.  This makes the
+     *  window shorter to fit the child height when possible and respects the 
+     *  user set height.
+     */
+    correctHeight: function(child) {
+        this.correctingHeight = true;
+        this.setHeight(Math.min(
+            this.preferredHeight, // set on user resize and first show
+            this.ownerCt.getHeight() - 20, // map portal height
+            this.getHeight() - this.body.getHeight() + child.getHeight()
+        ));
+        this.doLayout();
+        this.correctingHeight = false;
     },
 
     /** private: method[handleBeforeClose]
@@ -382,6 +407,7 @@ Editor.FeatureEditWizard = Ext.extend(Ext.Window, {
         });
         this.add(this.exceptionPanel);
         this.doLayout();
+        this.correctHeight(this.exceptionPanel);
     },
     
     /** private: method[handleStoreWrite]
