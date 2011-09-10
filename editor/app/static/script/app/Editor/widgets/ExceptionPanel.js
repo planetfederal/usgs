@@ -208,8 +208,12 @@ Editor.ExceptionPanel = Ext.extend(Ext.form.FormPanel, {
      */
     getProperty: function(property) {
         // get the first exception
-        var exc = this.exceptionReport.exceptions[0];
-        return exc[property];
+        var value;
+        var report = this.exceptionReport;
+        if (report && report.exceptions && report.exceptions[0]) {
+            value = report.exceptions[0][property];
+        }
+        return value;
     }
     
 });
